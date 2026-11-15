@@ -143,6 +143,38 @@ class PipelineComponentTests(unittest.TestCase):
         )
         self.assertEqual(rendered, "Hello, Automation!")
 
+    def test_surgical_ast_modifier(self) -> None:
+        """Test surgical AST parsing, function injection, block modification, and compilation."""
+        from mutate import CodeMutator, SurgicalAstModifier
+
+        source = (
+            "def existing_task(x: int) -> int:\n"
+            "    return x * 2\n"
+        )
+        tree = SurgicalAstModifier.parse_source(source)
+
+        # 1. Inject a new function
+        new_func_code = (
+            "def injected_helper(msg: str) -> str:\n"
+            "    return f'injected: {msg}'\n"
+        )
+        SurgicalAstModifier.inject_function(tree, new_func_code)
+
+        # 2. Inject a statement into existing function
+        stmt_injected = SurgicalAstModifier.inject_statement_into_function(
+            tree,
+            func_name="existing_task",
+            statement_code="print('Task executed')\n",
+            index=0,
+        )
+        self.assertTrue(stmt_injected)
+
+        # 3. Compile back to source code
+        compiled = SurgicalAstModifier.compile_tree(tree)
+        self.assertTrue(CodeMutator.ensure_valid_syntax(compiled))
+        self.assertIn("injected_helper", compiled)
+        self.assertIn("Task executed", compiled)
+
     def test_prover_execution(self) -> None:
         """Test subprocess execution safety and syntax checker."""
         from prover import ProverInterface
