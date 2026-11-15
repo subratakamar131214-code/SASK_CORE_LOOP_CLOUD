@@ -184,6 +184,34 @@ class PipelineComponentTests(unittest.TestCase):
         self.assertTrue(res.success)
         self.assertIn("PROVER_OK", res.stdout)
 
+    def test_lean4_prover_pipeline(self) -> None:
+        """Test Lean 4 / elan translation, wrapping, and verification pipeline."""
+        from prover import Lean4Prover, ProverInterface
+
+        lean_prover = Lean4Prover(allow_sorry=False)
+
+        # 1. Test wrapping of code assertion with Mathlib
+        wrapped_code = lean_prover.wrap_assertion(
+            assertion="∀ (n : Nat), n + 0 = n",
+            theorem_name="nat_add_zero",
+            use_mathlib=True,
+        )
+        self.assertIn("import Mathlib", wrapped_code)
+        self.assertIn("theorem nat_add_zero : ∀ (n : Nat), n + 0 = n", wrapped_code)
+
+        # 2. Test strict rejection of unproved 'sorry' obligations
+        sorry_assertion = "theorem test_sorry : 1 = 1 := by sorry"
+        result_sorry = lean_prover.verify_lean_source(sorry_assertion)
+        self.assertFalse(result_sorry.verified)
+        self.assertFalse(bool(result_sorry))
+        self.assertTrue(result_sorry.has_sorry)
+
+        # 3. Test ProverInterface integration returning strict boolean
+        prover = ProverInterface()
+        status = prover.verify_lean_assertion(sorry_assertion)
+        self.assertIsInstance(status, bool)
+        self.assertFalse(status)
+
     def test_component_integrity(self) -> None:
         """Verify all pipeline modules exist and can be imported."""
         checker = ComponentIntegrityChecker()
