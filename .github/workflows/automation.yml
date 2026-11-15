@@ -1,0 +1,54 @@
+name: Scheduled Modular Python Automation & Validation Pipeline
+
+on:
+  schedule:
+    # Trigger execution every 6 hours automatically
+    - cron: '0 */6 * * *'
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  run-pipeline:
+    name: Execute Automation & Validation Cycles
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository source
+        uses: actions/checkout@v4
+
+      - name: Set up Python runtime
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Verify Python Environment
+        run: |
+          python --version
+          python -c "import sys; print('Platform:', sys.platform); print('Prefix:', sys.prefix)"
+
+      - name: Step 1 - Syntax Validation (Prover)
+        run: |
+          python -m py_compile core.py mutate.py prover.py verify.py telos.py
+
+      - name: Step 2 - Automated Verification Suite
+        run: |
+          python verify.py
+
+      - name: Step 3 - Execute Automation Kernel Cycle
+        run: |
+          python core.py --cycles 1 --export-state execution_state.json
+
+      - name: Step 4 - Archive Execution State Artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: execution-state-telemetry
+          path: execution_state.json
+          if-no-files-found: ignore
