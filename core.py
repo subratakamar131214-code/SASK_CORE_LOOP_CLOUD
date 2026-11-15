@@ -86,46 +86,61 @@ class AutomationKernel:
         self.state = CoreState.TERMINATED
 
     def _build_pipeline_engine(self) -> TelosEngine:
-        """Initialize Telos milestone tracking engine with pipeline stages."""
+        """Initialize Telos milestone tracking engine with macro-objectives and tactical sub-quests."""
         engine = TelosEngine()
 
-        # Step 1: Environment & Module Integrity
-        engine.register_milestone(
-            milestone_id="env_check",
-            title="Environment & Module Integrity",
-            description="Verify Python runtime environment and module accessibility.",
+        # Register Macro-Objective
+        engine.register_macro_objective(
+            objective_id="system_mastery",
+            title="System Mastery & Autonomous Pipeline Convergence",
+            description="End-to-end multi-phase convergence toward verified, zero-defect execution.",
+            target_mastery=1.0,
         )
 
-        # Step 2: Code Structure & Mutation Analysis
-        engine.register_milestone(
-            milestone_id="code_analysis",
-            title="Code Structure & Mutation Analysis",
-            description="Parse source code AST and inspect structural metrics.",
-            depends_on=["env_check"],
-        )
-
-        # Step 3: Subprocess Validation (Prover)
-        engine.register_milestone(
-            milestone_id="syntax_proving",
-            title="External Subprocess Syntax Proving",
-            description="Invoke compiler to verify byte-compilation of Python files.",
-            depends_on=["code_analysis"],
-        )
-
-        # Step 4: Automated Verification Suite
-        engine.register_milestone(
-            milestone_id="test_verification",
-            title="Automated Test Verification",
-            description="Execute automated test runner across all pipeline modules.",
-            depends_on=["syntax_proving"],
-        )
-
-        # Step 5: State Telemetry Reporting
-        engine.register_milestone(
-            milestone_id="telemetry_report",
-            title="Telemetry & State Serialization",
-            description="Serialize execution state and aggregate telemetry.",
-            depends_on=["test_verification"],
+        # Issue Phased Tactical Sub-Quests
+        engine.issue_phased_tactical_subquests(
+            macro_objective_id="system_mastery",
+            subquest_specs=[
+                {
+                    "id": "env_check",
+                    "title": "Environment & Module Integrity",
+                    "description": "Verify Python runtime environment and module accessibility.",
+                    "phase": "RECONNAISSANCE",
+                    "weight": 1.0,
+                },
+                {
+                    "id": "code_analysis",
+                    "title": "Code Structure & Mutation Analysis",
+                    "description": "Parse source code AST and inspect structural metrics.",
+                    "depends_on": ["env_check"],
+                    "phase": "TRANSFORMATION",
+                    "weight": 1.5,
+                },
+                {
+                    "id": "syntax_proving",
+                    "title": "External Subprocess Syntax Proving",
+                    "description": "Invoke compiler to verify byte-compilation of Python files.",
+                    "depends_on": ["code_analysis"],
+                    "phase": "VERIFICATION",
+                    "weight": 2.0,
+                },
+                {
+                    "id": "test_verification",
+                    "title": "Automated Test Verification",
+                    "description": "Execute automated test runner across all pipeline modules.",
+                    "depends_on": ["syntax_proving"],
+                    "phase": "VERIFICATION",
+                    "weight": 2.5,
+                },
+                {
+                    "id": "telemetry_report",
+                    "title": "Telemetry & State Serialization",
+                    "description": "Serialize execution state and aggregate telemetry.",
+                    "depends_on": ["test_verification"],
+                    "phase": "CONVERGENCE",
+                    "weight": 1.0,
+                },
+            ],
         )
 
         return engine

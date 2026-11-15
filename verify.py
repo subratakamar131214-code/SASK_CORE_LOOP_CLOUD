@@ -126,6 +126,49 @@ class PipelineComponentTests(unittest.TestCase):
         self.assertTrue(engine.is_all_complete())
         self.assertFalse(engine.has_failures())
 
+    def test_telos_tactical_subquests_and_metabolic_reset(self) -> None:
+        """Test phased sub-quest generation, mastery progression, and metabolic resets."""
+        from telos import MilestoneStatus, TacticalPhase, TelosEngine
+
+        engine = TelosEngine(stagnation_threshold=3)
+        macro = engine.register_macro_objective(
+            objective_id="mastery_demo",
+            title="System Mastery Demo",
+            target_mastery=1.0,
+        )
+
+        subquests = engine.issue_phased_tactical_subquests(
+            macro_objective_id="mastery_demo",
+            subquest_specs=[
+                {"id": "sq1", "title": "Recon", "phase": TacticalPhase.RECONNAISSANCE, "weight": 1.0},
+                {"id": "sq2", "title": "Transform", "phase": TacticalPhase.TRANSFORMATION, "depends_on": ["sq1"], "weight": 1.0},
+            ],
+        )
+        self.assertEqual(len(subquests), 2)
+        self.assertEqual(macro.current_mastery, 0.0)
+
+        # Complete first subquest and check mastery score
+        engine.update_status("sq1", MilestoneStatus.COMPLETED)
+        self.assertEqual(macro.current_mastery, 0.5)
+
+        # Mark sq2 as failed
+        engine.update_status("sq2", MilestoneStatus.FAILED, error="Stuck in local basin")
+        self.assertTrue(engine.has_failures())
+
+        # Simulate stagnation across 3 cycles with stagnant error rate 0.5
+        reset_event = None
+        for _ in range(3):
+            reset_event = engine.record_error_metric(0.5)
+
+        self.assertIsNotNone(reset_event)
+        self.assertEqual(reset_event.reset_type, "METABOLIC_RESET")
+        self.assertIn("sq2", reset_event.cleared_milestone_ids)
+
+        # Confirm failed task was cleared from basin and reset to PENDING
+        ms2 = engine.get_milestone("sq2")
+        self.assertEqual(ms2.status, MilestoneStatus.PENDING)
+        self.assertFalse(engine.has_failures())
+
     def test_mutate_code_and_text(self) -> None:
         """Test code syntax verification and template rendering."""
         from mutate import CodeInspector, CodeMutator, TextMutator
