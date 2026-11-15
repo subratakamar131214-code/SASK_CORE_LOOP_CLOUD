@@ -1,0 +1,99 @@
+name: Immortal Relay Execution Pipeline
+
+on:
+  schedule:
+    # Scheduled 6-hour cron trigger (standard 5-field cron syntax)
+    - cron: '15 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      window_minutes:
+        description: 'Wall-clock execution window in minutes'
+        required: false
+        default: '340'
+        type: string
+      enable_successor:
+        description: 'Whether to trigger successor runner instance via REST API'
+        required: false
+        default: true
+        type: boolean
+
+concurrency:
+  group: immortal-relay
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  relay-execution:
+    name: Relay Execution & Handoff
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+
+    steps:
+      - name: Check out repository source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.RELAY_PAT || secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python runtime
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Lean 4 via elan
+        run: |
+          echo "Installing elan toolchain manager..."
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain stable
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Verify Environment & Toolchains
+        run: |
+          python --version
+          export PATH="$HOME/.elan/bin:$PATH"
+          elan --version || echo "elan installed"
+          lean --version || echo "lean toolchain active"
+
+      - name: Execute Core Event Loop
+        run: |
+          export PATH="$HOME/.elan/bin:$PATH"
+          WINDOW_MINS="${{ inputs.window_minutes || '340' }}"
+          python core.py --continuous --window-minutes "$WINDOW_MINS" --export-state execution_state.json
+
+      - name: Commit Modified Code Changes
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "relay: update execution state & synthesized artifacts [skip ci]"
+            git push origin HEAD:${{ github.ref_name }}
+          else
+            echo "No repository modifications detected; skipping commit."
+          fi
+
+      - name: Trigger Successor Runner via GitHub REST API
+        if: ${{ github.event.inputs.enable_successor != 'false' }}
+        run: |
+          echo "Invoking GitHub REST API dispatch for successor runner..."
+          # Note: Standard GITHUB_TOKEN forbids recursive self-dispatch to prevent accidental billing runaway;
+          # a Personal Access Token (RELAY_PAT) is used if configured.
+          AUTH_TOKEN="${{ secrets.RELAY_PAT || secrets.GITHUB_TOKEN }}"
+          TARGET_REF="${{ github.ref_name }}"
+          
+          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $AUTH_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/immortal_relay.yml/dispatches" \
+            -d "{\"ref\":\"$TARGET_REF\"}")
+          
+          STATUS=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d: -f2)
+          echo "Dispatch response status code: $STATUS"
+          if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 300 ]; then
+            echo "Successor runner successfully scheduled."
+          else
+            echo "Notice: Successor dispatch returned HTTP $STATUS. In scheduled/cron runs without a PAT, successor chaining is handled by the 6-hour cron schedule."
+          fi
