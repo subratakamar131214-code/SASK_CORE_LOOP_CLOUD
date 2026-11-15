@@ -258,11 +258,45 @@ class PipelineComponentTests(unittest.TestCase):
     def test_component_integrity(self) -> None:
         """Verify all pipeline modules exist and can be imported."""
         checker = ComponentIntegrityChecker()
-        for mod in ["telos", "mutate", "prover", "verify"]:
+        for mod in ["core", "telos", "mutate", "prover", "verify"]:
             self.assertTrue(
                 checker.verify_importable(mod),
                 f"Module {mod} failed import check.",
             )
+
+    def test_core_wall_clock_timer_and_handoff(self) -> None:
+        """Test the 340-minute wall-clock execution timer and container handoff serialization."""
+        import json
+        import tempfile
+        from core import AutomationKernel, CoreState, WallClockTimer
+
+        # 1. Verify standard 340-minute timer configuration
+        timer = WallClockTimer(window_minutes=340.0)
+        self.assertEqual(timer.window_minutes, 340.0)
+        self.assertEqual(timer.window_seconds, 340.0 * 60.0)
+        self.assertFalse(timer.is_threshold_reached())
+        self.assertGreater(timer.remaining_minutes, 339.0)
+
+        # 2. Test threshold expiration trigger
+        expired_timer = WallClockTimer(window_minutes=0.001, margin_seconds=1.0)
+        self.assertTrue(expired_timer.is_threshold_reached())
+
+        # 3. Test AutomationKernel state serialization and handoff
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_path = Path(tmp_dir) / "test_state.json"
+            kernel = AutomationKernel(
+                window_minutes=0.0001,  # triggers immediate handoff
+                state_file=tmp_path,
+            )
+            kernel.run_continuous_loop(max_cycles=1)
+
+            self.assertEqual(kernel.state, CoreState.HANDOFF_READY)
+            self.assertTrue(tmp_path.is_file())
+
+            payload = json.loads(tmp_path.read_text(encoding="utf-8"))
+            self.assertTrue(payload["container_handoff"])
+            self.assertEqual(payload["state"], "HANDOFF_READY")
+            self.assertEqual(payload["wall_clock"]["window_minutes"], 0.0001)
 
 
 if __name__ == "__main__":
