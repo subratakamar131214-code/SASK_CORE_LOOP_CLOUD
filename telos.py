@@ -1,17 +1,25 @@
-"""Telos Engine: Milestone and Task-Sequencing Engine.
+"""Telos Engine: Milestone and Task-Sequencing Engine with Universal Goal Ingestion.
 
 Provides tactical sub-quest generation, macro-objective progression toward
 system mastery, error-reduction stagnation detection, metabolic resets,
-and search-basin clearing for autonomous execution cycles.
+search-basin clearing, and an open-ended goal ingestion pipeline capable of
+absorbing, vectorizing, and scheduling any arbitrary goal from the Goal Giver.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+import json
+import uuid
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Set
+from pathlib import Path
+from typing import Any, Callable, Dict, Iterable, List, Optional, Set
 
+
+# ---------------------------------------------------------------------------
+# Core Enumerations
+# ---------------------------------------------------------------------------
 
 class MilestoneStatus(str, Enum):
     """Execution status for pipeline milestones and tactical quests."""
@@ -30,6 +38,40 @@ class TacticalPhase(str, Enum):
     CONVERGENCE = "CONVERGENCE"
     MASTERY = "MASTERY"
 
+
+class GoalVector(str, Enum):
+    """The three universal execution vectors for goal decomposition."""
+    FORMAL_PROOF = "FORMAL_PROOF"           # Vector 1: Lean 4 theorem proving & logic
+    ALGORITHMIC_CODE = "ALGORITHMIC_CODE"   # Vector 2: Code mutation, structures, optimisation
+    FRONTIER_EXPLORE = "FRONTIER_EXPLORE"   # Vector 3: Open-ended discovery and research
+
+
+class GoalPriority(int, Enum):
+    """Priority tiers for ingested goals (higher value = higher urgency)."""
+    CRITICAL = 4
+    HIGH = 3
+    NORMAL = 2
+    LOW = 1
+
+
+class GoalStatus(str, Enum):
+    """Lifecycle status for ingested goals."""
+    QUEUED = "QUEUED"
+    ACTIVE = "ACTIVE"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    DEFERRED = "DEFERRED"
+
+
+class DiscoveryTrack(str, Enum):
+    """Dual-track macro-discovery taxonomy for ingested goals."""
+    CONVERGENT_MASTERY = "CONVERGENT_MASTERY"   # Closed convergence on verifiable objectives
+    OPEN_FRONTIER = "OPEN_FRONTIER"             # Open-ended exploration and discovery
+
+
+# ---------------------------------------------------------------------------
+# Dataclasses
+# ---------------------------------------------------------------------------
 
 @dataclass
 class Milestone:
@@ -51,25 +93,21 @@ class Milestone:
     action: Optional[Callable[..., Any]] = None
 
     def mark_started(self) -> None:
-        """Mark milestone as running."""
         self.status = MilestoneStatus.RUNNING
         self.started_at = datetime.now(timezone.utc).isoformat()
 
     def mark_completed(self, metadata: Optional[Dict[str, Any]] = None) -> None:
-        """Mark milestone as completed successfully."""
         self.status = MilestoneStatus.COMPLETED
         self.completed_at = datetime.now(timezone.utc).isoformat()
         if metadata:
             self.metadata.update(metadata)
 
     def mark_failed(self, error: str) -> None:
-        """Mark milestone as failed with error context."""
         self.status = MilestoneStatus.FAILED
         self.completed_at = datetime.now(timezone.utc).isoformat()
         self.error_message = error
 
     def mark_skipped(self, reason: str = "") -> None:
-        """Mark milestone as skipped."""
         self.status = MilestoneStatus.SKIPPED
         self.completed_at = datetime.now(timezone.utc).isoformat()
         if reason:
@@ -103,8 +141,330 @@ class MacroObjective:
     )
 
 
+@dataclass
+class IngestionGoal:
+    """An arbitrary goal ingested from the Goal Giver and decomposed into sub-tasks."""
+    id: str
+    title: str
+    description: str
+    vector: GoalVector
+    priority: GoalPriority
+    raw_prompt: str
+    sub_tasks: List[str] = field(default_factory=list)
+    status: GoalStatus = GoalStatus.QUEUED
+    discipline_weight: float = 1.0
+    discovery_track: DiscoveryTrack = DiscoveryTrack.CONVERGENT_MASTERY
+    created_at: str = field(
+        default_factory=lambda: datetime.now(timezone.utc).isoformat()
+    )
+    completed_at: Optional[str] = None
+    error: Optional[str] = None
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
+        d = asdict(self)
+        d["vector"] = self.vector.value
+        d["priority"] = self.priority.name
+        d["status"] = self.status.value
+        d["discovery_track"] = self.discovery_track.value
+        return d
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "IngestionGoal":
+        data = dict(data)
+        vector = GoalVector(data.get("vector", GoalVector.FRONTIER_EXPLORE.value))
+        data["vector"] = vector
+        priority_raw = data.get("priority", "NORMAL")
+        if isinstance(priority_raw, int):
+            data["priority"] = GoalPriority(priority_raw)
+        else:
+            data["priority"] = GoalPriority[priority_raw]
+        data["status"] = GoalStatus(data.get("status", GoalStatus.QUEUED.value))
+        track_raw = data.get("discovery_track")
+        data["discovery_track"] = (
+            DiscoveryTrack(track_raw)
+            if track_raw
+            else MacroDiscoveryTaxonomy.classify_vector(vector)
+        )
+        return cls(**{k: v for k, v in data.items() if k in cls.__dataclass_fields__})
+
+
+# ---------------------------------------------------------------------------
+# Dual-Track Macro-Discovery Taxonomy
+# ---------------------------------------------------------------------------
+
+class MacroDiscoveryTaxonomy:
+    """Classifies goals into convergent-mastery or open-frontier discovery tracks.
+
+    Convergent goals have a closed success criterion and are driven to verified
+    completion. Frontier goals are open-ended and are driven toward exploration
+    breadth rather than convergence.
+    """
+
+    _FRONTIER_MARKERS: Set[str] = {
+        "explore", "exploration", "discover", "research", "novel", "frontier",
+        "open-ended", "unknown", "hypothesis", "hypotheses", "survey",
+        "brainstorm", "speculative", "emergent",
+    }
+
+    @staticmethod
+    def classify_vector(vector: GoalVector) -> DiscoveryTrack:
+        """Classify by execution vector when no prompt-level signal is available."""
+        if vector in (GoalVector.FORMAL_PROOF, GoalVector.ALGORITHMIC_CODE):
+            return DiscoveryTrack.CONVERGENT_MASTERY
+        return DiscoveryTrack.OPEN_FRONTIER
+
+    @classmethod
+    def classify(cls, raw_prompt: str, vector: GoalVector) -> DiscoveryTrack:
+        """Classify a goal using frontier markers, falling back to its vector."""
+        lower = raw_prompt.lower()
+        if any(marker in lower for marker in cls._FRONTIER_MARKERS):
+            return DiscoveryTrack.OPEN_FRONTIER
+        return cls.classify_vector(vector)
+
+    @staticmethod
+    def summarize(goals: Iterable[IngestionGoal]) -> Dict[str, Any]:
+        """Aggregate goals per discovery track."""
+        counts: Dict[str, int] = {t.value: 0 for t in DiscoveryTrack}
+        for goal in goals:
+            counts[goal.discovery_track.value] += 1
+        total = sum(counts.values())
+        convergent = counts[DiscoveryTrack.CONVERGENT_MASTERY.value]
+        return {
+            "total": total,
+            "tracks": counts,
+            "convergent_ratio": round(convergent / total, 4) if total else 0.0,
+        }
+
+
+# ---------------------------------------------------------------------------
+# Goal Ingestion Engine
+# ---------------------------------------------------------------------------
+
+class GoalIngestionEngine:
+    """
+    Universal goal ingestion pipeline capable of absorbing, vectorizing, and
+    scheduling any arbitrary goal issued by the Goal Giver — no matter how
+    abstract, multi-disciplinary, or novel.
+
+    Goals are auto-decomposed into sub-tasks across the three universal execution
+    vectors (FORMAL_PROOF, ALGORITHMIC_CODE, FRONTIER_EXPLORE) and scheduled
+    via a discipline-weighted priority queue.
+    """
+
+    # Heuristic keyword sets for automatic vector classification
+    _FORMAL_PROOF_KEYWORDS: Set[str] = {
+        "prove", "theorem", "lemma", "axiom", "formal", "lean", "mathlib",
+        "logic", "induction", "verify", "proof", "corollary", "deduction",
+        "consistency", "soundness", "completeness",
+    }
+    _ALGORITHMIC_CODE_KEYWORDS: Set[str] = {
+        "implement", "code", "algorithm", "function", "data structure", "optimize",
+        "benchmark", "refactor", "mutate", "ast", "parser", "runtime", "efficient",
+        "sort", "search", "graph", "tree", "dynamic", "programming",
+    }
+
+    def __init__(self) -> None:
+        self._goals: Dict[str, IngestionGoal] = {}
+        self.taxonomy = MacroDiscoveryTaxonomy()
+
+    # ------------------------------------------------------------------
+    # Public API
+    # ------------------------------------------------------------------
+
+    def ingest_goal(
+        self,
+        raw_prompt: str,
+        vector: Optional[GoalVector] = None,
+        priority: Optional[GoalPriority] = None,
+        discipline_weight: float = 1.0,
+        title: Optional[str] = None,
+        description: Optional[str] = None,
+    ) -> IngestionGoal:
+        """
+        Parse and vectorize any arbitrary goal string into an IngestionGoal.
+
+        If no vector is specified, the engine auto-classifies the goal using
+        keyword heuristics. Sub-tasks are auto-decomposed across all three
+        execution vectors when no vector is specified (open-frontier mode).
+        """
+        goal_id = str(uuid.uuid4())[:12]
+        effective_vector = vector or self._classify_vector(raw_prompt)
+        effective_priority = priority or GoalPriority.NORMAL
+        effective_title = title or self._derive_title(raw_prompt)
+        effective_desc = description or raw_prompt[:256]
+        effective_track = self.taxonomy.classify(raw_prompt, effective_vector)
+
+        sub_tasks = self._decompose_into_subtasks(
+            goal_id=goal_id,
+            raw_prompt=raw_prompt,
+            vector=effective_vector,
+            multi_vector=(vector is None),
+        )
+
+        goal = IngestionGoal(
+            id=goal_id,
+            title=effective_title,
+            description=effective_desc,
+            vector=effective_vector,
+            priority=effective_priority,
+            raw_prompt=raw_prompt,
+            sub_tasks=sub_tasks,
+            discipline_weight=discipline_weight,
+            discovery_track=effective_track,
+        )
+        self._goals[goal_id] = goal
+        return goal
+
+    def load_manifest(self, path: str = "goals_manifest.json") -> int:
+        """
+        Read and merge goals from a JSON manifest file.
+        Returns the count of newly loaded goals (skips duplicates by id).
+        """
+        manifest_path = Path(path)
+        if not manifest_path.is_file():
+            return 0
+
+        try:
+            raw = json.loads(manifest_path.read_text(encoding="utf-8"))
+            goals_data: List[Dict[str, Any]] = raw if isinstance(raw, list) else raw.get("goals", [])
+            loaded = 0
+            for entry in goals_data:
+                goal_id = entry.get("id")
+                if goal_id and goal_id not in self._goals:
+                    try:
+                        goal = IngestionGoal.from_dict(entry)
+                        self._goals[goal.id] = goal
+                        loaded += 1
+                    except Exception:
+                        pass  # Tolerate malformed entries
+            return loaded
+        except (json.JSONDecodeError, OSError):
+            return 0
+
+    def save_manifest(self, path: str = "goals_manifest.json") -> None:
+        """Persist the current goal queue to a JSON manifest file."""
+        manifest_path = Path(path)
+        payload = [g.to_dict() for g in self._goals.values()]
+        tmp_path = manifest_path.with_suffix(".tmp")
+        tmp_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        tmp_path.replace(manifest_path)
+
+    def get_priority_queue(self, discipline: float = 1.0) -> List[IngestionGoal]:
+        """
+        Return active (QUEUED or ACTIVE) goals sorted by effective priority score:
+            score = priority.value * discipline_weight * discipline
+        """
+        active = [
+            g for g in self._goals.values()
+            if g.status in (GoalStatus.QUEUED, GoalStatus.ACTIVE)
+        ]
+        active.sort(
+            key=lambda g: g.priority.value * g.discipline_weight * max(discipline, 0.0),
+            reverse=True,
+        )
+        return active
+
+    def mark_goal_complete(self, goal_id: str) -> None:
+        """Mark a goal as successfully completed."""
+        goal = self._goals.get(goal_id)
+        if goal:
+            goal.status = GoalStatus.COMPLETED
+            goal.completed_at = datetime.now(timezone.utc).isoformat()
+
+    def mark_goal_failed(self, goal_id: str, error: str) -> None:
+        """Mark a goal as failed with an error message."""
+        goal = self._goals.get(goal_id)
+        if goal:
+            goal.status = GoalStatus.FAILED
+            goal.error = error
+            goal.completed_at = datetime.now(timezone.utc).isoformat()
+
+    def get_all_goals(self) -> List[IngestionGoal]:
+        """Return all ingested goals."""
+        return list(self._goals.values())
+
+    def get_goal(self, goal_id: str) -> Optional[IngestionGoal]:
+        """Retrieve a goal by ID."""
+        return self._goals.get(goal_id)
+
+    def get_summary(self) -> Dict[str, Any]:
+        """Return a structured summary of the current goal queue."""
+        total = len(self._goals)
+        counts: Dict[str, int] = {s.value: 0 for s in GoalStatus}
+        for g in self._goals.values():
+            counts[g.status.value] += 1
+        return {
+            "total_goals": total,
+            "status_counts": counts,
+            "queued": counts[GoalStatus.QUEUED.value],
+            "active": counts[GoalStatus.ACTIVE.value],
+            "completed": counts[GoalStatus.COMPLETED.value],
+            "failed": counts[GoalStatus.FAILED.value],
+            "discovery_tracks": self.taxonomy.summarize(self._goals.values()),
+        }
+
+    # ------------------------------------------------------------------
+    # Private helpers
+    # ------------------------------------------------------------------
+
+    def _classify_vector(self, prompt: str) -> GoalVector:
+        """Auto-classify a goal prompt to one of the three execution vectors."""
+        lower = prompt.lower()
+        proof_hits = sum(1 for kw in self._FORMAL_PROOF_KEYWORDS if kw in lower)
+        code_hits = sum(1 for kw in self._ALGORITHMIC_CODE_KEYWORDS if kw in lower)
+        if proof_hits >= code_hits and proof_hits > 0:
+            return GoalVector.FORMAL_PROOF
+        if code_hits > 0:
+            return GoalVector.ALGORITHMIC_CODE
+        return GoalVector.FRONTIER_EXPLORE
+
+    @staticmethod
+    def _derive_title(prompt: str) -> str:
+        """Derive a short title from the first sentence or 72 characters."""
+        first_sentence = prompt.split(".")[0].strip()
+        return first_sentence[:72] if first_sentence else prompt[:72]
+
+    @staticmethod
+    def _decompose_into_subtasks(
+        goal_id: str,
+        raw_prompt: str,
+        vector: GoalVector,
+        multi_vector: bool,
+    ) -> List[str]:
+        """
+        Auto-decompose a goal into executable sub-task descriptors.
+        In multi-vector (open-frontier) mode, sub-tasks are generated across
+        all three execution vectors to ensure comprehensive coverage.
+        """
+        sub_tasks: List[str] = []
+
+        if multi_vector or vector == GoalVector.FORMAL_PROOF:
+            sub_tasks.append(
+                f"[{goal_id}][FORMAL_PROOF] Formalise and prove the core assertion: {raw_prompt[:120]}"
+            )
+        if multi_vector or vector == GoalVector.ALGORITHMIC_CODE:
+            sub_tasks.append(
+                f"[{goal_id}][ALGORITHMIC_CODE] Design and benchmark a novel algorithm for: {raw_prompt[:120]}"
+            )
+        if multi_vector or vector == GoalVector.FRONTIER_EXPLORE:
+            sub_tasks.append(
+                f"[{goal_id}][FRONTIER_EXPLORE] Explore open-ended implications and adjacent discoveries for: {raw_prompt[:120]}"
+            )
+
+        return sub_tasks
+
+
+# ---------------------------------------------------------------------------
+# Legacy TelosEngine (preserving all existing public API)
+# ---------------------------------------------------------------------------
+
 class TelosEngine:
-    """Milestone and task-sequencing engine with adaptive objective generation."""
+    """Milestone and task-sequencing engine with adaptive objective generation.
+
+    Embeds a GoalIngestionEngine as ``self.goal_engine`` for universal
+    goal-agnostic ingestion alongside existing milestone tracking.
+    """
 
     def __init__(self, stagnation_threshold: int = 3, error_tolerance_delta: float = 0.001) -> None:
         self._milestones: Dict[str, Milestone] = {}
@@ -114,6 +474,10 @@ class TelosEngine:
         self._reset_events: List[ResetEvent] = []
         self.stagnation_threshold = stagnation_threshold
         self.error_tolerance_delta = error_tolerance_delta
+
+        # Universal goal ingestion engine — wired into TelosEngine
+        self.goal_engine = GoalIngestionEngine()
+        self.discovery_taxonomy = self.goal_engine.taxonomy
 
     def register_milestone(
         self,
@@ -170,16 +534,7 @@ class TelosEngine:
         macro_objective_id: str,
         subquest_specs: List[Dict[str, Any]],
     ) -> List[Milestone]:
-        """Generate and sequence phased tactical sub-quests for a macro-objective.
-
-        Each spec is expected to contain:
-            - id: str
-            - title: str
-            - phase: TacticalPhase or str
-            - depends_on: Optional[List[str]]
-            - description: Optional[str]
-            - weight: Optional[float]
-        """
+        """Generate and sequence phased tactical sub-quests for a macro-objective."""
         macro = self._macro_objectives.get(macro_objective_id)
         if not macro:
             raise KeyError(f"Macro objective '{macro_objective_id}' not found.")
@@ -288,12 +643,10 @@ class TelosEngine:
         if len(self._error_history) < self.stagnation_threshold:
             return None
 
-        # Check the recent stagnation window
         window = self._error_history[-self.stagnation_threshold:]
         initial_error = window[0]
         recent_delta = initial_error - window[-1]
 
-        # Stagnation condition: errors are non-zero and not improving significantly
         is_stagnant = (window[-1] > 0.0) and (abs(recent_delta) <= self.error_tolerance_delta)
 
         if is_stagnant:
@@ -348,7 +701,6 @@ class TelosEngine:
             total_mastery = sum(m.current_mastery for m in self._macro_objectives.values())
             return round(total_mastery / len(self._macro_objectives), 4)
 
-        # Fallback to simple milestone ratio if no macro objectives registered
         total = len(self._milestones)
         if total == 0:
             return 1.0
@@ -400,6 +752,7 @@ class TelosEngine:
                 for mo in self._macro_objectives.values()
             ],
             "metabolic_resets": len(self._reset_events),
+            "goal_ingestion": self.goal_engine.get_summary(),
             "milestones": [
                 {
                     "id": m.id,

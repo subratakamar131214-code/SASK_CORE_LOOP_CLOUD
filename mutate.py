@@ -3,6 +3,8 @@
 Provides surgical parsing, programmatic node injection, function logic mutation,
 AST validation, source code compilation, and disk persistence while preserving
 clean Python structure and syntax guarantees.
+
+Integrates with drives.py for discipline-aware mutation pressure scaling.
 """
 
 from __future__ import annotations
@@ -389,6 +391,92 @@ class CodeMutator:
             )
         )
         return "".join(diff_lines)
+
+
+class DisciplineAwareMutator:
+    """Applies discipline-scaled mutation pressure from the Unified Discipline Engine.
+
+    Wraps SurgicalAstModifier and scales injection/transformation aggressiveness
+    based on the current mutation pressure reported by drives.py.
+    """
+
+    @staticmethod
+    def _get_mutation_pressure(discipline_override: Optional[float] = None) -> float:
+        """Retrieve current mutation pressure from drives module (graceful fallback)."""
+        if discipline_override is not None:
+            return max(0.0, min(1.0, discipline_override))
+        try:
+            from drives import get_mutation_pressure  # type: ignore[import]
+            return get_mutation_pressure()
+        except Exception:
+            return 0.5  # Neutral pressure if drives unavailable
+
+    @classmethod
+    def discipline_aware_mutate(
+        cls,
+        source: str,
+        discipline_override: Optional[float] = None,
+        inject_marker: bool = True,
+    ) -> TransformationResult:
+        """
+        Perform a discipline-scaled AST mutation on a source code string.
+
+        Mutation aggressiveness is determined by get_mutation_pressure():
+          - pressure >= 0.75: aggressive — inject both a telemetry marker and a
+            normalised docstring.
+          - pressure >= 0.40: moderate — inject a docstring only.
+          - pressure <  0.40: conservative — validate syntax only, no structural
+            changes.
+
+        Args:
+            source: Python source code string to mutate.
+            discipline_override: Optional float [0.0–1.0] to bypass drives lookup.
+            inject_marker: Whether to inject a telemetry marker comment (default True).
+
+        Returns:
+            TransformationResult capturing original/transformed source and diff.
+        """
+        pressure = cls._get_mutation_pressure(discipline_override)
+
+        if not CodeMutator.ensure_valid_syntax(source):
+            raise SyntaxError("discipline_aware_mutate: source code has syntax errors.")
+
+        if pressure >= 0.75:
+            # Aggressive: inject docstring + telemetry marker
+            result = CodeMutator.apply_docstring(
+                source,
+                docstring=f"# [SASK-MUTATE] Discipline pressure={pressure:.2f} — aggressive transformation applied.",
+            )
+            transformed = result.transformed
+            if inject_marker:
+                marker = f"\n# [SASK-DRIVES] mutation_pressure={pressure:.4f}\n"
+                if marker.strip() not in transformed:
+                    transformed = transformed.rstrip() + marker
+            applied = ["aggressive_docstring_injection", "telemetry_marker"]
+        elif pressure >= 0.40:
+            # Moderate: docstring normalisation only
+            result = CodeMutator.apply_docstring(
+                source,
+                docstring="# [SASK-MUTATE] Discipline-normalised module.",
+            )
+            transformed = result.transformed
+            applied = ["moderate_docstring_normalisation"]
+        else:
+            # Conservative: syntax check only, no structural changes
+            transformed = source
+            applied = ["conservative_syntax_check_only"]
+
+        is_modified = transformed != source
+        diff = CodeMutator.generate_diff(source, transformed)
+
+        return TransformationResult(
+            original=source,
+            transformed=transformed,
+            is_modified=is_modified,
+            diff=diff,
+            applied_rules=applied,
+            metadata={"mutation_pressure": pressure},
+        )
 
 
 class TextMutator:

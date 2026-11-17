@@ -34,9 +34,9 @@ jobs:
 
       - name: Step 1 - Syntax Validation (Prover)
         run: |
-          python -m py_compile core.py mutate.py prover.py verify.py telos.py
+          python -m py_compile core.py drives.py bio_gen.py telos.py mutate.py prover.py verify.py
 
-      - name: Step 2 - Automated Verification Suite
+      - name: Step 2 - Ancestral Verification Gate
         run: |
           python verify.py
 
@@ -49,5 +49,7 @@ jobs:
         if: always()
         with:
           name: execution-state-telemetry
-          path: execution_state.json
+          path: |
+            execution_state.json
+            .sask_ego_ratchet.json
           if-no-files-found: ignore

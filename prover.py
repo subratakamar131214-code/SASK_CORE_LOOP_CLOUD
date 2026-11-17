@@ -3,6 +3,8 @@
 Handles command execution, external compiler/linter invocations, timeout safety,
 and an execution pipeline with the Lean 4 compiler (elan/lean/lake) for formal
 verification against Lean and Mathlib.
+
+Integrates with drives.py for overthinking-depth-scaled repeated verification.
 """
 
 from __future__ import annotations
@@ -319,6 +321,54 @@ class Lean4Prover:
         )
         result = self.verify_lean_source(wrapped_source, timeout=timeout)
         return result.verified
+
+
+    def overthinking_verify(
+        self,
+        assertion: str,
+        theorem_name: str = "verified_assertion",
+        use_mathlib: bool = False,
+        timeout: Optional[float] = None,
+        depth_override: Optional[int] = None,
+    ) -> bool:
+        """
+        Run Lean 4 verification multiple times equal to the overthinking depth
+        from drives.py, requiring ALL passes to succeed (strict consensus).
+
+        This prevents false positives from transient compilation artefacts by
+        demanding deterministic agreement across repeated proof checks.
+
+        Args:
+            assertion: Lean 4 assertion or theorem source.
+            theorem_name: Identifier for the theorem.
+            use_mathlib: Whether to include Mathlib imports.
+            timeout: Per-pass timeout in seconds (default: self.default_timeout).
+            depth_override: Optional integer to bypass drives lookup.
+
+        Returns:
+            True only if all ``depth`` independent verification passes succeed.
+        """
+        # Determine overthinking depth
+        if depth_override is not None:
+            depth = max(1, int(depth_override))
+        else:
+            try:
+                from drives import get_overthinking_depth  # type: ignore[import]
+                depth = get_overthinking_depth()
+            except Exception:
+                depth = 3  # Sensible default
+
+        for pass_index in range(depth):
+            result = self.verify_assertion(
+                assertion=assertion,
+                theorem_name=f"{theorem_name}_pass{pass_index}",
+                use_mathlib=use_mathlib,
+                timeout=timeout,
+            )
+            if not result:
+                return False
+
+        return True
 
 
 class ProverInterface:

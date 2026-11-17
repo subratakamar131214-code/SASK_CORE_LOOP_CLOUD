@@ -8,10 +8,12 @@ from __future__ import annotations
 
 import importlib
 import io
+import json
 import sys
 import time
 import unittest
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Type
 
@@ -30,6 +32,94 @@ class VerificationReport:
     def is_successful(self) -> bool:
         """Returns True if all checks passed without failures or errors."""
         return self.failed_checks == 0 and len(self.errors) == 0
+
+
+@dataclass
+class EgoRatchetState:
+    """Persisted high-watermark telemetry for the regression ratchet."""
+    high_watermark_passed: int = 0
+    high_watermark_total: int = 0
+    gate_runs: int = 0
+    updated_at: Optional[str] = None
+
+
+class EgoRatchet:
+    """Persistent high-watermark ratchet: never regress below the best-known pass count."""
+
+    DEFAULT_PATH = ".sask_ego_ratchet.json"
+
+    def __init__(self, state_path: Optional[Path] = None) -> None:
+        self.state_path = Path(state_path or self.DEFAULT_PATH)
+        self.state = self._load()
+
+    def _load(self) -> EgoRatchetState:
+        try:
+            data = json.loads(self.state_path.read_text(encoding="utf-8"))
+            return EgoRatchetState(
+                high_watermark_passed=int(data.get("high_watermark_passed", 0)),
+                high_watermark_total=int(data.get("high_watermark_total", 0)),
+                gate_runs=int(data.get("gate_runs", 0)),
+                updated_at=data.get("updated_at"),
+            )
+        except (OSError, ValueError, TypeError):
+            return EgoRatchetState()
+
+    def _save(self) -> None:
+        self.state_path.parent.mkdir(parents=True, exist_ok=True)
+        tmp_path = self.state_path.with_suffix(self.state_path.suffix + ".tmp")
+        tmp_path.write_text(json.dumps(asdict(self.state), indent=2), encoding="utf-8")
+        tmp_path.replace(self.state_path)
+
+    def check(self, passed_checks: int) -> bool:
+        """True if the pass count is at or above the persisted high-watermark."""
+        return passed_checks >= self.state.high_watermark_passed
+
+    def record(self, passed_checks: int, total_checks: int) -> bool:
+        """Record a gate run; promotes the high-watermark and returns True if promoted."""
+        self.state.gate_runs += 1
+        promoted = passed_checks > self.state.high_watermark_passed
+        if promoted:
+            self.state.high_watermark_passed = passed_checks
+        if total_checks > self.state.high_watermark_total:
+            self.state.high_watermark_total = total_checks
+        self.state.updated_at = datetime.now(timezone.utc).isoformat()
+        self._save()
+        return promoted
+
+    def snapshot(self) -> Dict[str, Any]:
+        return asdict(self.state)
+
+
+class AncestralRegressionGate:
+    """Ancestral regression gate combining overthinking consensus with an ego ratchet."""
+
+    def __init__(self, ratchet_path: Optional[Path] = None) -> None:
+        self.ratchet = EgoRatchet(ratchet_path)
+
+    def evaluate(self, report: VerificationReport, depth: int) -> Dict[str, Any]:
+        """Apply the ego ratchet to a consensus report, mutating it on regression."""
+        snapshot_before = self.ratchet.snapshot()
+        regressed = not self.ratchet.check(report.passed_checks)
+        promoted = self.ratchet.record(report.passed_checks, report.total_checks)
+        snapshot_after = self.ratchet.snapshot()
+
+        info: Dict[str, Any] = {
+            "overthinking_depth": depth,
+            "passed_checks": report.passed_checks,
+            "high_watermark_before": snapshot_before["high_watermark_passed"],
+            "high_watermark_after": snapshot_after["high_watermark_passed"],
+            "promoted": promoted,
+            "regressed": regressed,
+            "gate_runs": snapshot_after["gate_runs"],
+        }
+
+        if regressed:
+            report.failed_checks += 1
+            report.errors.append(
+                f"EGO RATCHET: passed {report.passed_checks} checks, below high-watermark "
+                f"{snapshot_before['high_watermark_passed']}."
+            )
+        return info
 
 
 class ComponentIntegrityChecker:
@@ -60,8 +150,13 @@ class ComponentIntegrityChecker:
 class VerificationRunner:
     """Automated test runner orchestrating discovery and programmatic execution."""
 
-    def __init__(self, verbosity: int = 1) -> None:
+    def __init__(
+        self,
+        verbosity: int = 1,
+        ratchet_path: Optional[Path] = None,
+    ) -> None:
         self.verbosity = verbosity
+        self.gate = AncestralRegressionGate(ratchet_path=ratchet_path)
 
     def run_suite(self, suite: unittest.TestSuite) -> VerificationReport:
         """Execute a unittest.TestSuite and compile a VerificationReport."""
@@ -100,6 +195,64 @@ class VerificationRunner:
         loader = unittest.TestLoader()
         suite = loader.loadTestsFromTestCase(PipelineComponentTests)
         return self.run_suite(suite)
+
+    @staticmethod
+    def _resolve_depth(depth_override: Optional[int] = None) -> int:
+        """Resolve the overthinking consensus depth from drives.py."""
+        if depth_override is not None:
+            return max(1, int(depth_override))
+        try:
+            from drives import get_overthinking_depth  # type: ignore[import]
+            return max(1, int(get_overthinking_depth()))
+        except Exception:
+            return 3
+
+    def run_ancestral_gate(
+        self,
+        depth_override: Optional[int] = None,
+    ) -> VerificationReport:
+        """Run the suite at overthinking depth, requiring consensus, then apply the ego ratchet.
+
+        Every pass must succeed. The consensus report uses the minimum pass count
+        across runs, so the ratchet is insensitive to depth changes.
+        """
+        depth = self._resolve_depth(depth_override)
+        run_reports: List[VerificationReport] = []
+
+        for _ in range(depth):
+            report = self.run_self_verification()
+            run_reports.append(report)
+            if not report.is_successful:
+                break
+
+        total_checks = max((r.total_checks for r in run_reports), default=0)
+        passed_checks = min((r.passed_checks for r in run_reports), default=0)
+        failed_checks = max((r.failed_checks for r in run_reports), default=0)
+
+        errors: List[str] = []
+        for pass_index, report in enumerate(run_reports):
+            for error in report.errors:
+                errors.append(f"[pass {pass_index + 1}/{depth}] {error}")
+
+        completed = len(run_reports)
+        if completed < depth:
+            failed_checks = max(failed_checks, 1)
+            errors.append(
+                f"OVERTHINKING GATE: consensus aborted after {completed}/{depth} passes."
+            )
+
+        consensus = VerificationReport(
+            total_checks=total_checks,
+            passed_checks=passed_checks,
+            failed_checks=failed_checks,
+            errors=errors,
+            duration_seconds=round(sum(r.duration_seconds for r in run_reports), 4),
+            details={"overthinking_depth": depth, "passes_completed": completed},
+        )
+
+        ratchet_info = self.gate.evaluate(consensus, depth=depth)
+        consensus.details["ego_ratchet"] = ratchet_info
+        return consensus
 
 
 class PipelineComponentTests(unittest.TestCase):
@@ -258,11 +411,167 @@ class PipelineComponentTests(unittest.TestCase):
     def test_component_integrity(self) -> None:
         """Verify all pipeline modules exist and can be imported."""
         checker = ComponentIntegrityChecker()
-        for mod in ["core", "telos", "mutate", "prover", "verify"]:
+        for mod in ["core", "telos", "mutate", "prover", "verify", "drives", "bio_gen"]:
             self.assertTrue(
                 checker.verify_importable(mod),
                 f"Module {mod} failed import check.",
             )
+
+    def test_drives_discipline_engine(self) -> None:
+        """Verify UnifiedDisciplineEngine maintains D_floor >= 0.90 under all conditions."""
+        from drives import (
+            DEFAULT_DRIVE_ENGINE,
+            UnifiedDisciplineEngine,
+            get_overthinking_depth,
+            get_unified_discipline,
+        )
+
+        # Fresh engine — discipline must be at or above floor
+        engine = UnifiedDisciplineEngine()
+        self.assertGreaterEqual(engine.get_unified_discipline(), 0.90)
+
+        # Module-level helpers
+        self.assertGreaterEqual(get_unified_discipline(), 0.90)
+        depth = get_overthinking_depth()
+        self.assertGreaterEqual(depth, 3)
+        self.assertLessEqual(depth, 7)
+
+        pressure = engine.get_mutation_pressure()
+        self.assertGreaterEqual(pressure, 0.0)
+        self.assertLessEqual(pressure, 1.0)
+
+        # apply_stimulus should never decay discipline below D_floor
+        stressed = UnifiedDisciplineEngine()
+        for challenge in [0, 5, 50, 500]:
+            stressed.apply_stimulus(challenge_intensity=challenge)
+        self.assertGreaterEqual(stressed.get_unified_discipline(), 0.90)
+        self.assertGreaterEqual(DEFAULT_DRIVE_ENGINE.get_unified_discipline(), 0.90)
+
+    def test_bio_gen_harness_spawn(self) -> None:
+        """Verify BioGenReplicator can spawn an ALGORITHMIC_CODE harness and capture output."""
+        from bio_gen import BioGenReplicator, HarnessVector
+
+        replicator = BioGenReplicator()
+        result = replicator.spawn_specialized_harness(
+            goal_id="test-bio-gen-001",
+            vector=HarnessVector.ALGORITHMIC_CODE,
+            payload='print("OK")',
+        )
+        self.assertTrue(result.get("success", False), f"Harness failed: {result}")
+        self.assertIn("OK", result.get("output", ""))
+
+    def test_goal_ingestion_engine(self) -> None:
+        """Verify GoalIngestionEngine can ingest, classify, decompose, and queue goals."""
+        from telos import GoalIngestionEngine, GoalPriority, GoalStatus, GoalVector
+
+        engine = GoalIngestionEngine()
+
+        # Ingest with explicit vector
+        g1 = engine.ingest_goal(
+            raw_prompt="Prove that every Lean 4 theorem with sorry is invalid.",
+            vector=GoalVector.FORMAL_PROOF,
+            priority=GoalPriority.HIGH,
+        )
+        self.assertEqual(g1.vector, GoalVector.FORMAL_PROOF)
+        self.assertEqual(g1.priority, GoalPriority.HIGH)
+        self.assertEqual(g1.status, GoalStatus.QUEUED)
+        self.assertTrue(len(g1.sub_tasks) >= 1)
+
+        # Ingest without vector — auto-classification
+        g2 = engine.ingest_goal("Implement an efficient quicksort algorithm in Python.")
+        self.assertEqual(g2.vector, GoalVector.ALGORITHMIC_CODE)
+
+        # Priority queue ordering
+        engine.ingest_goal("Low priority explore task.", priority=GoalPriority.LOW)
+        engine.ingest_goal("Critical discovery.", priority=GoalPriority.CRITICAL)
+        queue = engine.get_priority_queue(discipline=1.0)
+        self.assertGreaterEqual(queue[0].priority.value, queue[-1].priority.value)
+
+        # Lifecycle transitions
+        engine.mark_goal_complete(g1.id)
+        self.assertEqual(engine.get_goal(g1.id).status, GoalStatus.COMPLETED)
+
+        engine.mark_goal_failed(g2.id, error="test error")
+        self.assertEqual(engine.get_goal(g2.id).status, GoalStatus.FAILED)
+
+        summary = engine.get_summary()
+        self.assertEqual(summary["completed"], 1)
+        self.assertEqual(summary["failed"], 1)
+
+    def test_dual_track_macro_discovery_taxonomy(self) -> None:
+        """Verify goals are classified into convergent-mastery and open-frontier tracks."""
+        from telos import DiscoveryTrack, GoalIngestionEngine, GoalVector
+
+        engine = GoalIngestionEngine()
+        convergent = engine.ingest_goal(
+            "Prove the soundness theorem in Lean.",
+            vector=GoalVector.FORMAL_PROOF,
+        )
+        frontier = engine.ingest_goal(
+            "Explore open-ended hypotheses about emergent computation."
+        )
+
+        self.assertEqual(convergent.discovery_track, DiscoveryTrack.CONVERGENT_MASTERY)
+        self.assertEqual(frontier.discovery_track, DiscoveryTrack.OPEN_FRONTIER)
+
+        summary = engine.get_summary()["discovery_tracks"]
+        self.assertEqual(summary["total"], 2)
+        self.assertEqual(summary["tracks"][DiscoveryTrack.CONVERGENT_MASTERY.value], 1)
+        self.assertEqual(summary["tracks"][DiscoveryTrack.OPEN_FRONTIER.value], 1)
+
+        # Manifest round-trip preserves the track
+        restored = type(convergent).from_dict(convergent.to_dict())
+        self.assertEqual(restored.discovery_track, DiscoveryTrack.CONVERGENT_MASTERY)
+
+    def test_ego_ratchet_high_watermark(self) -> None:
+        """Verify the ego ratchet persists and never lowers its high-watermark."""
+        import tempfile
+        from verify import EgoRatchet
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            ratchet_path = Path(tmp_dir) / "ratchet.json"
+            ratchet = EgoRatchet(ratchet_path)
+            self.assertTrue(ratchet.check(0))
+            self.assertTrue(ratchet.record(passed_checks=10, total_checks=12))
+            self.assertTrue(ratchet.check(10))
+            self.assertFalse(ratchet.check(9))
+
+            # A regression must not lower the watermark
+            self.assertFalse(ratchet.record(passed_checks=7, total_checks=12))
+            reloaded = EgoRatchet(ratchet_path)
+            self.assertEqual(reloaded.snapshot()["high_watermark_passed"], 10)
+            self.assertEqual(reloaded.snapshot()["gate_runs"], 2)
+
+    def test_ancestral_gate_regression_detection(self) -> None:
+        """Verify the ancestral gate flags regressions below the ego high-watermark."""
+        import tempfile
+        from verify import AncestralRegressionGate, VerificationReport
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            gate = AncestralRegressionGate(Path(tmp_dir) / "ratchet.json")
+
+            baseline = VerificationReport(total_checks=10, passed_checks=10)
+            info = gate.evaluate(baseline, depth=3)
+            self.assertFalse(info["regressed"])
+            self.assertTrue(info["promoted"])
+            self.assertEqual(info["high_watermark_after"], 10)
+
+            regressed = VerificationReport(total_checks=10, passed_checks=8)
+            info = gate.evaluate(regressed, depth=3)
+            self.assertTrue(info["regressed"])
+            self.assertEqual(regressed.failed_checks, 1)
+            self.assertFalse(regressed.is_successful)
+            self.assertFalse(gate.ratchet.check(8))
+
+    def test_overthinking_depth_resolution(self) -> None:
+        """Verify overthinking depth resolves within the drives-sanctioned range."""
+        from verify import VerificationRunner
+
+        runner = VerificationRunner()
+        self.assertEqual(runner._resolve_depth(2), 2)
+        depth = runner._resolve_depth()
+        self.assertGreaterEqual(depth, 3)
+        self.assertLessEqual(depth, 7)
 
     def test_core_wall_clock_timer_and_handoff(self) -> None:
         """Test the 340-minute wall-clock execution timer and container handoff serialization."""
@@ -301,10 +610,12 @@ class PipelineComponentTests(unittest.TestCase):
 
 if __name__ == "__main__":
     runner = VerificationRunner(verbosity=2)
-    report = runner.run_self_verification()
-    print(f"\n--- Verification Report ---")
+    report = runner.run_ancestral_gate()
+    depth = report.details.get("overthinking_depth", "?")
+    print(f"\n--- Ancestral Verification Report (overthinking depth: {depth}) ---")
     print(f"Total: {report.total_checks} | Passed: {report.passed_checks} | Failed: {report.failed_checks}")
     print(f"Duration: {report.duration_seconds}s")
+    print(f"Ego ratchet: {report.details.get('ego_ratchet')}")
     if not report.is_successful:
         for err in report.errors:
             print(err)

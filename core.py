@@ -1,10 +1,13 @@
 """Core Module: Continuous execution loop with 340-minute container handoff timer.
 
 Coordinates and integrates:
-  - telos.py: Phased tactical sub-quests, system mastery tracking, metabolic resets.
+  - telos.py: Phased tactical sub-quests, system mastery tracking, metabolic resets,
+               and universal goal-agnostic ingestion engine (GoalIngestionEngine).
   - mutate.py: Code inspection, AST validation, and surgical transformations.
   - prover.py: Subprocess syntax proving, Lean 4 / compiler execution pipeline.
   - verify.py: Automated verification test suites and component integrity checks.
+  - drives.py: Unified Discipline Engine — D_floor ≥ 0.90 adaptive drive parameters.
+  - bio_gen.py: Bio-Gen Replicator — specialized harness spawning across 3 vectors.
 
 Enforces an internal wall-clock timer (configured to a 340-minute window) that
 guarantees clean state serialization and graceful container handoff.
@@ -27,8 +30,27 @@ from typing import Any, Callable, Dict, List, Optional
 # Module integrations
 from mutate import CodeInspector, CodeMutator, SurgicalAstModifier
 from prover import ProverInterface
-from telos import MilestoneStatus, TacticalPhase, TelosEngine
+from telos import (
+    GoalIngestionEngine,
+    GoalStatus,
+    MilestoneStatus,
+    TacticalPhase,
+    TelosEngine,
+)
 from verify import ComponentIntegrityChecker, VerificationRunner
+
+# Optional integrations — degrade gracefully if unavailable
+try:
+    from drives import UnifiedDisciplineEngine  # type: ignore[import]
+    _DRIVES_AVAILABLE = True
+except ImportError:
+    _DRIVES_AVAILABLE = False
+
+try:
+    from bio_gen import BioGenReplicator, HarnessVector  # type: ignore[import]
+    _BIOGEN_AVAILABLE = True
+except ImportError:
+    _BIOGEN_AVAILABLE = False
 
 logging.basicConfig(
     level=logging.INFO,
@@ -120,8 +142,24 @@ class AutomationKernel:
 
         # Integrated sub-services
         self.prover = ProverInterface()
-        self.verifier = VerificationRunner()
+        self.verifier = VerificationRunner(
+            ratchet_path=self.workspace_root / ".sask_ego_ratchet.json"
+        )
         self.telos = self._build_pipeline_engine()
+
+        # Unified Discipline Engine (drives.py)
+        if _DRIVES_AVAILABLE:
+            self.drives: Optional[Any] = UnifiedDisciplineEngine()
+        else:
+            self.drives = None
+            logger.warning("drives.py not available — discipline engine disabled.")
+
+        # Bio-Gen Replicator (bio_gen.py)
+        if _BIOGEN_AVAILABLE:
+            self.bio_gen: Optional[Any] = BioGenReplicator()
+        else:
+            self.bio_gen = None
+            logger.warning("bio_gen.py not available — harness replication disabled.")
 
         self._register_signal_handlers()
 
@@ -199,6 +237,25 @@ class AutomationKernel:
 
         return engine
 
+    @staticmethod
+    def _build_harness_payload(goal: Any) -> str:
+        """Compose a deterministic, isolated harness script for an ingested goal."""
+        record = {
+            "id": goal.id,
+            "title": goal.title,
+            "vector": goal.vector.value,
+            "priority": goal.priority.name,
+            "description": goal.description,
+            "sub_tasks": list(goal.sub_tasks),
+        }
+        literal = json.dumps(json.dumps(record, ensure_ascii=True))
+        return (
+            "import json, os\n"
+            f"_GOAL = json.loads({literal})\n"
+            "_GOAL['harness_id'] = os.environ.get('SASK_HARNESS_ID', '')\n"
+            "print(json.dumps({'status': 'HARNESS_ACK', 'goal': _GOAL}))\n"
+        )
+
     def run_cycle(self) -> CycleMetrics:
         """Execute a single integrated cycle across telos, mutate, prover, and verify."""
         self.current_cycle += 1
@@ -219,7 +276,7 @@ class AutomationKernel:
             # 1. Reconnaissance: Environment & Module Integrity
             self.telos.update_status("env_check", MilestoneStatus.RUNNING)
             checker = ComponentIntegrityChecker()
-            modules = ["core", "mutate", "prover", "verify", "telos"]
+            modules = ["core", "mutate", "prover", "verify", "telos", "drives", "bio_gen"]
             import_results = {m: checker.verify_importable(m) for m in modules}
             if all(import_results.values()):
                 self.telos.update_status("env_check", MilestoneStatus.COMPLETED, metadata={"modules": import_results})
@@ -234,6 +291,43 @@ class AutomationKernel:
             if self.timer.is_threshold_reached():
                 logger.warning("Execution window threshold reached during reconnaissance phase.")
                 return self._finalize_cycle_metrics(cycle_start_time, start_iso, success=True, details=cycle_details)
+
+            # Stage 1.5: Goal Ingestion — poll manifest and spawn bio-gen harnesses
+            if self.bio_gen is not None:
+                try:
+                    loaded = self.telos.goal_engine.load_manifest()
+                    if loaded > 0:
+                        logger.info(f"GoalIngestionEngine: loaded {loaded} new goal(s) from manifest.")
+
+                    discipline_score = self.drives.get_unified_discipline() if self.drives else 1.0
+                    pending_goals = self.telos.goal_engine.get_priority_queue(discipline=discipline_score)
+                    bio_gen_results: List[Dict[str, Any]] = []
+
+                    for goal in pending_goals[:3]:  # Cap at 3 harnesses per cycle
+                        goal.status = GoalStatus.ACTIVE
+                        harness_result = self.bio_gen.spawn_specialized_harness(
+                            goal_id=goal.id,
+                            vector=goal.vector.value,
+                            payload=self._build_harness_payload(goal),
+                        )
+                        bio_gen_results.append({"goal_id": goal.id, "result": harness_result})
+                        if harness_result.get("success"):
+                            self.telos.goal_engine.mark_goal_complete(goal.id)
+                            logger.info(f"Bio-Gen harness completed goal {goal.id}: {goal.title[:60]}")
+                        else:
+                            self.telos.goal_engine.mark_goal_failed(
+                                goal.id, harness_result.get("error", "unknown")
+                            )
+                            error_count += 1
+                            logger.warning(
+                                f"Bio-Gen harness failed goal {goal.id}: {harness_result.get('error')}"
+                            )
+
+                    self.telos.goal_engine.save_manifest()
+                    cycle_details["bio_gen_results"] = bio_gen_results
+                except Exception as exc:
+                    logger.warning(f"Bio-Gen stage error (non-fatal): {exc}")
+                    cycle_details["bio_gen_error"] = str(exc)
 
             # 2. Transformation: AST Parsing & Code Structure Inspection
             self.telos.update_status("code_analysis", MilestoneStatus.RUNNING)
@@ -286,13 +380,15 @@ class AutomationKernel:
                 logger.warning("Execution window threshold reached during verification phase.")
                 return self._finalize_cycle_metrics(cycle_start_time, start_iso, success=True, details=cycle_details)
 
-            # 4. Automated Verification Suite
+            # 4. Automated Verification Suite — Ancestral Regression Gate
             self.telos.update_status("test_verification", MilestoneStatus.RUNNING)
-            test_report = self.verifier.run_self_verification()
+            test_report = self.verifier.run_ancestral_gate()
             cycle_details["test_report"] = {
                 "total": test_report.total_checks,
                 "passed": test_report.passed_checks,
                 "failed": test_report.failed_checks,
+                "overthinking_depth": test_report.details.get("overthinking_depth"),
+                "ego_ratchet": test_report.details.get("ego_ratchet"),
             }
             if test_report.is_successful:
                 self.telos.update_status(
@@ -318,6 +414,14 @@ class AutomationKernel:
             summary = self.telos.get_summary()
             cycle_details["milestone_summary"] = summary
             self.telos.update_status("telemetry_report", MilestoneStatus.COMPLETED)
+
+            # Apply drives stimulus based on cumulative error count
+            if self.drives is not None:
+                try:
+                    self.drives.apply_stimulus(challenge_intensity=error_count)
+                    cycle_details["drives_discipline"] = self.drives.get_unified_discipline()
+                except Exception as exc:
+                    logger.warning(f"Drives stimulus error (non-fatal): {exc}")
 
             self.state = CoreState.COMPLETED
             success = True
@@ -413,6 +517,27 @@ class AutomationKernel:
     def export_state_json(self) -> str:
         """Export serialized system state, timer metrics, and cycle history as formatted JSON."""
         summary = self.telos.get_summary()
+
+        # Drives telemetry
+        drives_telemetry: Dict[str, Any] = {"available": _DRIVES_AVAILABLE}
+        if self.drives is not None:
+            try:
+                drives_telemetry.update({
+                    "unified_discipline": self.drives.get_unified_discipline(),
+                    "mutation_pressure": self.drives.get_mutation_pressure(),
+                    "overthinking_depth": self.drives.get_overthinking_depth(),
+                })
+            except Exception:
+                pass
+
+        # Bio-Gen summary
+        bio_gen_summary: Dict[str, Any] = {"available": _BIOGEN_AVAILABLE}
+        if self.bio_gen is not None:
+            try:
+                bio_gen_summary.update(self.bio_gen.get_summary() if hasattr(self.bio_gen, "get_summary") else {})
+            except Exception:
+                pass
+
         payload = {
             "state": self.state.value,
             "container_handoff": self.state in (CoreState.HANDOFF_READY, CoreState.COMPLETED),
@@ -427,6 +552,8 @@ class AutomationKernel:
             "system_mastery": summary["system_mastery"],
             "total_cycles_executed": len(self.cycle_history),
             "telos_summary": summary,
+            "drives_telemetry": drives_telemetry,
+            "bio_gen_summary": bio_gen_summary,
             "cycles": [asdict(c) for c in self.cycle_history],
         }
         return json.dumps(payload, indent=2)
