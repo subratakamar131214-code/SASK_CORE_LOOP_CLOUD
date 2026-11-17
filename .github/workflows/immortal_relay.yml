@@ -42,6 +42,11 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
       - name: Install Lean 4 via elan
         run: |
           echo "Installing elan toolchain manager..."
@@ -57,8 +62,8 @@ jobs:
 
       - name: Pre-Flight Syntax & Import Gate
         run: |
-          python -m py_compile core.py drives.py bio_gen.py telos.py mutate.py prover.py verify.py
-          python -c "import core, drives, bio_gen, telos, mutate, prover, verify; print('ALL MODULES LOADED SUCCESSFULLY')"
+          python -m py_compile core.py drives.py bio_gen.py telos.py mutate.py prover.py verify.py science_mcp.py
+          python -c "import core, drives, bio_gen, telos, mutate, prover, verify, science_mcp; print('10-ROUTER SASK KERNEL FULLY INTEGRATED')"
 
       - name: Execute Core Event Loop
         run: |

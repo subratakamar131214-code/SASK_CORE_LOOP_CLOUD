@@ -1,0 +1,5 @@
+# SASK 10-router science engine — MCP server runtime
+# science_mcp.py tries `fastmcp`, then `mcp.server.fastmcp`, then an in-process
+# registry shim so the kernel still boots without network access.
+fastmcp>=2.12,<3
+# mcp[cli]>=1.9

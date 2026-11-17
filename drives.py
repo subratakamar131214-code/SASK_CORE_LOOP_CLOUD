@@ -99,6 +99,52 @@ class UnifiedDisciplineEngine:
         self.overthinking = min(1.0, self.overthinking + (reinforcement * 0.7))
         return self.get_telemetry()
 
+    def record_execution_telemetry(
+        self,
+        router: str,
+        latency_seconds: float = 0.0,
+        residual: float = 0.0,
+        success: bool = True,
+    ) -> Dict[str, Any]:
+        """Convert router friction into permanent discipline pressure.
+
+        Numerical residual, failures, and latency are fused into a bounded
+        challenge intensity that permanently reinforces the drive matrix. The
+        resulting discipline is always clamped at or above ``D_floor``.
+
+        Args:
+            router: Router or subsystem that produced the telemetry.
+            latency_seconds: Observed execution latency.
+            residual: Numerical residual in [0, 1].
+            success: Whether the execution completed successfully.
+
+        Returns:
+            Telemetry describing the applied pressure and resulting discipline.
+        """
+        bounded_residual = max(0.0, min(1.0, float(residual)))
+        residual_pressure = bounded_residual * 10.0
+        failure_pressure = 0.0 if success else 5.0
+        latency_pressure = max(0.0, min(5.0, float(latency_seconds))) * 0.25
+        challenge = round(
+            min(10.0, residual_pressure + failure_pressure + latency_pressure),
+            4,
+        )
+
+        before = self.get_unified_discipline()
+        self.apply_stimulus(challenge_intensity=challenge, context=router)
+        after = self.get_unified_discipline()
+
+        return {
+            "router": str(router),
+            "challenge_intensity": challenge,
+            "discipline_before": before,
+            "discipline_after": after,
+            "floor": self.floor,
+            "success": bool(success),
+            "residual": round(bounded_residual, 8),
+            "latency_seconds": round(max(0.0, float(latency_seconds)), 6),
+        }
+
     def get_telemetry(self) -> DriveMetrics:
         """Export complete state metrics for the unified discipline matrix."""
         return DriveMetrics(
@@ -140,4 +186,19 @@ def apply_stimulus(
     return DEFAULT_DRIVE_ENGINE.apply_stimulus(
         challenge_intensity=challenge_intensity,
         context=context,
+    )
+
+
+def record_execution_telemetry(
+    router: str = "unknown",
+    latency_seconds: float = 0.0,
+    residual: float = 0.0,
+    success: bool = True,
+) -> Dict[str, Any]:
+    """Feed router execution friction into the global discipline engine."""
+    return DEFAULT_DRIVE_ENGINE.record_execution_telemetry(
+        router=router,
+        latency_seconds=latency_seconds,
+        residual=residual,
+        success=success,
     )

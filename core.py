@@ -276,7 +276,7 @@ class AutomationKernel:
             # 1. Reconnaissance: Environment & Module Integrity
             self.telos.update_status("env_check", MilestoneStatus.RUNNING)
             checker = ComponentIntegrityChecker()
-            modules = ["core", "mutate", "prover", "verify", "telos", "drives", "bio_gen"]
+            modules = ["core", "mutate", "prover", "verify", "telos", "drives", "bio_gen", "science_mcp"]
             import_results = {m: checker.verify_importable(m) for m in modules}
             if all(import_results.values()):
                 self.telos.update_status("env_check", MilestoneStatus.COMPLETED, metadata={"modules": import_results})
@@ -292,42 +292,86 @@ class AutomationKernel:
                 logger.warning("Execution window threshold reached during reconnaissance phase.")
                 return self._finalize_cycle_metrics(cycle_start_time, start_iso, success=True, details=cycle_details)
 
-            # Stage 1.5: Goal Ingestion — poll manifest and spawn bio-gen harnesses
-            if self.bio_gen is not None:
-                try:
-                    loaded = self.telos.goal_engine.load_manifest()
-                    if loaded > 0:
-                        logger.info(f"GoalIngestionEngine: loaded {loaded} new goal(s) from manifest.")
+            # Stage 1.5: Goal Ingestion — science router dispatch with harness fallback
+            try:
+                loaded = self.telos.goal_engine.load_manifest()
+                if loaded > 0:
+                    logger.info(f"GoalIngestionEngine: loaded {loaded} new goal(s) from manifest.")
 
-                    discipline_score = self.drives.get_unified_discipline() if self.drives else 1.0
-                    pending_goals = self.telos.goal_engine.get_priority_queue(discipline=discipline_score)
-                    bio_gen_results: List[Dict[str, Any]] = []
+                discipline_score = self.drives.get_unified_discipline() if self.drives else 1.0
+                pending_goals = self.telos.goal_engine.get_priority_queue(discipline=discipline_score)
+                bio_gen_results: List[Dict[str, Any]] = []
+                science_dispatches: List[Dict[str, Any]] = []
 
-                    for goal in pending_goals[:3]:  # Cap at 3 harnesses per cycle
-                        goal.status = GoalStatus.ACTIVE
-                        harness_result = self.bio_gen.spawn_specialized_harness(
-                            goal_id=goal.id,
-                            vector=goal.vector.value,
-                            payload=self._build_harness_payload(goal),
+                for goal in pending_goals[:3]:  # Cap at 3 dispatches per cycle
+                    goal.status = GoalStatus.ACTIVE
+                    router = self.telos.goal_engine.resolve_router(goal)
+                    dispatch = (
+                        self.telos.goal_engine.dispatch_goal(
+                            goal.id,
+                            router=router,
+                            drive_engine=self.drives,
                         )
-                        bio_gen_results.append({"goal_id": goal.id, "result": harness_result})
-                        if harness_result.get("success"):
+                        if router
+                        else {"handled": False}
+                    )
+
+                    if dispatch.get("handled"):
+                        result = dispatch.get("result", {}) or {}
+                        success = bool(result.get("success"))
+                        science_dispatches.append({
+                            "goal_id": goal.id,
+                            "router": dispatch.get("router"),
+                            "success": success,
+                            "execution_mode": result.get("execution_mode"),
+                            "latency_seconds": result.get("latency_seconds"),
+                            "numerical_residual": result.get("numerical_residual"),
+                            "optimizer_strategy": (result.get("optimizer") or {}).get("strategy"),
+                            "discipline": result.get("discipline"),
+                        })
+                        if success:
                             self.telos.goal_engine.mark_goal_complete(goal.id)
-                            logger.info(f"Bio-Gen harness completed goal {goal.id}: {goal.title[:60]}")
-                        else:
-                            self.telos.goal_engine.mark_goal_failed(
-                                goal.id, harness_result.get("error", "unknown")
+                            logger.info(
+                                f"Science router {dispatch.get('router')} completed goal "
+                                f"{goal.id}: {goal.title[:60]}"
                             )
+                        else:
+                            error = result.get("error") or "router execution failed"
+                            self.telos.goal_engine.mark_goal_failed(goal.id, str(error))
                             error_count += 1
                             logger.warning(
-                                f"Bio-Gen harness failed goal {goal.id}: {harness_result.get('error')}"
+                                f"Science router {dispatch.get('router')} failed goal "
+                                f"{goal.id}: {error}"
                             )
+                        continue
 
-                    self.telos.goal_engine.save_manifest()
-                    cycle_details["bio_gen_results"] = bio_gen_results
-                except Exception as exc:
-                    logger.warning(f"Bio-Gen stage error (non-fatal): {exc}")
-                    cycle_details["bio_gen_error"] = str(exc)
+                    if self.bio_gen is None:
+                        continue
+
+                    harness_result = self.bio_gen.spawn_specialized_harness(
+                        goal_id=goal.id,
+                        vector=goal.vector.value,
+                        payload=self._build_harness_payload(goal),
+                    )
+                    bio_gen_results.append({"goal_id": goal.id, "result": harness_result})
+                    if harness_result.get("success"):
+                        self.telos.goal_engine.mark_goal_complete(goal.id)
+                        logger.info(f"Bio-Gen harness completed goal {goal.id}: {goal.title[:60]}")
+                    else:
+                        self.telos.goal_engine.mark_goal_failed(
+                            goal.id, harness_result.get("error", "unknown")
+                        )
+                        error_count += 1
+                        logger.warning(
+                            f"Bio-Gen harness failed goal {goal.id}: {harness_result.get('error')}"
+                        )
+
+                self.telos.goal_engine.save_manifest()
+                cycle_details["bio_gen_results"] = bio_gen_results
+                cycle_details["science_dispatches"] = science_dispatches
+            except Exception as exc:
+                logger.warning(f"Goal dispatch stage error (non-fatal): {exc}")
+                cycle_details["goal_dispatch_error"] = str(exc)
 
             # 2. Transformation: AST Parsing & Code Structure Inspection
             self.telos.update_status("code_analysis", MilestoneStatus.RUNNING)
@@ -538,6 +582,15 @@ class AutomationKernel:
             except Exception:
                 pass
 
+        # 10-router science engine telemetry
+        science_telemetry: Dict[str, Any] = {"available": False}
+        try:
+            from science_mcp import get_science_telemetry  # type: ignore[import-not-found]
+
+            science_telemetry = get_science_telemetry()
+        except Exception as exc:
+            science_telemetry = {"available": False, "error": str(exc)}
+
         payload = {
             "state": self.state.value,
             "container_handoff": self.state in (CoreState.HANDOFF_READY, CoreState.COMPLETED),
@@ -554,6 +607,7 @@ class AutomationKernel:
             "telos_summary": summary,
             "drives_telemetry": drives_telemetry,
             "bio_gen_summary": bio_gen_summary,
+            "science_engine": science_telemetry,
             "cycles": [asdict(c) for c in self.cycle_history],
         }
         return json.dumps(payload, indent=2)

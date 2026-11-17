@@ -64,7 +64,7 @@ class BioGenReplicator:
         workspace_root: Optional[Path] = None,
         default_timeout: float = 60.0,
     ) -> None:
-        self.workspace_root = workspace_root or Path.cwd()
+        self.workspace_root = (workspace_root or Path.cwd()).resolve()
         self.default_timeout = default_timeout
         self._harness_registry: Dict[str, HarnessResult] = {}
 
@@ -105,6 +105,12 @@ class BioGenReplicator:
         env["SASK_HARNESS_ID"] = harness_id
         env["SASK_GOAL_ID"] = goal_id
         env["SASK_VECTOR"] = vector.value
+        existing_pythonpath = env.get("PYTHONPATH", "")
+        env["PYTHONPATH"] = os.pathsep.join(
+            part
+            for part in (str(self.workspace_root), existing_pythonpath)
+            if part
+        )
 
         # Write payload to a temporary script file for clean subprocess isolation
         with tempfile.NamedTemporaryFile(
@@ -167,6 +173,47 @@ class BioGenReplicator:
             Path(tmp_path).unlink(missing_ok=True)
 
         return self._merge_result(result).to_dict()
+
+    def spawn_router_harness(
+        self,
+        goal_id: str,
+        router: str,
+        payload: Optional[Dict[str, Any]] = None,
+        vector: Union[HarnessVector, str] = HarnessVector.FRONTIER_EXPLORE,
+        timeout: Optional[float] = None,
+    ) -> Dict[str, Any]:
+        """Spawn a lightweight harness that dispatches a science router.
+
+        The payload is passed through the environment so arbitrary goal text
+        cannot alter the generated harness script.
+
+        Args:
+            goal_id: Goal identifier from the ingestion pipeline.
+            router: Science router name or alias.
+            payload: Router keyword payload.
+            vector: Harness vector used for registry classification.
+            timeout: Subprocess timeout in seconds.
+
+        Returns:
+            Harness result dict; the router JSON appears in ``output``.
+        """
+        script = (
+            "import json, os\n"
+            "from science_mcp import dispatch_router\n"
+            f"router = {json.dumps(router)}\n"
+            "payload = json.loads(os.environ.get('SASK_ROUTER_PAYLOAD', '{}'))\n"
+            "result = dispatch_router(router, payload=payload)\n"
+            "print(json.dumps(result, default=str))\n"
+        )
+        return self.spawn_specialized_harness(
+            goal_id=goal_id,
+            vector=vector,
+            payload=script,
+            timeout=timeout,
+            env_overrides={
+                "SASK_ROUTER_PAYLOAD": json.dumps(payload or {}, default=str)
+            },
+        )
 
     def _merge_result(self, result: HarnessResult) -> HarnessResult:
         """Merge harness result back into the main registry."""

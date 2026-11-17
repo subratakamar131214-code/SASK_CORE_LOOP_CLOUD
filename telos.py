@@ -14,7 +14,7 @@ from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, Iterable, List, Optional, Set
+from typing import Any, Callable, Dict, Iterable, List, Optional, Set, Union
 
 
 # ---------------------------------------------------------------------------
@@ -264,9 +264,52 @@ class GoalIngestionEngine:
         "sort", "search", "graph", "tree", "dynamic", "programming",
     }
 
+    # Keyword routing surface for the ten science_mcp routers
+    _ROUTER_KEYWORDS: Dict[str, Set[str]] = {
+        "quantum_router": {
+            "quantum", "qasm", "qubit", "circuit", "anneal", "superconduct",
+        },
+        "atomistic_router": {
+            "atomistic", "atom", "dft", "molecular dynamics", "lattice",
+            "interatomic", "calphad",
+        },
+        "hpc_router": {
+            "hpc", "slurm", "mpi", "cluster", "supercomput", "job array",
+            "batch scheduler",
+        },
+        "wetlab_router": {
+            "wetlab", "wet lab", "assay", "pipette", "laboratory",
+            "protocol", "synthesis",
+        },
+        "sensing_router": {
+            "sensor", "satellite", "imagery", "remote sensing", "telemetry",
+            "stac", "bounding box",
+        },
+        "beamline_router": {
+            "beamline", "synchrotron", "x-ray", "diffraction", "flyscan",
+        },
+        "free_grid_router": {
+            "grid compute", "volunteer", "boinc", "distributed comput",
+            "swarm", "work pool",
+        },
+        "multiphysics_router": {
+            "pde", "multiphysics", "finite element", "cfd", "thermal",
+            "structural", "mesh",
+        },
+        "digital_twin_router": {
+            "digital twin", "usd", "kinematic", "physics engine",
+            "simulation scene",
+        },
+        "biomolecular_router": {
+            "protein", "pdb", "biomolecular", "genome", "docking",
+            "forcefield",
+        },
+    }
+
     def __init__(self) -> None:
         self._goals: Dict[str, IngestionGoal] = {}
         self.taxonomy = MacroDiscoveryTaxonomy()
+        self._router_dispatch_count = 0
 
     # ------------------------------------------------------------------
     # Public API
@@ -313,6 +356,9 @@ class GoalIngestionEngine:
             discipline_weight=discipline_weight,
             discovery_track=effective_track,
         )
+        router = self.resolve_router(raw_prompt)
+        if router:
+            goal.metadata["router"] = router
         self._goals[goal_id] = goal
         return goal
 
@@ -388,6 +434,177 @@ class GoalIngestionEngine:
         """Retrieve a goal by ID."""
         return self._goals.get(goal_id)
 
+    def resolve_router(self, goal_or_prompt: Union[IngestionGoal, str]) -> Optional[str]:
+        """Resolve a goal to one of the ten science routers.
+
+        Explicit ``metadata["router"]`` hints take precedence. Otherwise the
+        prompt is scored against router keyword sets and the strongest match is
+        returned.
+
+        Args:
+            goal_or_prompt: An ingested goal or a raw prompt string.
+
+        Returns:
+            A canonical router name, or None when no router matches.
+        """
+        if isinstance(goal_or_prompt, IngestionGoal):
+            explicit = (goal_or_prompt.metadata or {}).get("router")
+            if explicit:
+                return str(explicit)
+            prompt = goal_or_prompt.raw_prompt
+        else:
+            prompt = str(goal_or_prompt)
+
+        lower = prompt.lower()
+        scores: Dict[str, int] = {}
+        for router, keywords in self._ROUTER_KEYWORDS.items():
+            score = sum(1 for keyword in keywords if keyword in lower)
+            if score:
+                scores[router] = score
+        if not scores:
+            return None
+        return max(scores, key=lambda name: (scores[name], name))
+
+    @staticmethod
+    def _normalize_router_name(router: str) -> str:
+        """Expand short router names to their canonical identifier."""
+        key = router.strip().lower().replace("-", "_").replace(" ", "_")
+        if key.endswith("_router"):
+            return key
+        return f"{key}_router"
+
+    def _default_router_payload(
+        self,
+        goal: IngestionGoal,
+        router: str,
+    ) -> Dict[str, Any]:
+        """Derive a minimal router payload from an ingested goal."""
+        text = (goal.description or goal.raw_prompt).strip()
+        payloads: Dict[str, Dict[str, Any]] = {
+            "quantum_router": {
+                "qasm_batch": [text],
+                "target_backends": ["statevector_sim"],
+                "precision_target": 1e-6,
+            },
+            "atomistic_router": {
+                "atoms_batch": [{"goal": text}],
+                "calculator_chain": ["mlip", "dft"],
+                "live_sensor_feed": None,
+            },
+            "hpc_router": {
+                "execution_segments": [{"goal": text}],
+                "target_hpc_matrix": ["local"],
+            },
+            "wetlab_router": {
+                "protocol_rdf_graphs": [{"goal": text}],
+                "facility_matrix": ["simulated_facility"],
+            },
+            "sensing_router": {
+                "bbox": None,
+                "datetime_range": {},
+                "collections": [text],
+                "auto_inject_simulators": True,
+            },
+            "beamline_router": {
+                "scan_plans": [{"goal": text}],
+                "beamline_nodes": ["simulated_beamline"],
+            },
+            "free_grid_router": {
+                "executable_cmds": [f"# simulated task: {text[:180]}"],
+                "input_matrix": [],
+                "target_pools": ["local_pool"],
+            },
+            "multiphysics_router": {
+                "mesh_files": [{"goal": text}],
+                "physics_domains": ["thermal", "structural"],
+                "coupled_solvers": ["fenics"],
+            },
+            "digital_twin_router": {
+                "usd_scenes": [{"goal": text}],
+                "physics_engines": ["physx"],
+                "dt": 0.01,
+            },
+            "biomolecular_router": {
+                "pdb_ids": [],
+                "pipeline_steps": [text],
+                "forcefields": ["amber"],
+            },
+        }
+        return dict(payloads.get(router, {"goal": text}))
+
+    def dispatch_goal(
+        self,
+        goal_id: str,
+        router: Optional[str] = None,
+        payload: Optional[Dict[str, Any]] = None,
+        drive_engine: Optional[Any] = None,
+    ) -> Dict[str, Any]:
+        """Dispatch an ingested goal to one of the ten FastMCP science routers.
+
+        Args:
+            goal_id: Identifier of the ingested goal.
+            router: Optional explicit router; otherwise resolved from the goal.
+            payload: Optional router payload; otherwise derived from the goal.
+            drive_engine: Optional discipline engine to receive router telemetry.
+
+        Returns:
+            Dict with ``handled``, ``router``, and the router ``result``. Goal
+            lifecycle status is left to the caller.
+        """
+        goal = self._goals.get(goal_id)
+        if goal is None:
+            return {
+                "handled": False,
+                "router": router,
+                "error": f"Unknown goal '{goal_id}'.",
+            }
+
+        selected = router or self.resolve_router(goal)
+        if not selected:
+            return {"handled": False, "router": None, "reason": "no_router_match"}
+        selected = self._normalize_router_name(selected)
+
+        try:
+            from science_mcp import dispatch_router  # type: ignore[import-not-found]
+        except Exception as exc:
+            return {
+                "handled": False,
+                "router": selected,
+                "error": f"science_mcp unavailable: {exc}",
+            }
+
+        effective_payload = (
+            payload
+            if payload is not None
+            else self._default_router_payload(goal, selected)
+        )
+        result = dispatch_router(
+            selected,
+            payload=effective_payload,
+            drive_engine=drive_engine,
+        )
+
+        goal.metadata["router"] = selected
+        goal.metadata["last_router_dispatch"] = {
+            "success": bool(result.get("success")),
+            "execution_mode": result.get("execution_mode"),
+            "latency_seconds": result.get("latency_seconds"),
+            "numerical_residual": result.get("numerical_residual"),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+        self._router_dispatch_count += 1
+        return {"handled": True, "router": selected, "result": result}
+
+    def get_router_histogram(self) -> Dict[str, int]:
+        """Count ingested goals assigned to each science router."""
+        histogram: Dict[str, int] = {}
+        for goal in self._goals.values():
+            assigned = (goal.metadata or {}).get("router")
+            if assigned:
+                key = str(assigned)
+                histogram[key] = histogram.get(key, 0) + 1
+        return histogram
+
     def get_summary(self) -> Dict[str, Any]:
         """Return a structured summary of the current goal queue."""
         total = len(self._goals)
@@ -402,6 +619,8 @@ class GoalIngestionEngine:
             "completed": counts[GoalStatus.COMPLETED.value],
             "failed": counts[GoalStatus.FAILED.value],
             "discovery_tracks": self.taxonomy.summarize(self._goals.values()),
+            "science_router_hints": self.get_router_histogram(),
+            "router_dispatches": self._router_dispatch_count,
         }
 
     # ------------------------------------------------------------------

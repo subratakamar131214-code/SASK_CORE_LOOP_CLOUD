@@ -573,6 +573,87 @@ class PipelineComponentTests(unittest.TestCase):
         self.assertGreaterEqual(depth, 3)
         self.assertLessEqual(depth, 7)
 
+    def test_science_router_matrix(self) -> None:
+        """Verify all ten science routers execute and return bounded telemetry."""
+        from science_mcp import ROUTER_NAMES, dispatch_router, get_science_telemetry
+
+        self.assertEqual(len(ROUTER_NAMES), 10)
+        for router in ROUTER_NAMES:
+            result = dispatch_router(router, payload={})
+            self.assertTrue(
+                result.get("success"),
+                f"{router} failed: {result.get('error')}",
+            )
+            self.assertEqual(result["router"], router)
+            self.assertIn(
+                result["execution_mode"],
+                {"simulated_fallback", "live_adapter"},
+            )
+            self.assertGreaterEqual(result["numerical_residual"], 0.0)
+            self.assertLessEqual(result["numerical_residual"], 1.0)
+            self.assertGreaterEqual(result["latency_seconds"], 0.0)
+            self.assertIn("task_graph", result)
+            self.assertIn("optimizer", result)
+            self.assertIn("discipline", result)
+
+        telemetry = get_science_telemetry()
+        self.assertEqual(telemetry["router_count"], 10)
+        self.assertEqual(len(telemetry["routers"]), 10)
+
+    def test_telos_science_goal_dispatch(self) -> None:
+        """Verify telos routes a science prompt to the right router and executes it."""
+        from telos import GoalIngestionEngine
+
+        engine = GoalIngestionEngine()
+        goal = engine.ingest_goal(
+            "Run a quantum circuit swarm with high precision."
+        )
+        self.assertEqual(engine.resolve_router(goal), "quantum_router")
+        self.assertEqual(goal.metadata.get("router"), "quantum_router")
+
+        report = engine.dispatch_goal(goal.id)
+        self.assertTrue(report["handled"])
+        self.assertEqual(report["router"], "quantum_router")
+        self.assertTrue(report["result"]["success"])
+        self.assertEqual(goal.metadata["router"], "quantum_router")
+        self.assertEqual(engine.get_router_histogram()["quantum_router"], 1)
+        self.assertEqual(engine.get_summary()["router_dispatches"], 1)
+
+    def test_drives_execution_friction(self) -> None:
+        """Verify router friction raises discipline without breaching D_floor."""
+        from drives import UnifiedDisciplineEngine
+
+        engine = UnifiedDisciplineEngine()
+        before = engine.get_unified_discipline()
+        telemetry = engine.record_execution_telemetry(
+            router="quantum_router",
+            latency_seconds=3.0,
+            residual=1.0,
+            success=False,
+        )
+        self.assertGreater(telemetry["challenge_intensity"], 0.0)
+        self.assertLessEqual(telemetry["challenge_intensity"], 10.0)
+        self.assertGreaterEqual(telemetry["discipline_after"], 0.90)
+        self.assertGreaterEqual(telemetry["discipline_after"], before)
+        self.assertEqual(telemetry["floor"], 0.90)
+
+    def test_bio_gen_router_harness(self) -> None:
+        """Verify bio_gen can spawn a harness for a specific science router."""
+        from bio_gen import BioGenReplicator
+
+        replicator = BioGenReplicator()
+        result = replicator.spawn_router_harness(
+            goal_id="test-router-harness-001",
+            router="quantum_router",
+            payload={
+                "qasm_batch": ["OPENQASM 2.0; qreg q[1];"],
+                "target_backends": ["statevector_sim"],
+                "precision_target": 1e-6,
+            },
+        )
+        self.assertTrue(result.get("success"), result.get("error"))
+        self.assertIn("quantum_router", result.get("output", ""))
+
     def test_core_wall_clock_timer_and_handoff(self) -> None:
         """Test the 340-minute wall-clock execution timer and container handoff serialization."""
         import json
