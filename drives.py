@@ -7,6 +7,7 @@ boost (D_floor >= 0.90) with zero temporary booster decay.
 
 from __future__ import annotations
 
+import threading
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Dict, Optional
@@ -41,6 +42,8 @@ class UnifiedDisciplineEngine:
         overthinking: float = 0.93,
         floor: float = 0.90,
     ) -> None:
+        # Concurrent science-router workers read and reinforce drives in parallel.
+        self._lock = threading.RLock()
         self.floor = max(0.90, min(1.0, floor))
         self.discipline = max(self.floor, min(1.0, discipline))
         self.obsession = max(self.floor, min(1.0, obsession))
@@ -91,12 +94,13 @@ class UnifiedDisciplineEngine:
     ) -> DriveMetrics:
         """Permanently reinforce drives under challenge stimuli with zero decay below floor."""
         reinforcement = max(0.0, min(0.05, 0.01 * challenge_intensity))
-        self.discipline = min(1.0, self.discipline + reinforcement)
-        self.obsession = min(1.0, self.obsession + reinforcement)
-        self.motivation = min(1.0, self.motivation + reinforcement)
-        self.anger = min(1.0, self.anger + (reinforcement * 0.5))
-        self.madness = min(1.0, self.madness + (reinforcement * 0.5))
-        self.overthinking = min(1.0, self.overthinking + (reinforcement * 0.7))
+        with self._lock:
+            self.discipline = min(1.0, self.discipline + reinforcement)
+            self.obsession = min(1.0, self.obsession + reinforcement)
+            self.motivation = min(1.0, self.motivation + reinforcement)
+            self.anger = min(1.0, self.anger + (reinforcement * 0.5))
+            self.madness = min(1.0, self.madness + (reinforcement * 0.5))
+            self.overthinking = min(1.0, self.overthinking + (reinforcement * 0.7))
         return self.get_telemetry()
 
     def record_execution_telemetry(
@@ -130,9 +134,10 @@ class UnifiedDisciplineEngine:
             4,
         )
 
-        before = self.get_unified_discipline()
-        self.apply_stimulus(challenge_intensity=challenge, context=router)
-        after = self.get_unified_discipline()
+        with self._lock:
+            before = self.get_unified_discipline()
+            self.apply_stimulus(challenge_intensity=challenge, context=router)
+            after = self.get_unified_discipline()
 
         return {
             "router": str(router),

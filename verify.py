@@ -654,6 +654,143 @@ class PipelineComponentTests(unittest.TestCase):
         self.assertTrue(result.get("success"), result.get("error"))
         self.assertIn("quantum_router", result.get("output", ""))
 
+    def test_goal_stream_expansion_and_dedup(self) -> None:
+        """Verify exhaustive level-wise expansion and ledger deduplication."""
+        import tempfile
+
+        from telos import GoalIngestionEngine, GoalPriority, GoalStreamingPipeline
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            root = Path(tmp_dir)
+            objective = "Prove the convergence theorem for autonomous kernels."
+
+            engine = GoalIngestionEngine()
+            stream = GoalStreamingPipeline(
+                engine,
+                ledger_path=root / "ledger.json",
+                state_path=root / "stream.json",
+                max_level=3,
+                max_concurrency=2,
+                producer_poll_seconds=0.05,
+            )
+            info = stream.submit_objective(objective, level=2, priority=GoalPriority.HIGH)
+            self.assertTrue(info["new"])
+            self.assertTrue(stream.start(resume=False)["started"])
+
+            # L0=1, L1=5, L2=15 => 21 exhaustive permutations.
+            self.assertTrue(stream.wait_for_items(21, timeout=10), stream.get_telemetry())
+            drained = stream.drain()
+            self.assertEqual(len(drained), 2)  # bounded by max_concurrency
+            for goal in drained:
+                self.assertTrue(stream.complete(goal.id, True)["freed_slot"])
+            self.assertEqual(len(stream.drain()), 2)
+
+            telemetry = stream.stop()
+            self.assertEqual(telemetry["produced"], 21)
+            self.assertEqual(telemetry["level_counts"], {"0": 1, "1": 5, "2": 15})
+            self.assertEqual(telemetry["ledger"]["entries"], 21)
+            self.assertEqual(telemetry["completed"], 2)
+            self.assertTrue((root / "stream.json").is_file())
+            self.assertTrue((root / "ledger.json").is_file())
+
+            # A fresh runner with the same ledger must suppress every duplicate.
+            engine2 = GoalIngestionEngine()
+            stream2 = GoalStreamingPipeline(
+                engine2,
+                ledger_path=root / "ledger.json",
+                state_path=root / "stream2.json",
+                max_level=3,
+                max_concurrency=2,
+                producer_poll_seconds=0.05,
+            )
+            stream2.submit_objective(objective, level=2, priority=GoalPriority.HIGH)
+            stream2.start(resume=False)
+            deadline = time.monotonic() + 5.0
+            while time.monotonic() < deadline:
+                snapshot = stream2.get_telemetry()
+                if snapshot["producer_passes"] >= 1 and snapshot["queue_depth"] == 0:
+                    break
+                time.sleep(0.02)
+            telemetry2 = stream2.stop()
+            self.assertEqual(telemetry2["produced"], 0)
+            self.assertGreaterEqual(telemetry2["duplicates_suppressed"], 21)
+            self.assertEqual(len(engine2.get_all_goals()), 0)
+
+    def test_goal_stream_resume_and_slot_release(self) -> None:
+        """Verify in-flight and pending work survives a handoff and is requeued."""
+        import tempfile
+
+        from telos import GoalIngestionEngine, GoalPriority, GoalStreamingPipeline
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            root = Path(tmp_dir)
+            objective = "Explore novel protein docking frontiers."
+
+            stream = GoalStreamingPipeline(
+                GoalIngestionEngine(),
+                ledger_path=root / "ledger.json",
+                state_path=root / "stream.json",
+                max_level=1,
+                max_concurrency=2,
+                producer_poll_seconds=0.05,
+            )
+            stream.submit_objective(objective, level=1, priority=GoalPriority.NORMAL)
+            stream.start(resume=False)
+            self.assertTrue(stream.wait_for_items(6, timeout=10))  # L0=1 + L1=5
+
+            in_flight = stream.drain()
+            self.assertEqual(len(in_flight), 2)
+            self.assertEqual(stream.available_slots, 0)
+            self.assertEqual(stream.drain(), [])  # slots exhausted
+
+            handoff = stream.stop()
+            self.assertEqual(handoff["in_flight"], 2)
+
+            resumed_engine = GoalIngestionEngine()
+            resumed = GoalStreamingPipeline(
+                resumed_engine,
+                ledger_path=root / "ledger.json",
+                state_path=root / "stream.json",
+                max_level=1,
+                max_concurrency=2,
+                producer_poll_seconds=0.05,
+            )
+            info = resumed.start(resume=True)
+            self.assertEqual(info["resumed"]["requeued"], 6)
+            self.assertTrue(resumed.wait_for_items(6, timeout=5))
+            self.assertEqual(len(resumed_engine.get_all_goals()), 6)
+            resumed.stop()
+
+    def test_core_goal_stream_wiring(self) -> None:
+        """Verify the core starts, drains, persists, and exports the goal stream."""
+        import tempfile
+
+        from core import AutomationKernel
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            root = Path(tmp_dir)
+            kernel = AutomationKernel(
+                workspace_root=root,
+                window_minutes=1.0,
+                stream_enabled=True,
+                stream_level=1,
+                stream_concurrency=2,
+            )
+            info = kernel._start_goal_stream()
+            self.assertTrue(info["started"])
+            self.assertTrue(kernel.telos.stream.wait_for_items(1, timeout=10))
+
+            telemetry = kernel.telos.stream.stop()
+            self.assertGreaterEqual(telemetry["produced"], 6)
+
+            state_path = kernel.save_state_to_disk()
+            payload = json.loads(state_path.read_text(encoding="utf-8"))
+            self.assertTrue(payload["goal_stream"]["enabled"])
+            self.assertGreaterEqual(payload["goal_stream"]["produced"], 6)
+            self.assertGreaterEqual(payload["goal_stream"]["ledger"]["entries"], 6)
+            self.assertTrue((root / ".sask_goal_ledger.json").is_file())
+            self.assertTrue((root / ".sask_goal_stream.json").is_file())
+
     def test_core_wall_clock_timer_and_handoff(self) -> None:
         """Test the 340-minute wall-clock execution timer and container handoff serialization."""
         import json

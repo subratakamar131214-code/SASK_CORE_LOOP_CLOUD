@@ -8,13 +8,17 @@ absorbing, vectorizing, and scheduling any arbitrary goal from the Goal Giver.
 
 from __future__ import annotations
 
+import hashlib
 import json
+import queue
+import threading
+import time
 import uuid
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, Iterable, List, Optional, Set, Union
+from typing import Any, Callable, Dict, Iterable, List, Optional, Set, Tuple, Union
 
 
 # ---------------------------------------------------------------------------
@@ -310,6 +314,9 @@ class GoalIngestionEngine:
         self._goals: Dict[str, IngestionGoal] = {}
         self.taxonomy = MacroDiscoveryTaxonomy()
         self._router_dispatch_count = 0
+        # Reentrant lock: the streaming producer thread and the main execution
+        # loop mutate and iterate the goal registry concurrently.
+        self._lock = threading.RLock()
 
     # ------------------------------------------------------------------
     # Public API
@@ -323,6 +330,7 @@ class GoalIngestionEngine:
         discipline_weight: float = 1.0,
         title: Optional[str] = None,
         description: Optional[str] = None,
+        goal_id: Optional[str] = None,
     ) -> IngestionGoal:
         """
         Parse and vectorize any arbitrary goal string into an IngestionGoal.
@@ -330,37 +338,46 @@ class GoalIngestionEngine:
         If no vector is specified, the engine auto-classifies the goal using
         keyword heuristics. Sub-tasks are auto-decomposed across all three
         execution vectors when no vector is specified (open-frontier mode).
+
+        Args:
+            goal_id: Optional deterministic identifier. Re-ingesting an existing
+                id returns the stored goal unchanged, which makes streamed goals
+                idempotent across producer passes and handoffs.
         """
-        goal_id = str(uuid.uuid4())[:12]
-        effective_vector = vector or self._classify_vector(raw_prompt)
-        effective_priority = priority or GoalPriority.NORMAL
-        effective_title = title or self._derive_title(raw_prompt)
-        effective_desc = description or raw_prompt[:256]
-        effective_track = self.taxonomy.classify(raw_prompt, effective_vector)
+        with self._lock:
+            if goal_id and goal_id in self._goals:
+                return self._goals[goal_id]
 
-        sub_tasks = self._decompose_into_subtasks(
-            goal_id=goal_id,
-            raw_prompt=raw_prompt,
-            vector=effective_vector,
-            multi_vector=(vector is None),
-        )
+            effective_id = goal_id or str(uuid.uuid4())[:12]
+            effective_vector = vector or self._classify_vector(raw_prompt)
+            effective_priority = priority or GoalPriority.NORMAL
+            effective_title = title or self._derive_title(raw_prompt)
+            effective_desc = description or raw_prompt[:256]
+            effective_track = self.taxonomy.classify(raw_prompt, effective_vector)
 
-        goal = IngestionGoal(
-            id=goal_id,
-            title=effective_title,
-            description=effective_desc,
-            vector=effective_vector,
-            priority=effective_priority,
-            raw_prompt=raw_prompt,
-            sub_tasks=sub_tasks,
-            discipline_weight=discipline_weight,
-            discovery_track=effective_track,
-        )
-        router = self.resolve_router(raw_prompt)
-        if router:
-            goal.metadata["router"] = router
-        self._goals[goal_id] = goal
-        return goal
+            sub_tasks = self._decompose_into_subtasks(
+                goal_id=effective_id,
+                raw_prompt=raw_prompt,
+                vector=effective_vector,
+                multi_vector=(vector is None),
+            )
+
+            goal = IngestionGoal(
+                id=effective_id,
+                title=effective_title,
+                description=effective_desc,
+                vector=effective_vector,
+                priority=effective_priority,
+                raw_prompt=raw_prompt,
+                sub_tasks=sub_tasks,
+                discipline_weight=discipline_weight,
+                discovery_track=effective_track,
+            )
+            router = self.resolve_router(raw_prompt)
+            if router:
+                goal.metadata["router"] = router
+            self._goals[effective_id] = goal
+            return goal
 
     def load_manifest(self, path: str = "goals_manifest.json") -> int:
         """
@@ -375,15 +392,16 @@ class GoalIngestionEngine:
             raw = json.loads(manifest_path.read_text(encoding="utf-8"))
             goals_data: List[Dict[str, Any]] = raw if isinstance(raw, list) else raw.get("goals", [])
             loaded = 0
-            for entry in goals_data:
-                goal_id = entry.get("id")
-                if goal_id and goal_id not in self._goals:
-                    try:
-                        goal = IngestionGoal.from_dict(entry)
-                        self._goals[goal.id] = goal
-                        loaded += 1
-                    except Exception:
-                        pass  # Tolerate malformed entries
+            with self._lock:
+                for entry in goals_data:
+                    goal_id = entry.get("id")
+                    if goal_id and goal_id not in self._goals:
+                        try:
+                            goal = IngestionGoal.from_dict(entry)
+                            self._goals[goal.id] = goal
+                            loaded += 1
+                        except Exception:
+                            pass  # Tolerate malformed entries
             return loaded
         except (json.JSONDecodeError, OSError):
             return 0
@@ -391,7 +409,8 @@ class GoalIngestionEngine:
     def save_manifest(self, path: str = "goals_manifest.json") -> None:
         """Persist the current goal queue to a JSON manifest file."""
         manifest_path = Path(path)
-        payload = [g.to_dict() for g in self._goals.values()]
+        with self._lock:
+            payload = [g.to_dict() for g in self._goals.values()]
         tmp_path = manifest_path.with_suffix(".tmp")
         tmp_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
         tmp_path.replace(manifest_path)
@@ -401,10 +420,11 @@ class GoalIngestionEngine:
         Return active (QUEUED or ACTIVE) goals sorted by effective priority score:
             score = priority.value * discipline_weight * discipline
         """
-        active = [
-            g for g in self._goals.values()
-            if g.status in (GoalStatus.QUEUED, GoalStatus.ACTIVE)
-        ]
+        with self._lock:
+            active = [
+                g for g in self._goals.values()
+                if g.status in (GoalStatus.QUEUED, GoalStatus.ACTIVE)
+            ]
         active.sort(
             key=lambda g: g.priority.value * g.discipline_weight * max(discipline, 0.0),
             reverse=True,
@@ -413,26 +433,38 @@ class GoalIngestionEngine:
 
     def mark_goal_complete(self, goal_id: str) -> None:
         """Mark a goal as successfully completed."""
-        goal = self._goals.get(goal_id)
-        if goal:
-            goal.status = GoalStatus.COMPLETED
-            goal.completed_at = datetime.now(timezone.utc).isoformat()
+        with self._lock:
+            goal = self._goals.get(goal_id)
+            if goal:
+                goal.status = GoalStatus.COMPLETED
+                goal.completed_at = datetime.now(timezone.utc).isoformat()
 
     def mark_goal_failed(self, goal_id: str, error: str) -> None:
         """Mark a goal as failed with an error message."""
-        goal = self._goals.get(goal_id)
-        if goal:
-            goal.status = GoalStatus.FAILED
-            goal.error = error
-            goal.completed_at = datetime.now(timezone.utc).isoformat()
+        with self._lock:
+            goal = self._goals.get(goal_id)
+            if goal:
+                goal.status = GoalStatus.FAILED
+                goal.error = error
+                goal.completed_at = datetime.now(timezone.utc).isoformat()
+
+    def mark_goal_queued(self, goal_id: str) -> None:
+        """Return a goal to the QUEUED state (used when a handoff interrupts work)."""
+        with self._lock:
+            goal = self._goals.get(goal_id)
+            if goal:
+                goal.status = GoalStatus.QUEUED
+                goal.completed_at = None
 
     def get_all_goals(self) -> List[IngestionGoal]:
         """Return all ingested goals."""
-        return list(self._goals.values())
+        with self._lock:
+            return list(self._goals.values())
 
     def get_goal(self, goal_id: str) -> Optional[IngestionGoal]:
         """Retrieve a goal by ID."""
-        return self._goals.get(goal_id)
+        with self._lock:
+            return self._goals.get(goal_id)
 
     def resolve_router(self, goal_or_prompt: Union[IngestionGoal, str]) -> Optional[str]:
         """Resolve a goal to one of the ten science routers.
@@ -551,7 +583,8 @@ class GoalIngestionEngine:
             Dict with ``handled``, ``router``, and the router ``result``. Goal
             lifecycle status is left to the caller.
         """
-        goal = self._goals.get(goal_id)
+        with self._lock:
+            goal = self._goals.get(goal_id)
         if goal is None:
             return {
                 "handled": False,
@@ -584,21 +617,24 @@ class GoalIngestionEngine:
             drive_engine=drive_engine,
         )
 
-        goal.metadata["router"] = selected
-        goal.metadata["last_router_dispatch"] = {
-            "success": bool(result.get("success")),
-            "execution_mode": result.get("execution_mode"),
-            "latency_seconds": result.get("latency_seconds"),
-            "numerical_residual": result.get("numerical_residual"),
-            "timestamp": datetime.now(timezone.utc).isoformat(),
-        }
-        self._router_dispatch_count += 1
+        with self._lock:
+            goal.metadata["router"] = selected
+            goal.metadata["last_router_dispatch"] = {
+                "success": bool(result.get("success")),
+                "execution_mode": result.get("execution_mode"),
+                "latency_seconds": result.get("latency_seconds"),
+                "numerical_residual": result.get("numerical_residual"),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+            self._router_dispatch_count += 1
         return {"handled": True, "router": selected, "result": result}
 
     def get_router_histogram(self) -> Dict[str, int]:
         """Count ingested goals assigned to each science router."""
         histogram: Dict[str, int] = {}
-        for goal in self._goals.values():
+        with self._lock:
+            goals = list(self._goals.values())
+        for goal in goals:
             assigned = (goal.metadata or {}).get("router")
             if assigned:
                 key = str(assigned)
@@ -607,9 +643,12 @@ class GoalIngestionEngine:
 
     def get_summary(self) -> Dict[str, Any]:
         """Return a structured summary of the current goal queue."""
-        total = len(self._goals)
+        with self._lock:
+            goals = list(self._goals.values())
+            dispatch_count = self._router_dispatch_count
+        total = len(goals)
         counts: Dict[str, int] = {s.value: 0 for s in GoalStatus}
-        for g in self._goals.values():
+        for g in goals:
             counts[g.status.value] += 1
         return {
             "total_goals": total,
@@ -618,9 +657,9 @@ class GoalIngestionEngine:
             "active": counts[GoalStatus.ACTIVE.value],
             "completed": counts[GoalStatus.COMPLETED.value],
             "failed": counts[GoalStatus.FAILED.value],
-            "discovery_tracks": self.taxonomy.summarize(self._goals.values()),
+            "discovery_tracks": self.taxonomy.summarize(goals),
             "science_router_hints": self.get_router_histogram(),
-            "router_dispatches": self._router_dispatch_count,
+            "router_dispatches": dispatch_count,
         }
 
     # ------------------------------------------------------------------
@@ -675,6 +714,686 @@ class GoalIngestionEngine:
 
 
 # ---------------------------------------------------------------------------
+# Asynchronous Continuous Goal Streaming Pipeline
+# ---------------------------------------------------------------------------
+
+class GoalStreamLedger:
+    """Persistent deduplication ledger for stream-generated goals.
+
+    Each generated tactical permutation is identified by a stable blake2b hash
+    of (objective, level, vector, phase, state variation). The ledger survives
+    producer passes and relay handoffs, so the same permutation is never
+    enqueued twice while the remaining space is flooded at full throughput.
+
+    The ledger is a JSON state cache (atomic temp-file replace) rather than
+    SQLite so it can be committed alongside the execution state and recovered
+    by the next GitHub Actions runner.
+    """
+
+    VERSION = 1
+
+    def __init__(self, path: Union[str, Path] = ".sask_goal_ledger.json") -> None:
+        self.path = Path(path)
+        self._lock = threading.RLock()
+        self._records: Dict[str, Dict[str, Any]] = {}
+        self._loaded = False
+
+    @staticmethod
+    def hash_key(*parts: Any) -> str:
+        """Return a deterministic 128-bit hash for an ordered permutation key."""
+        canonical = json.dumps(parts, sort_keys=True, separators=(",", ":"), default=str)
+        return hashlib.blake2b(canonical.encode("utf-8"), digest_size=16).hexdigest()
+
+    def load(self) -> int:
+        """Lazily load the ledger from disk, tolerating malformed caches."""
+        with self._lock:
+            if self._loaded:
+                return len(self._records)
+            self._loaded = True
+            if not self.path.is_file():
+                return 0
+            try:
+                raw = json.loads(self.path.read_text(encoding="utf-8"))
+                records = raw.get("records", {}) if isinstance(raw, dict) else {}
+                if isinstance(records, dict):
+                    self._records = {
+                        str(key): dict(value)
+                        for key, value in records.items()
+                        if isinstance(value, dict)
+                    }
+            except (json.JSONDecodeError, OSError):
+                self._records = {}
+            return len(self._records)
+
+    def contains(self, key: str) -> bool:
+        """True when the permutation hash has already been generated."""
+        with self._lock:
+            return key in self._records
+
+    def register(self, key: str, record: Dict[str, Any]) -> bool:
+        """Record a new permutation hash. Returns False when already present."""
+        with self._lock:
+            if key in self._records:
+                return False
+            payload = dict(record)
+            payload.setdefault("created_at", datetime.now(timezone.utc).isoformat())
+            payload.setdefault("status", GoalStatus.QUEUED.value)
+            self._records[key] = payload
+            return True
+
+    def update(self, key: str, **fields: Any) -> bool:
+        """Merge lifecycle fields into an existing ledger record."""
+        with self._lock:
+            record = self._records.get(key)
+            if record is None:
+                return False
+            record.update(fields)
+            record["updated_at"] = datetime.now(timezone.utc).isoformat()
+            return True
+
+    def save(self) -> Path:
+        """Atomically persist the ledger to disk."""
+        with self._lock:
+            payload = {
+                "version": self.VERSION,
+                "saved_at": datetime.now(timezone.utc).isoformat(),
+                "count": len(self._records),
+                "records": self._records,
+            }
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        tmp_path = self.path.with_suffix(self.path.suffix + ".tmp")
+        tmp_path.write_text(json.dumps(payload, separators=(",", ":")), encoding="utf-8")
+        tmp_path.replace(self.path)
+        return self.path
+
+    def stats(self) -> Dict[str, Any]:
+        """Aggregate ledger entries by lifecycle status and expansion level."""
+        with self._lock:
+            records = list(self._records.values())
+        by_status: Dict[str, int] = {}
+        by_level: Dict[str, int] = {}
+        for record in records:
+            status = str(record.get("status", "UNKNOWN"))
+            by_status[status] = by_status.get(status, 0) + 1
+            level = str(record.get("level", "-"))
+            by_level[level] = by_level.get(level, 0) + 1
+        return {"entries": len(records), "by_status": by_status, "by_level": by_level}
+
+    def __len__(self) -> int:
+        with self._lock:
+            return len(self._records)
+
+
+class GoalStreamingPipeline:
+    """Asynchronous continuous producer/consumer pipeline for goal generation.
+
+    A daemon producer thread continuously expands every submitted primary
+    objective into the exhaustive cartesian space of tactical permutations and
+    enqueues novel goals into a bounded priority queue. The core execution loop
+    is a consumer: it drains only as many goals as it has free worker slots and
+    releases each slot the moment that goal finishes, so generation never waits
+    on execution and execution never waits on generation.
+
+    Expansion levels (complete permutations — no random sampling):
+        L0: primary objective                          (1)
+        L1: phases                                     (5)
+        L2: vectors x phases                           (15)
+        L3: vectors x phases x state variations        (75)
+
+    Deduplication is enforced by :class:`GoalStreamLedger`, which is consulted
+    before ingest so repeated producer passes and relay handoffs are idempotent.
+    """
+
+    VERSION = 1
+    STATE_VARIATIONS: Tuple[str, ...] = (
+        "BASELINE",
+        "HIGH_PRECISION",
+        "FAULT_TOLERANT",
+        "ADVERSARIAL",
+        "LOW_LATENCY",
+    )
+    _PHASE_ACTIONS: Dict[TacticalPhase, str] = {
+        TacticalPhase.RECONNAISSANCE: "map constraints, inputs and failure modes for",
+        TacticalPhase.TRANSFORMATION: "construct and mutate candidate solutions for",
+        TacticalPhase.VERIFICATION: "formally verify and stress-test",
+        TacticalPhase.CONVERGENCE: "resolve residuals and converge execution for",
+        TacticalPhase.MASTERY: "generalize, benchmark and master",
+    }
+    _VARIATION_MODIFIERS: Dict[str, str] = {
+        "BASELINE": "under baseline operating constraints",
+        "HIGH_PRECISION": "under high-precision numerical tolerances",
+        "FAULT_TOLERANT": "under injected fault and recovery conditions",
+        "ADVERSARIAL": "under adversarial and worst-case inputs",
+        "LOW_LATENCY": "under low-latency execution budgets",
+    }
+
+    def __init__(
+        self,
+        engine: GoalIngestionEngine,
+        ledger_path: Union[str, Path] = ".sask_goal_ledger.json",
+        state_path: Union[str, Path] = ".sask_goal_stream.json",
+        max_level: int = 3,
+        max_queue_size: int = 4096,
+        max_concurrency: int = 4,
+        producer_poll_seconds: float = 1.0,
+    ) -> None:
+        self.engine = engine
+        self.ledger = GoalStreamLedger(ledger_path)
+        self.state_path = Path(state_path)
+        self.max_level = max(1, min(3, int(max_level)))
+        self.max_concurrency = max(1, int(max_concurrency))
+        self.producer_poll_seconds = max(0.05, float(producer_poll_seconds))
+        self._queue: "queue.PriorityQueue[Tuple[int, int, str]]" = queue.PriorityQueue(
+            maxsize=max(1, int(max_queue_size))
+        )
+        self._lock = threading.RLock()
+        self._wake = threading.Event()
+        self._stop = threading.Event()
+        self._thread: Optional[threading.Thread] = None
+        self._objectives: Dict[str, Dict[str, Any]] = {}
+        self._pending: Dict[str, Dict[str, Any]] = {}
+        self._in_flight: Dict[str, Dict[str, Any]] = {}
+        self._sequence = 0
+        self._producer_passes = 0
+        self._revision = 0
+        self._last_scanned_revision = -1
+        self._produced = 0
+        self._duplicates = 0
+        self._completed = 0
+        self._failed = 0
+        self._level_counts: Dict[str, int] = {}
+        self._restored = False
+
+    # ------------------------------------------------------------------
+    # Lifecycle
+    # ------------------------------------------------------------------
+
+    @property
+    def is_running(self) -> bool:
+        """True while the producer daemon thread is alive."""
+        with self._lock:
+            return bool(self._thread and self._thread.is_alive())
+
+    def start(self, resume: bool = True) -> Dict[str, Any]:
+        """Load the ledger/state, restore pending work, and start producing.
+
+        Args:
+            resume: When True, requeue goals left pending or in flight by a
+                previous runner before the producer begins.
+
+        Returns:
+            Telemetry including how much state was resumed.
+        """
+        with self._lock:
+            if self._thread and self._thread.is_alive():
+                return {"started": False, "already_running": True, **self.get_telemetry()}
+
+            self.ledger.load()
+            resumed = self._restore_state() if resume and not self._restored else {
+                "objectives": 0,
+                "requeued": 0,
+            }
+            self._restored = True
+            self._stop.clear()
+            self._thread = threading.Thread(
+                target=self._producer_loop,
+                name="sask-goal-producer",
+                daemon=True,
+            )
+            self._thread.start()
+        return {"started": True, "resumed": resumed, **self.get_telemetry()}
+
+    def stop(self, timeout: float = 5.0) -> Dict[str, Any]:
+        """Signal the producer to halt, join it, and persist stream state."""
+        with self._lock:
+            thread = self._thread
+        self._stop.set()
+        self._wake.set()
+        if thread and thread.is_alive():
+            thread.join(timeout=max(0.0, timeout))
+        with self._lock:
+            if self._thread is thread and (thread is None or not thread.is_alive()):
+                self._thread = None
+        self.persist()
+        return self.get_telemetry()
+
+    # ------------------------------------------------------------------
+    # Producer API
+    # ------------------------------------------------------------------
+
+    def submit_objective(
+        self,
+        objective: str,
+        level: Optional[int] = None,
+        priority: Optional[GoalPriority] = None,
+        objective_id: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """Register a primary objective for exhaustive level-wise expansion.
+
+        The objective is expanded to every permutation from level 0 up to
+        ``level`` by the producer thread. Submissions are idempotent: the same
+        objective text yields the same objective id and is not re-registered.
+        """
+        text = str(objective).strip()
+        if not text:
+            raise ValueError("objective must be a non-empty string")
+        effective_level = self.max_level if level is None else max(0, min(self.max_level, int(level)))
+        obj_id = objective_id or f"obj-{GoalStreamLedger.hash_key('objective', text)[:12]}"
+        record = {
+            "id": obj_id,
+            "objective": text,
+            "level": effective_level,
+            "priority": (priority or GoalPriority.NORMAL).name,
+            "metadata": dict(metadata or {}),
+            "submitted_at": datetime.now(timezone.utc).isoformat(),
+        }
+        with self._lock:
+            existing = self._objectives.get(obj_id)
+            if existing is not None:
+                return {
+                    "objective_id": obj_id,
+                    "level": existing["level"],
+                    "new": False,
+                }
+            self._objectives[obj_id] = record
+            self._revision += 1
+        self._wake.set()
+        return {"objective_id": obj_id, "level": effective_level, "new": True}
+
+    def drain(self, limit: Optional[int] = None) -> List[IngestionGoal]:
+        """Non-blocking consumer pull bounded by free worker slots.
+
+        Args:
+            limit: Optional additional cap for callers that only want a batch.
+
+        Returns:
+            Goals marked ACTIVE and admitted into the in-flight registry.
+        """
+        with self._lock:
+            capacity = self.max_concurrency - len(self._in_flight)
+        if limit is not None:
+            capacity = min(capacity, max(0, int(limit)))
+
+        goals: List[IngestionGoal] = []
+        while capacity > 0:
+            try:
+                _score, _seq, goal_id = self._queue.get_nowait()
+            except queue.Empty:
+                break
+
+            goal = self.engine.get_goal(goal_id)
+            if goal is None or goal.status not in (GoalStatus.QUEUED, GoalStatus.ACTIVE):
+                with self._lock:
+                    self._pending.pop(goal_id, None)
+                continue
+
+            goal.status = GoalStatus.ACTIVE
+            with self._lock:
+                item = self._pending.pop(goal_id, None) or {"goal_id": goal_id}
+                self._in_flight[goal_id] = {
+                    **item,
+                    "started_at": datetime.now(timezone.utc).isoformat(),
+                }
+            goals.append(goal)
+            capacity -= 1
+        return goals
+
+    def complete(self, goal_id: str, success: bool, error: Optional[str] = None) -> Dict[str, Any]:
+        """Release a worker slot and finalize the goal and its ledger record."""
+        with self._lock:
+            item = self._in_flight.pop(goal_id, None) or {}
+            if success:
+                self._completed += 1
+            else:
+                self._failed += 1
+
+        if success:
+            self.engine.mark_goal_complete(goal_id)
+        else:
+            self.engine.mark_goal_failed(goal_id, error or "execution failed")
+
+        key = str(item.get("hash") or "")
+        if not key:
+            goal = self.engine.get_goal(goal_id)
+            key = str(((goal.metadata or {}).get("stream") or {}).get("hash", "")) if goal else ""
+        if key:
+            self.ledger.update(
+                key,
+                status=GoalStatus.COMPLETED.value if success else GoalStatus.FAILED.value,
+                error=error,
+                completed_at=datetime.now(timezone.utc).isoformat(),
+            )
+        return {"goal_id": goal_id, "success": bool(success), "freed_slot": True}
+
+    # ------------------------------------------------------------------
+    # Telemetry / persistence
+    # ------------------------------------------------------------------
+
+    @property
+    def queue_depth(self) -> int:
+        """Number of goals waiting in the priority queue."""
+        return self._queue.qsize()
+
+    @property
+    def in_flight_count(self) -> int:
+        """Goals currently admitted to workers and awaiting completion."""
+        with self._lock:
+            return len(self._in_flight)
+
+    @property
+    def available_slots(self) -> int:
+        """Worker slots currently free to accept another goal."""
+        return max(0, self.max_concurrency - self.in_flight_count)
+
+    def wait_for_items(self, count: int = 1, timeout: float = 10.0) -> bool:
+        """Block until at least ``count`` goals are queued or the timeout elapses."""
+        deadline = time.monotonic() + max(0.0, float(timeout))
+        while time.monotonic() < deadline:
+            if self._queue.qsize() >= count:
+                return True
+            time.sleep(0.01)
+        return self._queue.qsize() >= count
+
+    def get_telemetry(self) -> Dict[str, Any]:
+        """Return a structured snapshot of producer/consumer and ledger state."""
+        with self._lock:
+            return {
+                "running": bool(self._thread and self._thread.is_alive()),
+                "max_level": self.max_level,
+                "max_concurrency": self.max_concurrency,
+                "queue_depth": self._queue.qsize(),
+                "in_flight": len(self._in_flight),
+                "available_slots": max(0, self.max_concurrency - len(self._in_flight)),
+                "objectives": len(self._objectives),
+                "producer_passes": self._producer_passes,
+                "produced": self._produced,
+                "duplicates_suppressed": self._duplicates,
+                "completed": self._completed,
+                "failed": self._failed,
+                "level_counts": dict(self._level_counts),
+                "ledger": self.ledger.stats(),
+                "ledger_path": str(self.ledger.path),
+                "state_path": str(self.state_path),
+            }
+
+    def persist(self) -> Path:
+        """Atomically serialize the queue, in-flight work, and ledger for handoff."""
+        self.ledger.save()
+        with self._lock:
+            pending = list(self._pending.values())
+            in_flight = list(self._in_flight.values())
+            payload = {
+                "version": self.VERSION,
+                "saved_at": datetime.now(timezone.utc).isoformat(),
+                "objectives": self._objectives,
+                "pending": pending,
+                "in_flight": in_flight,
+                "stats": {
+                    "produced": self._produced,
+                    "duplicates_suppressed": self._duplicates,
+                    "completed": self._completed,
+                    "failed": self._failed,
+                    "producer_passes": self._producer_passes,
+                    "level_counts": dict(self._level_counts),
+                },
+            }
+        self.state_path.parent.mkdir(parents=True, exist_ok=True)
+        tmp_path = self.state_path.with_suffix(self.state_path.suffix + ".tmp")
+        tmp_path.write_text(json.dumps(payload, separators=(",", ":")), encoding="utf-8")
+        tmp_path.replace(self.state_path)
+        return self.state_path
+
+    # ------------------------------------------------------------------
+    # Producer internals
+    # ------------------------------------------------------------------
+
+    def _producer_loop(self) -> None:
+        try:
+            while not self._stop.is_set():
+                with self._lock:
+                    objectives = list(self._objectives.values())
+                    revision = self._revision
+
+                # Idle until a new objective is submitted: the permutation space
+                # is already exhausted and ledger-checked, so rescanning would
+                # only produce duplicate suppressions.
+                if objectives and revision == self._last_scanned_revision:
+                    self._wake.wait(timeout=self.producer_poll_seconds)
+                    self._wake.clear()
+                    continue
+
+                for objective in objectives:
+                    if self._stop.is_set():
+                        break
+                    for level in range(0, int(objective["level"]) + 1):
+                        for spec in self._expand_level(objective, level):
+                            if self._stop.is_set():
+                                break
+                            self._enqueue_spec(objective, spec, level)
+                        self.ledger.save()
+
+                with self._lock:
+                    self._producer_passes += 1
+                    self._last_scanned_revision = revision
+                try:
+                    self.persist()
+                except OSError:
+                    pass
+        finally:
+            try:
+                self.ledger.save()
+            except OSError:
+                pass
+
+    def _expand_level(self, objective: Dict[str, Any], level: int) -> List[Dict[str, Any]]:
+        """Generate every permutation for one expansion level (no sampling)."""
+        base = str(objective["objective"])
+        specs: List[Dict[str, Any]] = []
+
+        if level == 0:
+            specs.append({
+                "raw_prompt": base,
+                "vector": self.engine._classify_vector(base),
+                "phase": "PRIMARY",
+                "variation": "PRIMARY",
+                "title": base[:72],
+            })
+            return specs
+
+        base_vector = self.engine._classify_vector(base)
+        for phase in TacticalPhase:
+            action = self._PHASE_ACTIONS[phase]
+            if level == 1:
+                specs.append({
+                    "raw_prompt": f"[L1][{phase.value}] {action} :: {base}",
+                    "vector": base_vector,
+                    "phase": phase.value,
+                    "variation": "BASELINE",
+                    "title": f"[L1][{phase.value}] {base[:48]}",
+                })
+                continue
+
+            for vector in GoalVector:
+                if level == 2:
+                    specs.append({
+                        "raw_prompt": (
+                            f"[L2][{vector.value}][{phase.value}] {action} :: {base} "
+                            f"under the {vector.value} execution vector"
+                        ),
+                        "vector": vector,
+                        "phase": phase.value,
+                        "variation": "BASELINE",
+                        "title": f"[L2][{vector.value}][{phase.value}] {base[:40]}",
+                    })
+                    continue
+
+                for variation in self.STATE_VARIATIONS:
+                    specs.append({
+                        "raw_prompt": (
+                            f"[L3][{vector.value}][{phase.value}][{variation}] {action} :: {base} "
+                            f"under the {vector.value} execution vector "
+                            f"{self._VARIATION_MODIFIERS[variation]}"
+                        ),
+                        "vector": vector,
+                        "phase": phase.value,
+                        "variation": variation,
+                        "title": f"[L3][{vector.value}][{phase.value}][{variation}] {base[:32]}",
+                    })
+        return specs
+
+    def _enqueue_spec(
+        self,
+        objective: Dict[str, Any],
+        spec: Dict[str, Any],
+        level: int,
+    ) -> bool:
+        """Deduplicate, ingest, and enqueue one generated permutation."""
+        key = GoalStreamLedger.hash_key(
+            objective["id"],
+            level,
+            spec["vector"].value,
+            spec["phase"],
+            spec["variation"],
+        )
+        if self.ledger.contains(key):
+            with self._lock:
+                self._duplicates += 1
+            return False
+
+        goal_id = f"strm-{key[:12]}"
+        priority = GoalPriority[objective.get("priority", GoalPriority.NORMAL.name)]
+        goal = self.engine.ingest_goal(
+            raw_prompt=spec["raw_prompt"],
+            vector=spec["vector"],
+            priority=priority,
+            discipline_weight=1.0,
+            title=spec["title"],
+            goal_id=goal_id,
+        )
+
+        stream_meta = {
+            "objective_id": objective["id"],
+            "objective": objective["objective"][:180],
+            "level": level,
+            "phase": spec["phase"],
+            "variation": spec["variation"],
+            "hash": key,
+        }
+        goal.metadata.setdefault("stream", {}).update(stream_meta)
+        router = self.engine.resolve_router(goal)
+        if router:
+            goal.metadata["router"] = router
+
+        score = -int(priority.value * 1000 + (self.max_level - level) * 50)
+        with self._lock:
+            self._sequence += 1
+            sequence = self._sequence
+        item = {
+            "goal_id": goal_id,
+            "hash": key,
+            "title": spec["title"],
+            "raw_prompt": spec["raw_prompt"],
+            "vector": spec["vector"].value,
+            "priority": priority.name,
+            "discipline_weight": 1.0,
+            "level": level,
+            "phase": spec["phase"],
+            "variation": spec["variation"],
+            "score": score,
+            "sequence": sequence,
+            "metadata": {"stream": stream_meta, "router": goal.metadata.get("router")},
+        }
+
+        while not self._stop.is_set():
+            try:
+                self._queue.put((score, sequence, goal_id), timeout=0.5)
+                break
+            except queue.Full:
+                continue
+        else:
+            return False
+
+        self.ledger.register(key, {
+            "goal_id": goal_id,
+            "objective_id": objective["id"],
+            "level": level,
+            "vector": spec["vector"].value,
+            "phase": spec["phase"],
+            "variation": spec["variation"],
+            "status": GoalStatus.QUEUED.value,
+        })
+        with self._lock:
+            self._pending[goal_id] = item
+            self._produced += 1
+            level_key = str(level)
+            self._level_counts[level_key] = self._level_counts.get(level_key, 0) + 1
+        return True
+
+    def _restore_state(self) -> Dict[str, Any]:
+        """Requeue pending and interrupted goals from the last handoff."""
+        if not self.state_path.is_file():
+            return {"objectives": 0, "requeued": 0}
+
+        try:
+            state = json.loads(self.state_path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            return {"objectives": 0, "requeued": 0}
+
+        with self._lock:
+            for obj_id, record in (state.get("objectives") or {}).items():
+                if isinstance(record, dict) and obj_id not in self._objectives:
+                    self._objectives[str(obj_id)] = record
+            stats = state.get("stats") or {}
+            self._produced = max(self._produced, int(stats.get("produced", 0)))
+            self._duplicates = max(self._duplicates, int(stats.get("duplicates_suppressed", 0)))
+            self._completed = max(self._completed, int(stats.get("completed", 0)))
+            self._failed = max(self._failed, int(stats.get("failed", 0)))
+            self._producer_passes = max(self._producer_passes, int(stats.get("producer_passes", 0)))
+            for level_key, count in (stats.get("level_counts") or {}).items():
+                self._level_counts[str(level_key)] = max(
+                    self._level_counts.get(str(level_key), 0), int(count)
+                )
+
+        items = list(state.get("pending") or []) + list(state.get("in_flight") or [])
+        requeued = 0
+        max_sequence = 0
+        for item in items:
+            if not isinstance(item, dict) or not item.get("goal_id"):
+                continue
+            try:
+                goal_id = str(item["goal_id"])
+                goal = self.engine.get_goal(goal_id)
+                if goal is None:
+                    goal = self.engine.ingest_goal(
+                        raw_prompt=str(item["raw_prompt"]),
+                        vector=GoalVector(item["vector"]),
+                        priority=GoalPriority[item.get("priority", GoalPriority.NORMAL.name)],
+                        discipline_weight=float(item.get("discipline_weight", 1.0)),
+                        title=item.get("title"),
+                        goal_id=goal_id,
+                    )
+                    goal.metadata.update(item.get("metadata") or {})
+                else:
+                    self.engine.mark_goal_queued(goal_id)
+
+                score = int(item.get("score", 0))
+                sequence = int(item.get("sequence", 0))
+                max_sequence = max(max_sequence, sequence)
+                self._queue.put_nowait((score, sequence, goal_id))
+                with self._lock:
+                    self._pending[goal_id] = item
+                requeued += 1
+            except Exception:
+                continue
+
+        with self._lock:
+            self._sequence = max(self._sequence, max_sequence) + 1
+            objective_count = len(self._objectives)
+        return {"objectives": objective_count, "requeued": requeued}
+
+
+# ---------------------------------------------------------------------------
 # Legacy TelosEngine (preserving all existing public API)
 # ---------------------------------------------------------------------------
 
@@ -685,7 +1404,14 @@ class TelosEngine:
     goal-agnostic ingestion alongside existing milestone tracking.
     """
 
-    def __init__(self, stagnation_threshold: int = 3, error_tolerance_delta: float = 0.001) -> None:
+    def __init__(
+        self,
+        stagnation_threshold: int = 3,
+        error_tolerance_delta: float = 0.001,
+        workspace_root: Optional[Union[str, Path]] = None,
+        stream_max_level: int = 3,
+        stream_concurrency: int = 4,
+    ) -> None:
         self._milestones: Dict[str, Milestone] = {}
         self._macro_objectives: Dict[str, MacroObjective] = {}
         self._execution_history: List[Dict[str, Any]] = []
@@ -697,6 +1423,17 @@ class TelosEngine:
         # Universal goal ingestion engine — wired into TelosEngine
         self.goal_engine = GoalIngestionEngine()
         self.discovery_taxonomy = self.goal_engine.taxonomy
+
+        # Asynchronous continuous goal streaming pipeline. Inert until started;
+        # paths are rooted at the workspace so relay handoffs persist with it.
+        root = Path(workspace_root) if workspace_root else Path.cwd()
+        self.stream = GoalStreamingPipeline(
+            self.goal_engine,
+            ledger_path=root / ".sask_goal_ledger.json",
+            state_path=root / ".sask_goal_stream.json",
+            max_level=stream_max_level,
+            max_concurrency=stream_concurrency,
+        )
 
     def register_milestone(
         self,
