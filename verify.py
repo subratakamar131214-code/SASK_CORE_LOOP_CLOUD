@@ -778,7 +778,7 @@ class PipelineComponentTests(unittest.TestCase):
             )
             info = kernel._start_goal_stream()
             self.assertTrue(info["started"])
-            self.assertTrue(kernel.telos.stream.wait_for_items(1, timeout=10))
+            self.assertTrue(kernel.telos.stream.wait_for_items(6, timeout=10))
 
             telemetry = kernel.telos.stream.stop()
             self.assertGreaterEqual(telemetry["produced"], 6)
@@ -810,9 +810,11 @@ class PipelineComponentTests(unittest.TestCase):
 
         # 3. Test AutomationKernel state serialization and handoff
         with tempfile.TemporaryDirectory() as tmp_dir:
-            tmp_path = Path(tmp_dir) / "test_state.json"
+            tmp_root = Path(tmp_dir)
+            tmp_path = tmp_root / "test_state.json"
             kernel = AutomationKernel(
                 window_minutes=0.0001,  # triggers immediate handoff
+                workspace_root=tmp_root,
                 state_file=tmp_path,
             )
             kernel.run_continuous_loop(max_cycles=1)
@@ -824,6 +826,257 @@ class PipelineComponentTests(unittest.TestCase):
             self.assertTrue(payload["container_handoff"])
             self.assertEqual(payload["state"], "HANDOFF_READY")
             self.assertEqual(payload["wall_clock"]["window_minutes"], 0.0001)
+
+    def test_meta_prover_axiomatic_search(self) -> None:
+        """Verify axiom mutation and evolutionary framework search persist state."""
+        import tempfile
+
+        from meta_prover import AxiomRegistry, MetaProver
+
+        registry = AxiomRegistry()
+        frameworks = registry.base_frameworks()
+        self.assertGreaterEqual(len(frameworks), 6)
+        mutated = registry.mutate(frameworks[0], salt=7)
+        self.assertNotEqual(mutated.signature(), frameworks[0].signature())
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            state_path = Path(tmp_dir) / "meta.json"
+            prover = MetaProver(
+                state_path=state_path,
+                population=6,
+                max_generations=2,
+            )
+            result = prover.search(
+                "construct a compact verified proof for distributed state",
+                generations=2,
+            )
+            self.assertGreater(result["evaluations"], len(frameworks))
+            self.assertGreaterEqual(result["best_score"], 0.5)
+            self.assertLessEqual(result["best_score"], 1.0)
+            self.assertEqual(len(result["ranking"]), 5)
+            self.assertTrue(result["lean_skeleton"])
+            self.assertTrue(state_path.is_file())
+
+            telemetry = prover.get_telemetry()
+            self.assertEqual(telemetry["searches"], 1)
+            self.assertIsNotNone(telemetry["preferred_framework"])
+
+            reloaded = MetaProver(state_path=state_path)
+            reloaded_telemetry = reloaded.get_telemetry()
+            self.assertEqual(reloaded_telemetry["searches"], 1)
+            self.assertEqual(
+                reloaded_telemetry["evaluations"], result["evaluations"]
+            )
+
+    def test_curiosity_free_energy_and_autonomous_goals(self) -> None:
+        """Verify surprisal, information gain, novel hypotheses, and goal proposal."""
+        import tempfile
+
+        from telos import GoalIngestionEngine
+        from telos_v2 import EpistemicCuriosityEngine
+
+        engine = GoalIngestionEngine()
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            state_path = Path(tmp_dir) / "curiosity.json"
+            curiosity = EpistemicCuriosityEngine(
+                goal_engine=engine,
+                state_path=state_path,
+                seed=11,
+                min_proposal_score=0.0,
+            )
+            observation = curiosity.observe("quantum_dynamics", 0.02, weight=1.0)
+            self.assertGreater(observation["surprisal"], 0.0)
+            self.assertGreater(observation["information_gain"], 0.0)
+            self.assertGreaterEqual(observation["intrinsic_reward"], 0.0)
+            self.assertLessEqual(observation["intrinsic_reward"], 1.0)
+
+            tick = curiosity.tick(
+                telemetry={
+                    "system_mastery": 0.6,
+                    "success_rate": 0.75,
+                    "error_count": 2,
+                },
+                generate=3,
+                propose_limit=2,
+            )
+            self.assertEqual(len(tick["hypotheses"]), 3)
+            statements = {item["statement"] for item in tick["hypotheses"]}
+            self.assertEqual(len(statements), 3)
+            self.assertGreaterEqual(len(tick["proposals"]), 1)
+            self.assertGreaterEqual(len(engine.get_all_goals()), 1)
+            for goal in engine.get_all_goals():
+                self.assertIn("curiosity", goal.metadata)
+
+            telemetry = curiosity.get_telemetry()
+            self.assertGreaterEqual(telemetry["hypotheses_generated"], 3)
+            self.assertGreaterEqual(telemetry["hypotheses_proposed"], 1)
+            self.assertTrue(state_path.is_file())
+
+            reloaded = EpistemicCuriosityEngine(
+                goal_engine=GoalIngestionEngine(),
+                state_path=state_path,
+            )
+            self.assertGreaterEqual(
+                reloaded.get_telemetry()["hypotheses_generated"], 3
+            )
+
+    def test_manifold_cross_domain_isomorphism_and_transfer(self) -> None:
+        """Verify cross-domain structural isomorphism and solution transport."""
+        import tempfile
+
+        from manifold_bridge import AnalogicalManifoldBridge
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            state_path = Path(tmp_dir) / "manifold.json"
+            bridge = AnalogicalManifoldBridge(state_path=state_path)
+
+            ring_matches = bridge.find_isomorphisms(
+                "net-ring-6", cross_domain_only=True
+            )
+            self.assertTrue(
+                any(
+                    match["target"] == "alg-cayley-z6"
+                    and match["structural_isomorphism"]
+                    for match in ring_matches
+                )
+            )
+            lattice_matches = bridge.find_isomorphisms(
+                "phys-lattice-2x3", cross_domain_only=True
+            )
+            self.assertTrue(
+                any(
+                    match["target"] == "net-mesh-2x3"
+                    and match["structural_isomorphism"]
+                    for match in lattice_matches
+                )
+            )
+            cfg_matches = bridge.find_isomorphisms(
+                "comp-cfg-diamond", cross_domain_only=True
+            )
+            self.assertFalse(
+                any(match["structural_isomorphism"] for match in cfg_matches)
+            )
+
+            transfer = bridge.transfer_solution("alg-cayley-z6", "net-ring-6")
+            self.assertTrue(transfer["transferred"])
+            self.assertTrue(transfer["structural_isomorphism"])
+            self.assertGreaterEqual(transfer["confidence"], 0.99)
+            self.assertEqual(len(transfer["node_mapping"]), 6)
+            self.assertTrue(state_path.is_file())
+
+            reloaded = AnalogicalManifoldBridge(state_path=state_path)
+            self.assertGreaterEqual(
+                reloaded.get_telemetry()["transfers"], 1
+            )
+
+    def test_devil_advocate_stagnation_inversion(self) -> None:
+        """Verify stagnation detection, assumption inversion, and drive pressure."""
+        import tempfile
+
+        from devil_advocate import DevilAdvocate
+        from drives import UnifiedDisciplineEngine
+        from telos import GoalIngestionEngine
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            state_path = Path(tmp_dir) / "devil.json"
+            devil = DevilAdvocate(
+                state_path=state_path,
+                window=3,
+                cooldown_cycles=0,
+            )
+            drives = UnifiedDisciplineEngine()
+            goals = GoalIngestionEngine()
+            before = drives.get_unified_discipline()
+
+            result = None
+            for _ in range(5):
+                result = devil.challenge(
+                    {
+                        "system_mastery": 0.9,
+                        "unified_discipline": 0.95,
+                        "success_rate": 0.97,
+                    },
+                    drive_engine=drives,
+                    goal_engine=goals,
+                )
+
+            self.assertTrue(result["challenged"])
+            self.assertTrue(result["probes"])
+            assessment = result["assessment"]
+            self.assertTrue(
+                assessment["stagnation"] or assessment["local_convergence"]
+            )
+            probe = result["probes"][0]
+            self.assertTrue(probe["assumption_challenged"])
+            self.assertTrue(probe["inverted_objective"])
+            inversion = devil.invert_metric("system_mastery", 0.9)
+            self.assertAlmostEqual(
+                inversion["inverted_target"] + 0.9, 1.0, places=6
+            )
+
+            self.assertGreaterEqual(drives.get_unified_discipline(), before)
+            self.assertGreaterEqual(drives.get_unified_discipline(), 0.90)
+            self.assertGreaterEqual(len(goals.get_all_goals()), 1)
+            self.assertTrue(state_path.is_file())
+
+            reloaded = DevilAdvocate(state_path=state_path)
+            self.assertGreaterEqual(
+                reloaded.get_telemetry()["challenges_issued"], 1
+            )
+
+    def test_core_extensions_wiring_and_export(self) -> None:
+        """Verify the kernel runs and exports all four extensions with state."""
+        import tempfile
+
+        from core import AutomationKernel
+        from science_mcp import get_science_telemetry
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            root = Path(tmp_dir)
+            kernel = AutomationKernel(
+                workspace_root=root,
+                window_minutes=1.0,
+                extensions_enabled=True,
+            )
+            self.assertIsNotNone(kernel.meta_prover)
+            self.assertIsNotNone(kernel.curiosity)
+            self.assertIsNotNone(kernel.manifold)
+            self.assertIsNotNone(kernel.devil)
+
+            extensions = kernel._run_extensions({}, error_count=0)
+            self.assertTrue(extensions["meta_prover"]["available"])
+            self.assertTrue(extensions["meta_prover"]["best_success"])
+            self.assertGreaterEqual(
+                extensions["curiosity"]["hypotheses_generated"], 1
+            )
+            self.assertTrue(extensions["manifold"]["available"])
+            self.assertGreaterEqual(extensions["manifold"]["transfers"], 1)
+            self.assertTrue(extensions["persistence"]["state_files"])
+
+            science_extensions = get_science_telemetry()["extensions"]
+            for name in (
+                "curiosity",
+                "meta_prover",
+                "manifold_bridge",
+                "devil_advocate",
+            ):
+                self.assertIn(name, science_extensions)
+
+            payload = json.loads(kernel.export_state_json())
+            self.assertTrue(payload["extensions"]["enabled"])
+            self.assertGreaterEqual(
+                payload["extensions"]["meta_prover"]["searches"], 1
+            )
+            self.assertGreaterEqual(
+                kernel.drives.get_unified_discipline(), 0.90
+            )
+            for filename in (
+                ".sask_meta_prover.json",
+                ".sask_curiosity.json",
+                ".sask_manifold.json",
+                ".sask_devil_advocate.json",
+            ):
+                self.assertTrue((root / filename).is_file(), filename)
 
 
 if __name__ == "__main__":

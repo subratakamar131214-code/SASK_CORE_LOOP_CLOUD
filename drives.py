@@ -51,6 +51,7 @@ class UnifiedDisciplineEngine:
         self.madness = max(self.floor, min(1.0, madness))
         self.motivation = max(self.floor, min(1.0, motivation))
         self.overthinking = max(self.floor, min(1.0, overthinking))
+        self._last_extension_fusion: Dict[str, Any] = {}
 
     def get_unified_discipline(self) -> float:
         """Calculate permanently fused operational discipline (D).
@@ -150,6 +151,65 @@ class UnifiedDisciplineEngine:
             "latency_seconds": round(max(0.0, float(latency_seconds)), 6),
         }
 
+    def fuse_extension_metrics(
+        self,
+        metrics: Dict[str, float],
+        context: str = "extensions",
+    ) -> Dict[str, Any]:
+        """Fuse meta-cognitive extension telemetry into permanent drive pressure.
+
+        Meta-prover compactness, curiosity intrinsic reward, manifold transfer
+        confidence, and adversarial inversion intensity are weighted into one
+        bounded challenge signal that permanently reinforces the drive matrix.
+
+        Args:
+            metrics: Extension metrics keyed by name; values are clamped to [0, 1].
+            context: Origin label recorded in telemetry.
+
+        Returns:
+            Fusion telemetry including the resulting unified discipline.
+        """
+        weights = {
+            "meta_prover_score": 0.25,
+            "curiosity_reward": 0.25,
+            "manifold_confidence": 0.20,
+            "adversarial_intensity": 0.30,
+        }
+        bounded: Dict[str, float] = {}
+        for key, value in (metrics or {}).items():
+            try:
+                bounded[str(key)] = max(0.0, min(1.0, float(value)))
+            except (TypeError, ValueError):
+                continue
+
+        weighted_total = 0.0
+        weight_total = 0.0
+        for key, value in bounded.items():
+            weight = weights.get(key, 0.10)
+            weighted_total += value * weight
+            weight_total += weight
+
+        fused = round(weighted_total / weight_total, 6) if weight_total else 0.0
+        challenge = round(fused * 10.0, 4)
+
+        with self._lock:
+            before = self.get_unified_discipline()
+            if challenge > 0.0:
+                self.apply_stimulus(challenge_intensity=challenge, context=context)
+            after = self.get_unified_discipline()
+            telemetry = {
+                "context": context,
+                "components": {key: round(value, 6) for key, value in bounded.items()},
+                "fused_intensity": fused,
+                "challenge_intensity": challenge,
+                "discipline_before": before,
+                "discipline_after": after,
+                "floor": self.floor,
+            }
+            self._last_extension_fusion = telemetry
+
+        return telemetry
+
     def get_telemetry(self) -> DriveMetrics:
         """Export complete state metrics for the unified discipline matrix."""
         return DriveMetrics(
@@ -207,3 +267,11 @@ def record_execution_telemetry(
         residual=residual,
         success=success,
     )
+
+
+def fuse_extension_metrics(
+    metrics: Dict[str, float],
+    context: str = "extensions",
+) -> Dict[str, Any]:
+    """Fuse extension telemetry into the global discipline engine."""
+    return DEFAULT_DRIVE_ENGINE.fuse_extension_metrics(metrics, context=context)

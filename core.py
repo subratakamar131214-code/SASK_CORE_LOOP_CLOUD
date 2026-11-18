@@ -8,6 +8,11 @@ Coordinates and integrates:
   - verify.py: Automated verification test suites and component integrity checks.
   - drives.py: Unified Discipline Engine — D_floor ≥ 0.90 adaptive drive parameters.
   - bio_gen.py: Bio-Gen Replicator — specialized harness spawning across 3 vectors.
+  - science_mcp.py: 10-router hyper-specialized science engine with live telemetry.
+  - meta_prover.py: Evolutionary axiom mutation over alternative logical frameworks.
+  - telos_v2.py: Epistemic curiosity engine driven by surprisal and information gain.
+  - manifold_bridge.py: Cross-domain structural isomorphism and solution transport.
+  - devil_advocate.py: Adversarial metric inversion that escapes local minima.
 
 Enforces an internal wall-clock timer (configured to a 340-minute window) that
 guarantees clean state serialization and graceful container handoff.
@@ -17,9 +22,11 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import hashlib
 import json
 import logging
 import os
+import re
 import signal
 import sys
 import time
@@ -27,7 +34,7 @@ from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 # Module integrations
 from mutate import CodeInspector, CodeMutator, SurgicalAstModifier
@@ -54,6 +61,35 @@ try:
     _BIOGEN_AVAILABLE = True
 except ImportError:
     _BIOGEN_AVAILABLE = False
+
+# Meta-cognitive extensions — degrade gracefully when individual modules are absent
+try:
+    from meta_prover import MetaProver  # type: ignore[import]
+
+    _META_PROVER_AVAILABLE = True
+except ImportError:
+    _META_PROVER_AVAILABLE = False
+
+try:
+    from telos_v2 import EpistemicCuriosityEngine  # type: ignore[import]
+
+    _CURIOSITY_AVAILABLE = True
+except ImportError:
+    _CURIOSITY_AVAILABLE = False
+
+try:
+    from manifold_bridge import AnalogicalManifoldBridge  # type: ignore[import]
+
+    _MANIFOLD_AVAILABLE = True
+except ImportError:
+    _MANIFOLD_AVAILABLE = False
+
+try:
+    from devil_advocate import DevilAdvocate  # type: ignore[import]
+
+    _DEVIL_AVAILABLE = True
+except ImportError:
+    _DEVIL_AVAILABLE = False
 
 logging.basicConfig(
     level=logging.INFO,
@@ -139,6 +175,8 @@ class AutomationKernel:
         stream_objective: Optional[str] = None,
         stream_concurrency: int = 4,
         stream_max_goals_per_cycle: int = 32,
+        extensions_enabled: bool = True,
+        curiosity_interval_seconds: float = 0.0,
     ) -> None:
         self.workspace_root = workspace_root or Path.cwd()
         self.state_file = state_file or (self.workspace_root / self.DEFAULT_STATE_FILE)
@@ -154,6 +192,10 @@ class AutomationKernel:
         self.stream_objective = stream_objective
         self.stream_concurrency = max(1, int(stream_concurrency))
         self.stream_max_goals_per_cycle = max(1, int(stream_max_goals_per_cycle))
+
+        # Meta-cognitive extension configuration
+        self.extensions_enabled = bool(extensions_enabled)
+        self.curiosity_interval_seconds = max(0.0, float(curiosity_interval_seconds))
 
         # Integrated sub-services
         self.prover = ProverInterface()
@@ -176,7 +218,104 @@ class AutomationKernel:
             self.bio_gen = None
             logger.warning("bio_gen.py not available — harness replication disabled.")
 
+        # Meta-cognitive extensions
+        self.meta_prover: Optional[Any] = None
+        self.curiosity: Optional[Any] = None
+        self.manifold: Optional[Any] = None
+        self.devil: Optional[Any] = None
+        if self.extensions_enabled:
+            self._initialize_extensions()
+
         self._register_signal_handlers()
+
+    def _initialize_extensions(self) -> None:
+        """Instantiate the four meta-cognitive extensions with handoff state files."""
+        root = self.workspace_root
+        if _META_PROVER_AVAILABLE:
+            try:
+                self.meta_prover = MetaProver(
+                    prover=self.prover,
+                    state_path=root / ".sask_meta_prover.json",
+                )
+            except Exception as exc:
+                logger.warning(f"Meta-prover initialization failed: {exc}")
+        else:
+            logger.warning("meta_prover.py not available — axiomatic mutation disabled.")
+
+        if _CURIOSITY_AVAILABLE:
+            try:
+                self.curiosity = EpistemicCuriosityEngine(
+                    goal_engine=self.telos.goal_engine,
+                    stream=self.telos.stream,
+                    state_path=root / ".sask_curiosity.json",
+                )
+            except Exception as exc:
+                logger.warning(f"Curiosity engine initialization failed: {exc}")
+        else:
+            logger.warning("telos_v2.py not available — epistemic curiosity disabled.")
+
+        if _MANIFOLD_AVAILABLE:
+            try:
+                self.manifold = AnalogicalManifoldBridge(
+                    state_path=root / ".sask_manifold.json"
+                )
+            except Exception as exc:
+                logger.warning(f"Manifold bridge initialization failed: {exc}")
+        else:
+            logger.warning("manifold_bridge.py not available — analogical transport disabled.")
+
+        if _DEVIL_AVAILABLE:
+            try:
+                self.devil = DevilAdvocate(
+                    state_path=root / ".sask_devil_advocate.json"
+                )
+            except Exception as exc:
+                logger.warning(f"Devil advocate initialization failed: {exc}")
+        else:
+            logger.warning("devil_advocate.py not available — counter-intuition disabled.")
+
+        self._register_science_extensions()
+
+    def _register_science_extensions(self) -> None:
+        """Expose extension instances through the science engine registry."""
+        try:
+            from science_mcp import register_extension  # type: ignore[import-not-found]
+        except Exception as exc:
+            logger.warning(f"Science extension registry unavailable: {exc}")
+            return
+
+        mapping = {
+            "meta_prover": self.meta_prover,
+            "curiosity": self.curiosity,
+            "manifold_bridge": self.manifold,
+            "devil_advocate": self.devil,
+        }
+        for name, engine in mapping.items():
+            if engine is None:
+                continue
+            try:
+                register_extension(name, engine)
+            except Exception as exc:
+                logger.warning(f"Failed to register science extension '{name}': {exc}")
+
+    def _save_extension_state(self) -> Dict[str, Any]:
+        """Persist every extension for container handoff; never fatal."""
+        saved: List[str] = []
+        failures: Dict[str, str] = {}
+        for name in ("meta_prover", "curiosity", "manifold", "devil"):
+            engine = getattr(self, name, None)
+            if engine is None or not hasattr(engine, "save"):
+                continue
+            try:
+                path = engine.save()
+                if path is not None:
+                    saved.append(str(path))
+            except Exception as exc:
+                failures[name] = f"{type(exc).__name__}: {exc}"
+        result: Dict[str, Any] = {"state_files": saved}
+        if failures:
+            result["save_failures"] = failures
+        return result
 
     def _register_signal_handlers(self) -> None:
         """Register OS signal handlers for graceful shutdown and state preservation."""
@@ -195,6 +334,13 @@ class AutomationKernel:
                 self.telos.stream.persist()
             except Exception as exc:
                 logger.warning(f"Goal stream persistence on signal failed: {exc}")
+        curiosity = getattr(self, "curiosity", None)
+        if curiosity is not None:
+            try:
+                curiosity.stop_background()
+            except Exception:
+                pass
+        self._save_extension_state()
         self.save_state_to_disk()
 
     def _build_pipeline_engine(self) -> TelosEngine:
@@ -395,6 +541,294 @@ class AutomationKernel:
             self.telos.goal_engine.mark_goal_failed(goal.id, str(error or "unknown"))
         return success
 
+    # ------------------------------------------------------------------
+    # Meta-cognitive extension stage
+    # ------------------------------------------------------------------
+
+    def _inspect_pipeline_graph(self) -> Tuple[List[str], List[Tuple[str, str]]]:
+        """Build the live module-import graph for the manifold bridge."""
+        modules = sorted(path.stem for path in self.workspace_root.glob("*.py"))
+        module_set = set(modules)
+        pattern = re.compile(
+            r"^\s*(?:from|import)\s+([A-Za-z_][A-Za-z0-9_]*)",
+            re.MULTILINE,
+        )
+        edges: set = set()
+        for path in self.workspace_root.glob("*.py"):
+            try:
+                text = path.read_text(encoding="utf-8")
+            except OSError:
+                continue
+            for match in pattern.finditer(text):
+                target = match.group(1)
+                if target in module_set and target != path.stem:
+                    edges.add((path.stem, target))
+        return modules, sorted(edges)
+
+    def _inject_manifold_transfer(self, transfer: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """Ingest one manifold transfer directive as a deterministic goal."""
+        if not transfer or not transfer.get("transferred"):
+            return None
+        directive = str(transfer.get("directive") or "").strip()
+        if not directive:
+            return None
+
+        signature = "|".join(
+            str(transfer.get(key, ""))
+            for key in ("source", "target", "solution")
+        )
+        goal_id = "manifold-" + hashlib.blake2b(
+            signature.encode("utf-8"), digest_size=6
+        ).hexdigest()
+        existing = self.telos.goal_engine.get_goal(goal_id)
+        if existing is not None:
+            return {"goal_id": goal_id, "injected": False, "reason": "exists"}
+
+        try:
+            goal = self.telos.goal_engine.ingest_goal(
+                directive,
+                priority=GoalPriority.NORMAL,
+                title=f"Manifold transfer: {transfer.get('solution', 'solution')}",
+                goal_id=goal_id,
+            )
+            goal.metadata["manifold_transfer"] = {
+                "source": transfer.get("source"),
+                "target": transfer.get("target"),
+                "source_domain": transfer.get("source_domain"),
+                "target_domain": transfer.get("target_domain"),
+                "confidence": transfer.get("confidence"),
+                "structural_isomorphism": transfer.get("structural_isomorphism"),
+            }
+        except Exception as exc:
+            return {
+                "goal_id": goal_id,
+                "injected": False,
+                "reason": f"{type(exc).__name__}: {exc}",
+            }
+
+        streamed = False
+        if self.stream_enabled and self.telos.stream.is_running:
+            try:
+                info = self.telos.stream.submit_objective(
+                    directive,
+                    level=1,
+                    priority=GoalPriority.NORMAL,
+                    objective_id=f"manifold-obj-{goal_id}",
+                    metadata={
+                        "source": "manifold_bridge",
+                        "transfer": transfer.get("solution"),
+                    },
+                )
+                streamed = bool(info.get("new", True))
+            except Exception:
+                streamed = False
+
+        return {"goal_id": goal_id, "injected": True, "streamed": streamed}
+
+    def _run_extensions(
+        self,
+        cycle_details: Dict[str, Any],
+        error_count: int,
+    ) -> Dict[str, Any]:
+        """Run the meta-prover, curiosity, manifold, and adversarial extensions."""
+        telemetry: Dict[str, Any] = {
+            "enabled": self.extensions_enabled,
+            "meta_prover": {"available": self.meta_prover is not None},
+            "curiosity": {"available": self.curiosity is not None},
+            "manifold": {"available": self.manifold is not None},
+            "devil_advocate": {"available": self.devil is not None},
+        }
+        if not self.extensions_enabled:
+            return telemetry
+
+        summary = self.telos.get_summary()
+        goal_summary = summary.get("goal_ingestion", {}) or {}
+        completed = int(goal_summary.get("completed", 0))
+        failed = int(goal_summary.get("failed", 0))
+        success_rate = (
+            completed / (completed + failed) if (completed + failed) else 1.0
+        )
+        discipline = self.drives.get_unified_discipline() if self.drives else 1.0
+        metrics = {
+            "system_mastery": float(summary.get("system_mastery", 0.0)),
+            "unified_discipline": float(discipline),
+            "success_rate": round(success_rate, 6),
+            "error_count": float(error_count),
+        }
+        fusion_components: Dict[str, float] = {}
+
+        # 1. Axiomatic mutation & meta-prover search
+        if self.meta_prover is not None and (
+            self.current_cycle == 1 or self.current_cycle % 3 == 0 or error_count > 0
+        ):
+            target_goal = (
+                self.stream_objective
+                or os.environ.get("SASK_PRIMARY_OBJECTIVE")
+                or (
+                    "Converge the SASK kernel with compact, verified proof paths "
+                    "across every science router and discipline constraint"
+                )
+            )
+            try:
+                search = self.meta_prover.search(target_goal)
+                compact = {
+                    key: search.get(key)
+                    for key in (
+                        "best_framework",
+                        "best_framework_name",
+                        "best_score",
+                        "best_success",
+                        "best_steps",
+                        "best_compactness",
+                        "best_residual",
+                        "evaluations",
+                        "generations",
+                    )
+                }
+                compact["available"] = True
+                telemetry["meta_prover"] = compact
+                cycle_details["meta_prover"] = compact
+                fusion_components["meta_prover_score"] = float(
+                    search.get("best_score", 0.0)
+                )
+            except Exception as exc:
+                telemetry["meta_prover"] = {
+                    "available": True,
+                    "error": f"{type(exc).__name__}: {exc}",
+                }
+
+        # 2. Epistemic curiosity — intrinsic reward and autonomous hypotheses
+        if self.curiosity is not None:
+            try:
+                tick = self.curiosity.tick(
+                    telemetry=metrics,
+                    generate=2,
+                    propose_limit=1,
+                )
+                proposals = tick.get("proposals") or []
+                telemetry["curiosity"] = {
+                    "available": True,
+                    "tick": tick.get("tick"),
+                    "intrinsic_reward": tick.get("intrinsic_reward"),
+                    "mean_surprise": tick.get("mean_surprise"),
+                    "mean_information_gain": tick.get("mean_information_gain"),
+                    "free_energy": tick.get("free_energy"),
+                    "hypotheses_generated": len(tick.get("hypotheses") or []),
+                    "proposals": proposals,
+                }
+                cycle_details["curiosity"] = {
+                    "tick": tick.get("tick"),
+                    "hypotheses": len(tick.get("hypotheses") or []),
+                    "proposals": proposals,
+                }
+                fusion_components["curiosity_reward"] = float(
+                    tick.get("intrinsic_reward", 0.0)
+                )
+            except Exception as exc:
+                telemetry["curiosity"] = {
+                    "available": True,
+                    "error": f"{type(exc).__name__}: {exc}",
+                }
+
+        # 3. Cross-domain analogical manifold bridge
+        if self.manifold is not None and (
+            self.current_cycle == 1 or self.current_cycle % 4 == 0
+        ):
+            try:
+                modules, edges = self._inspect_pipeline_graph()
+                analysis = self.manifold.analyze_pipeline(
+                    "live-pipeline", edges, modules
+                )
+                transfers = list(analysis.get("transfers") or [])
+                if not transfers:
+                    transfers = self.manifold.auto_transfer(limit=1)
+                injected = [
+                    record
+                    for record in (
+                        self._inject_manifold_transfer(transfer)
+                        for transfer in transfers[:1]
+                    )
+                    if record is not None
+                ]
+                telemetry["manifold"] = {
+                    "available": True,
+                    "structures": self.manifold.get_telemetry().get("structure_count"),
+                    "matches": len(analysis.get("matches") or []),
+                    "transfers": len(transfers),
+                    "injected_goals": injected,
+                }
+                cycle_details["manifold"] = {
+                    "nodes": analysis.get("nodes"),
+                    "edges": analysis.get("edges"),
+                    "matches": (analysis.get("matches") or [])[:3],
+                    "transfers": transfers,
+                    "injected_goals": injected,
+                }
+                if transfers:
+                    fusion_components["manifold_confidence"] = float(
+                        transfers[0].get("confidence", 0.0)
+                    )
+            except Exception as exc:
+                telemetry["manifold"] = {
+                    "available": True,
+                    "error": f"{type(exc).__name__}: {exc}",
+                }
+
+        # 4. Adversarial counter-intuition injection on stagnation
+        if self.devil is not None:
+            try:
+                challenge = self.devil.challenge(
+                    metrics,
+                    drive_engine=self.drives,
+                    goal_engine=self.telos.goal_engine,
+                    stream=self.telos.stream if self.stream_enabled else None,
+                )
+                probes = challenge.get("probes") or []
+                assessment = challenge.get("assessment") or {}
+                telemetry["devil_advocate"] = {
+                    "available": True,
+                    "challenged": challenge.get("challenged"),
+                    "reason": challenge.get("reason"),
+                    "probes": probes,
+                    "cooldown_remaining": challenge.get("cooldown_remaining"),
+                    "stagnation": assessment.get("stagnation"),
+                    "local_convergence": assessment.get("local_convergence"),
+                    "stable_metrics": assessment.get("stable_metrics"),
+                }
+                cycle_details["devil_advocate"] = telemetry["devil_advocate"]
+                if probes:
+                    fusion_components["adversarial_intensity"] = max(
+                        float(probe.get("intensity", 0.0)) for probe in probes
+                    )
+            except Exception as exc:
+                telemetry["devil_advocate"] = {
+                    "available": True,
+                    "error": f"{type(exc).__name__}: {exc}",
+                }
+
+        # 5. Fuse extension pressure into the permanent drive matrix
+        if self.drives is not None and fusion_components:
+            try:
+                telemetry["drive_fusion"] = self.drives.fuse_extension_metrics(
+                    fusion_components,
+                    context=f"cycle:{self.current_cycle}",
+                )
+                cycle_details["drive_fusion"] = telemetry["drive_fusion"]
+            except Exception as exc:
+                telemetry["drive_fusion"] = {
+                    "error": f"{type(exc).__name__}: {exc}"
+                }
+
+        try:
+            self.telos.goal_engine.save_manifest(
+                str(self.workspace_root / "goals_manifest.json")
+            )
+        except Exception as exc:
+            logger.warning(f"Manifest persistence after extensions failed: {exc}")
+
+        telemetry["persistence"] = self._save_extension_state()
+        return telemetry
+
     def run_cycle(self) -> CycleMetrics:
         """Execute a single integrated cycle across telos, mutate, prover, and verify."""
         self.current_cycle += 1
@@ -593,6 +1027,20 @@ class AutomationKernel:
                 "overthinking_depth": test_report.details.get("overthinking_depth"),
                 "ego_ratchet": test_report.details.get("ego_ratchet"),
             }
+
+            # 4.5 Meta-cognitive extensions: axiomatic mutation, curiosity,
+            # cross-domain transport, and adversarial injection. This stage is
+            # non-fatal and also runs on verification failure so stagnation is
+            # still challenged.
+            if self.extensions_enabled:
+                try:
+                    cycle_details["extensions"] = self._run_extensions(
+                        cycle_details, error_count
+                    )
+                except Exception as exc:
+                    logger.warning(f"Extension stage error (non-fatal): {exc}")
+                    cycle_details["extension_error"] = str(exc)
+
             if test_report.is_successful:
                 self.telos.update_status(
                     "test_verification",
@@ -662,6 +1110,11 @@ class AutomationKernel:
             details=details,
         )
         self.cycle_history.append(metrics)
+        if self.extensions_enabled:
+            try:
+                self._save_extension_state()
+            except Exception as exc:
+                logger.warning(f"Extension persistence during finalize failed: {exc}")
         logger.info(
             f"Cycle #{self.current_cycle} concluded in {metrics.duration_seconds}s "
             f"(Status: {'SUCCESS' if success else 'FAILED'}, Mastery: {metrics.system_mastery * 100:.1f}%)"
@@ -688,6 +1141,19 @@ class AutomationKernel:
                 f"resumed={stream_info.get('resumed')}, "
                 f"seeded={len(stream_info.get('seeded') or [])})."
             )
+
+        curiosity_started = False
+        if self.curiosity is not None and self.curiosity_interval_seconds > 0:
+            curiosity_started = self.curiosity.start_background(
+                self.curiosity_interval_seconds,
+                generate=1,
+                propose_limit=1,
+            )
+            if curiosity_started:
+                logger.info(
+                    f"Curiosity background loop active "
+                    f"(interval={self.curiosity_interval_seconds}s)."
+                )
 
         try:
             while not self._stop_requested:
@@ -731,6 +1197,16 @@ class AutomationKernel:
                     )
                 except Exception as exc:
                     logger.warning(f"Goal stream shutdown error: {exc}")
+            if curiosity_started and self.curiosity is not None:
+                try:
+                    self.curiosity.stop_background()
+                except Exception as exc:
+                    logger.warning(f"Curiosity shutdown error: {exc}")
+            if self.extensions_enabled:
+                try:
+                    self._save_extension_state()
+                except Exception as exc:
+                    logger.warning(f"Extension persistence on handoff failed: {exc}")
             # On loop exit, cleanly serialize state to disk for container handoff
             self.save_state_to_disk()
 
@@ -779,6 +1255,21 @@ class AutomationKernel:
         except Exception as exc:
             goal_stream["error"] = str(exc)
 
+        # Meta-cognitive extension telemetry
+        extensions_telemetry: Dict[str, Any] = {"enabled": self.extensions_enabled}
+        for name in ("meta_prover", "curiosity", "manifold", "devil"):
+            engine = getattr(self, name, None)
+            if engine is None:
+                extensions_telemetry[name] = {"available": False}
+                continue
+            try:
+                extensions_telemetry[name] = engine.get_telemetry()
+            except Exception as exc:
+                extensions_telemetry[name] = {
+                    "available": True,
+                    "error": f"{type(exc).__name__}: {exc}",
+                }
+
         payload = {
             "state": self.state.value,
             "container_handoff": self.state in (CoreState.HANDOFF_READY, CoreState.COMPLETED),
@@ -797,6 +1288,7 @@ class AutomationKernel:
             "bio_gen_summary": bio_gen_summary,
             "science_engine": science_telemetry,
             "goal_stream": goal_stream,
+            "extensions": extensions_telemetry,
             "cycles": [asdict(c) for c in self.cycle_history],
         }
         return json.dumps(payload, indent=2)
@@ -884,6 +1376,25 @@ def main() -> None:
         default=_env_int("SASK_MAX_CONCURRENCY", 4),
         help="Maximum goals in flight (worker slots) for the streaming consumer.",
     )
+    parser.add_argument(
+        "--extensions",
+        dest="extensions",
+        action="store_true",
+        default=None,
+        help="Force-enable the meta-prover, curiosity, manifold, and adversarial extensions.",
+    )
+    parser.add_argument(
+        "--no-extensions",
+        dest="extensions",
+        action="store_false",
+        help="Disable all meta-cognitive extensions.",
+    )
+    parser.add_argument(
+        "--curiosity-interval",
+        type=float,
+        default=float(os.environ.get("SASK_CURIOSITY_INTERVAL", "0") or 0.0),
+        help="Background curiosity tick interval in seconds (0 disables the daemon; per-cycle ticks still run).",
+    )
     args = parser.parse_args()
 
     state_path = Path(args.export_state) if args.export_state else None
@@ -898,6 +1409,15 @@ def main() -> None:
         else (max_cycles is None and env_stream_enabled)
     )
 
+    env_extensions_enabled = os.environ.get(
+        "SASK_EXTENSIONS_ENABLED", "1"
+    ).strip().lower() not in ("0", "false", "no", "off")
+    extensions_enabled = (
+        args.extensions
+        if args.extensions is not None
+        else env_extensions_enabled
+    )
+
     kernel = AutomationKernel(
         window_minutes=args.window_minutes,
         state_file=state_path,
@@ -905,6 +1425,8 @@ def main() -> None:
         stream_level=args.stream_level,
         stream_objective=args.stream_objective,
         stream_concurrency=args.stream_concurrency,
+        extensions_enabled=extensions_enabled,
+        curiosity_interval_seconds=args.curiosity_interval,
     )
 
     kernel.run_continuous_loop(

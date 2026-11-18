@@ -36,5 +36,6 @@ venv.bak/
 
 # Logs and telemetry
 *.log
+*.tmp
 execution_state.json
 run_state.json

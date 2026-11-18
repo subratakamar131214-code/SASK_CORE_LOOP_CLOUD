@@ -694,6 +694,87 @@ _DRIVE_ENGINE_CTX: ContextVar[Any] = ContextVar(
     "sask_science_drive_engine", default=None
 )
 
+# Meta-cognitive extensions registered by the SASK kernel (meta-prover,
+# curiosity engine, manifold bridge, adversarial injector).
+_EXTENSIONS: Dict[str, Any] = {}
+_EXTENSION_LOCK = threading.RLock()
+
+
+def register_extension(name: str, engine: Any) -> Dict[str, Any]:
+    """Register a kernel extension so router results can surface its hints."""
+    key = str(name or "").strip()
+    if not key:
+        raise ValueError("extension name must be non-empty")
+    with _EXTENSION_LOCK:
+        _EXTENSIONS[key] = engine
+    return {"registered": True, "name": key, "extensions": sorted(_EXTENSIONS)}
+
+
+def unregister_extension(name: str) -> bool:
+    """Remove a registered extension, returning True when one was removed."""
+    with _EXTENSION_LOCK:
+        return _EXTENSIONS.pop(str(name or "").strip(), None) is not None
+
+
+def get_extension_snapshot() -> Dict[str, Any]:
+    """Return redacted telemetry for every registered extension."""
+    with _EXTENSION_LOCK:
+        extensions = dict(_EXTENSIONS)
+    snapshot: Dict[str, Any] = {}
+    for name, engine in extensions.items():
+        telemetry: Dict[str, Any] = {"registered": True}
+        try:
+            if hasattr(engine, "get_telemetry"):
+                telemetry.update(engine.get_telemetry())
+        except Exception as exc:  # Telemetry must never break a router
+            telemetry["error"] = f"{type(exc).__name__}: {exc}"
+        snapshot[name] = telemetry
+    return snapshot
+
+
+def _extension_hints(router: str) -> Dict[str, Any]:
+    """Lightweight per-result hints drawn from registered extensions."""
+    with _EXTENSION_LOCK:
+        extensions = dict(_EXTENSIONS)
+    hints: Dict[str, Any] = {}
+    meta_prover = extensions.get("meta_prover")
+    if meta_prover is not None and hasattr(meta_prover, "preferred_framework"):
+        try:
+            framework = meta_prover.preferred_framework()
+            if framework:
+                hints["preferred_framework"] = framework
+        except Exception:
+            pass
+    curiosity = extensions.get("curiosity") or extensions.get("telos_v2")
+    if curiosity is not None:
+        try:
+            telemetry = curiosity.get_telemetry()
+            hints["curiosity_free_energy"] = telemetry.get("free_energy")
+            hints["curiosity_intrinsic_reward"] = telemetry.get("intrinsic_reward")
+        except Exception:
+            pass
+    manifold = extensions.get("manifold_bridge") or extensions.get("manifold")
+    if manifold is not None:
+        try:
+            telemetry = manifold.get_telemetry()
+            hints["manifold_isomorphisms"] = telemetry.get("isomorphisms_found")
+            hints["manifold_embedding_dimensions"] = telemetry.get(
+                "embedding_dimensions"
+            )
+        except Exception:
+            pass
+    devil = extensions.get("devil_advocate") or extensions.get("devil")
+    if devil is not None:
+        try:
+            telemetry = devil.get_telemetry()
+            hints["adversarial_challenges"] = telemetry.get("challenges_issued")
+            hints["adversarial_intensity"] = telemetry.get("last_intensity")
+        except Exception:
+            pass
+    if hints:
+        hints["router"] = router
+    return hints
+
 
 def _canonical_router(router_name: str) -> Optional[str]:
     """Resolve aliases and short names to a canonical router identifier."""
@@ -861,6 +942,9 @@ def _execute_router(
             "credentials": identity_context.redacted(),
         }
     )
+    extension_hints = _extension_hints(router)
+    if extension_hints:
+        result["extensions"] = extension_hints
     return result
 
 
@@ -1292,6 +1376,7 @@ def get_science_telemetry() -> Dict[str, Any]:
         "optimizer": self_optimizer.telemetry(),
         "specialization": specialization_engine.describe(),
         "credentials": identity_context.redacted(),
+        "extensions": get_extension_snapshot(),
     }
 
 

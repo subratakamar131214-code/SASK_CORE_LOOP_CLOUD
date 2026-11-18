@@ -44,6 +44,8 @@ jobs:
       SASK_STREAM_ENABLED: "1"
       SASK_STREAM_LEVEL: ${{ inputs.stream_level || '2' }}
       SASK_MAX_CONCURRENCY: ${{ inputs.stream_concurrency || '4' }}
+      SASK_EXTENSIONS_ENABLED: "1"
+      SASK_CURIOSITY_INTERVAL: "180"
 
     steps:
       - name: Check out repository source
@@ -76,8 +78,9 @@ jobs:
 
       - name: Pre-Flight Syntax & Import Gate
         run: |
-          python -m py_compile core.py drives.py bio_gen.py telos.py mutate.py prover.py verify.py science_mcp.py
-          python -c "import core, drives, bio_gen, telos, mutate, prover, verify, science_mcp; print('10-ROUTER SASK KERNEL FULLY INTEGRATED')"
+          python -m py_compile core.py drives.py bio_gen.py telos.py mutate.py prover.py verify.py science_mcp.py \
+            meta_prover.py telos_v2.py manifold_bridge.py devil_advocate.py
+          python -c "import core, drives, bio_gen, telos, mutate, prover, verify, science_mcp, meta_prover, telos_v2, manifold_bridge, devil_advocate; print('SASK KERNEL + 10 ROUTERS + 4 EXTENSIONS FULLY INTEGRATED')"
 
       - name: Execute Core Event Loop
         run: |
@@ -112,6 +115,10 @@ jobs:
             .sask_ego_ratchet.json
             .sask_goal_ledger.json
             .sask_goal_stream.json
+            .sask_meta_prover.json
+            .sask_curiosity.json
+            .sask_manifold.json
+            .sask_devil_advocate.json
             goals_manifest.json
           if-no-files-found: ignore
 
