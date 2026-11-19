@@ -56,6 +56,12 @@ jobs:
               tail -n 150 verify_output.log
               echo '```'
             } >> "$GITHUB_STEP_SUMMARY"
+            grep -E "^(FAILURE|ERROR|OVERTHINKING GATE|EGO RATCHET):" verify_output.log | head -n 3 | cut -c1-800 | while IFS= read -r line; do
+              echo "::error title=AncestralGate::$(printf '%s' "$line" | tr -d '\r')"
+            done
+            grep -E "(AssertionError|Error:)" verify_output.log | head -n 3 | cut -c1-800 | while IFS= read -r line; do
+              echo "::error title=GateDetail::$(printf '%s' "$line" | tr -d '\r')"
+            done
           fi
 
       - name: Step 3 - Execute Automation Kernel Cycle
