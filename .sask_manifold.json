@@ -1,0 +1,3266 @@
+{
+  "version": 1,
+  "comparisons": 60240,
+  "isomorphisms": 8032,
+  "structures": [
+    {
+      "id": "alg-cayley-z6",
+      "domain": "abstract_algebra",
+      "name": "Cayley graph of Z6",
+      "nodes": [
+        "z0",
+        "z1",
+        "z2",
+        "z3",
+        "z4",
+        "z5"
+      ],
+      "edges": [
+        [
+          "z0",
+          "z1"
+        ],
+        [
+          "z1",
+          "z2"
+        ],
+        [
+          "z2",
+          "z3"
+        ],
+        [
+          "z3",
+          "z4"
+        ],
+        [
+          "z4",
+          "z5"
+        ],
+        [
+          "z5",
+          "z0"
+        ]
+      ],
+      "node_labels": {},
+      "metadata": {
+        "group": "Z6",
+        "generator": 1
+      },
+      "created_at": "2026-11-19T00:18:34.364671+00:00"
+    },
+    {
+      "id": "net-ring-6",
+      "domain": "distributed_networks",
+      "name": "Six-node ring topology",
+      "nodes": [
+        "n0",
+        "n1",
+        "n2",
+        "n3",
+        "n4",
+        "n5"
+      ],
+      "edges": [
+        [
+          "n0",
+          "n1"
+        ],
+        [
+          "n1",
+          "n2"
+        ],
+        [
+          "n2",
+          "n3"
+        ],
+        [
+          "n3",
+          "n4"
+        ],
+        [
+          "n4",
+          "n5"
+        ],
+        [
+          "n5",
+          "n0"
+        ]
+      ],
+      "node_labels": {},
+      "metadata": {
+        "topology": "ring",
+        "diameter": 3
+      },
+      "created_at": "2026-11-19T00:18:34.365623+00:00"
+    },
+    {
+      "id": "phys-lattice-2x3",
+      "domain": "physical_simulation",
+      "name": "2x3 periodic lattice patch",
+      "nodes": [
+        "p00",
+        "p01",
+        "p02",
+        "p10",
+        "p11",
+        "p12"
+      ],
+      "edges": [
+        [
+          "p00",
+          "p01"
+        ],
+        [
+          "p00",
+          "p10"
+        ],
+        [
+          "p01",
+          "p02"
+        ],
+        [
+          "p01",
+          "p11"
+        ],
+        [
+          "p02",
+          "p12"
+        ],
+        [
+          "p10",
+          "p11"
+        ],
+        [
+          "p11",
+          "p12"
+        ]
+      ],
+      "node_labels": {},
+      "metadata": {
+        "lattice": "square",
+        "shape": [
+          2,
+          3
+        ]
+      },
+      "created_at": "2026-11-19T00:18:34.366474+00:00"
+    },
+    {
+      "id": "net-mesh-2x3",
+      "domain": "distributed_networks",
+      "name": "2x3 mesh network",
+      "nodes": [
+        "m00",
+        "m01",
+        "m02",
+        "m10",
+        "m11",
+        "m12"
+      ],
+      "edges": [
+        [
+          "m00",
+          "m01"
+        ],
+        [
+          "m00",
+          "m10"
+        ],
+        [
+          "m01",
+          "m02"
+        ],
+        [
+          "m01",
+          "m11"
+        ],
+        [
+          "m02",
+          "m12"
+        ],
+        [
+          "m10",
+          "m11"
+        ],
+        [
+          "m11",
+          "m12"
+        ]
+      ],
+      "node_labels": {},
+      "metadata": {
+        "topology": "mesh",
+        "shape": [
+          2,
+          3
+        ]
+      },
+      "created_at": "2026-11-19T00:18:34.367375+00:00"
+    },
+    {
+      "id": "comp-cfg-diamond",
+      "domain": "compiler_theory",
+      "name": "Diamond control-flow graph",
+      "nodes": [
+        "entry",
+        "branch",
+        "then",
+        "else",
+        "merge",
+        "exit"
+      ],
+      "edges": [
+        [
+          "entry",
+          "branch"
+        ],
+        [
+          "branch",
+          "then"
+        ],
+        [
+          "branch",
+          "else"
+        ],
+        [
+          "then",
+          "merge"
+        ],
+        [
+          "else",
+          "merge"
+        ],
+        [
+          "merge",
+          "exit"
+        ]
+      ],
+      "node_labels": {},
+      "metadata": {
+        "form": "diamond",
+        "join": "merge"
+      },
+      "created_at": "2026-11-19T00:18:34.368257+00:00"
+    },
+    {
+      "id": "live-pipeline",
+      "domain": "compiler_theory",
+      "name": "Live pipeline dependency graph",
+      "nodes": [
+        "bio_gen",
+        "core",
+        "devil_advocate",
+        "drives",
+        "manifold_bridge",
+        "meta_prover",
+        "mutate",
+        "prover",
+        "science_mcp",
+        "telos",
+        "telos_v2",
+        "verify"
+      ],
+      "edges": [
+        [
+          "core",
+          "bio_gen"
+        ],
+        [
+          "core",
+          "devil_advocate"
+        ],
+        [
+          "core",
+          "drives"
+        ],
+        [
+          "core",
+          "manifold_bridge"
+        ],
+        [
+          "core",
+          "meta_prover"
+        ],
+        [
+          "core",
+          "mutate"
+        ],
+        [
+          "core",
+          "prover"
+        ],
+        [
+          "core",
+          "science_mcp"
+        ],
+        [
+          "core",
+          "telos"
+        ],
+        [
+          "core",
+          "telos_v2"
+        ],
+        [
+          "core",
+          "verify"
+        ],
+        [
+          "devil_advocate",
+          "telos"
+        ],
+        [
+          "meta_prover",
+          "prover"
+        ],
+        [
+          "mutate",
+          "drives"
+        ],
+        [
+          "prover",
+          "drives"
+        ],
+        [
+          "science_mcp",
+          "drives"
+        ],
+        [
+          "telos",
+          "science_mcp"
+        ],
+        [
+          "telos_v2",
+          "telos"
+        ],
+        [
+          "verify",
+          "bio_gen"
+        ],
+        [
+          "verify",
+          "core"
+        ],
+        [
+          "verify",
+          "devil_advocate"
+        ],
+        [
+          "verify",
+          "drives"
+        ],
+        [
+          "verify",
+          "manifold_bridge"
+        ],
+        [
+          "verify",
+          "meta_prover"
+        ],
+        [
+          "verify",
+          "mutate"
+        ],
+        [
+          "verify",
+          "prover"
+        ],
+        [
+          "verify",
+          "science_mcp"
+        ],
+        [
+          "verify",
+          "telos"
+        ],
+        [
+          "verify",
+          "telos_v2"
+        ]
+      ],
+      "node_labels": {},
+      "metadata": {
+        "source": "core.pipeline",
+        "modules": 12
+      },
+      "created_at": "2026-11-19T00:18:37.424320+00:00"
+    }
+  ],
+  "solutions": {
+    "alg-cayley-z6": [
+      {
+        "name": "cycle_decomposition",
+        "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+        "invariants_used": [
+          "cycle_rank",
+          "degree_regularity"
+        ],
+        "registered_at": "2026-11-19T00:18:34.369069+00:00"
+      }
+    ],
+    "net-ring-6": [
+      {
+        "name": "cycle_decomposition",
+        "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+        "invariants_used": [
+          "cycle_rank",
+          "degree_regularity"
+        ],
+        "registered_at": "2026-11-19T00:18:34.369074+00:00"
+      }
+    ],
+    "phys-lattice-2x3": [
+      {
+        "name": "lattice_sweep",
+        "approximation": "lattice",
+        "approach": "Order nodes along rows and columns, then apply alternating forward/backward sweeps so every dependency is satisfied in at most two passes.",
+        "invariants_used": [
+          "bipartite_balance",
+          "degree_distribution"
+        ],
+        "registered_at": "2026-11-19T00:18:34.369076+00:00"
+      }
+    ],
+    "net-mesh-2x3": [
+      {
+        "name": "lattice_sweep",
+        "approximation": "lattice",
+        "approach": "Order nodes along rows and columns, then apply alternating forward/backward sweeps so every dependency is satisfied in at most two passes.",
+        "invariants_used": [
+          "bipartite_balance",
+          "degree_distribution"
+        ],
+        "registered_at": "2026-11-19T00:18:34.369079+00:00"
+      }
+    ],
+    "comp-cfg-diamond": [
+      {
+        "name": "dominator_collapse",
+        "approach": "Collapse strongly dominated regions into single super-nodes before analysis; the reduced structure preserves all reachability invariants.",
+        "invariants_used": [
+          "reachability_depth",
+          "component_count"
+        ],
+        "registered_at": "2026-11-19T00:18:34.369081+00:00"
+      }
+    ]
+  },
+  "transfers": [
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:31:51.062934+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:32:02.961160+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:32:15.000667+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:32:26.905344+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:32:38.451259+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:32:50.450373+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:33:02.856732+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:33:16.451245+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:33:29.899502+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:33:42.911425+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:33:56.529432+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:34:10.146303+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:34:22.657799+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:34:35.525345+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:34:48.728900+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:35:01.569730+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:35:14.954065+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:35:28.081434+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:35:40.576748+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:35:52.961264+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:36:04.837229+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:36:17.249736+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:36:29.586458+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:36:41.967568+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:36:54.185868+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:37:06.007171+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:37:18.193910+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:37:30.356407+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:37:42.245443+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:37:54.231875+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:38:05.772757+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:38:17.718382+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:38:29.725762+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:38:41.622714+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:38:53.137234+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:39:05.132152+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:39:17.176754+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:39:29.211101+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:39:40.964313+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:39:53.264946+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:40:05.346704+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:40:17.399082+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:40:29.002527+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:40:41.036680+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:40:53.116682+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:41:04.859690+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:41:16.895585+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:41:28.932160+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:41:41.002943+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:41:52.987060+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:42:04.622812+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:42:16.718746+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:42:28.891179+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:42:41.427502+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:42:53.837430+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:43:06.075840+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:43:17.720381+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:43:29.743163+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:43:41.738220+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:43:53.774152+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:44:05.423014+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:44:17.488580+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:44:29.512227+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:44:41.463405+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:44:53.036750+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:45:05.167416+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:45:17.235339+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:45:29.245901+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:45:40.898009+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:45:53.006532+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:46:05.072598+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:46:17.164124+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:46:28.806602+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:46:40.894832+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:46:53.044389+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:47:05.131284+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:47:16.790063+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:47:28.872432+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:47:40.898012+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:47:53.011001+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:48:04.788802+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:48:16.846946+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:48:28.963148+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:48:41.079884+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:48:52.798694+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:49:04.948767+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:49:16.681719+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:49:28.857650+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:49:40.621621+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:49:52.851447+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:50:05.097110+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:50:17.245997+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:50:29.458175+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:50:41.248940+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:50:53.406175+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:51:05.714446+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:51:17.666255+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:51:29.895186+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:51:42.081673+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:51:53.819900+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:52:06.113674+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:52:18.430393+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:52:30.662664+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:52:42.454414+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:52:54.612248+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:53:06.808679+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:53:18.572810+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:53:30.795678+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:53:42.972653+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:53:54.823248+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:54:07.194473+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:54:19.345256+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:54:31.625891+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:54:43.483446+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:54:55.751355+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:55:07.666831+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:55:19.904227+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:55:32.137185+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:55:44.358361+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:55:56.703976+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:56:08.549518+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:56:20.844035+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:56:32.734384+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:56:45.039183+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:56:57.363629+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:57:09.686592+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:57:21.524726+00:00"
+    },
+    {
+      "source": "alg-cayley-z6",
+      "target": "net-ring-6",
+      "source_domain": "abstract_algebra",
+      "target_domain": "distributed_networks",
+      "solution": "cycle_decomposition",
+      "approach": "Decompose the structure into independent cycles and process each cycle with a single linear sweep, reusing the invariant state at the wrap point.",
+      "structural_isomorphism": true,
+      "similarity": 1.0,
+      "confidence": 1.0,
+      "node_mapping": {
+        "z0": "n0",
+        "z1": "n1",
+        "z5": "n5",
+        "z2": "n2",
+        "z4": "n4",
+        "z3": "n3"
+      },
+      "transferred": true,
+      "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
+      "timestamp": "2026-11-19T05:57:33.825613+00:00"
+    }
+  ]
+}
