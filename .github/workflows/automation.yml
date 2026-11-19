@@ -27,6 +27,14 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Restore pip download cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            pip-${{ runner.os }}-
+
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
@@ -39,7 +47,8 @@ jobs:
 
       - name: Step 1 - Syntax Validation (Prover)
         run: |
-          python -m py_compile core.py drives.py bio_gen.py telos.py mutate.py prover.py verify.py science_mcp.py
+          python -m py_compile core.py drives.py bio_gen.py telos.py mutate.py prover.py verify.py science_mcp.py \
+            meta_prover.py telos_v2.py manifold_bridge.py devil_advocate.py egraph_engine.py
 
       - name: Step 2 - Ancestral Verification Gate
         run: |
@@ -76,4 +85,9 @@ jobs:
           path: |
             execution_state.json
             .sask_ego_ratchet.json
+            .sask_egraph.json
+            .sask_meta_prover.json
+            .sask_curiosity.json
+            .sask_manifold.json
+            .sask_devil_advocate.json
           if-no-files-found: ignore

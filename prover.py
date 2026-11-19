@@ -9,16 +9,19 @@ Integrates with drives.py for overthinking-depth-scaled repeated verification.
 
 from __future__ import annotations
 
+import concurrent.futures
+import hashlib
 import os
 import re
 import shutil
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tuple, Union
 
 
 @dataclass
@@ -371,12 +374,506 @@ class Lean4Prover:
         return True
 
 
+@dataclass
+class SearchNode:
+    """A single explored state in one direction of the search frontier."""
+
+    state: Any
+    parent: Optional["SearchNode"]
+    depth: int
+    priority: float = 0.0
+
+
+@dataclass
+class SearchBudget:
+    """Strict resource ceilings for bidirectional exploration."""
+
+    max_nodes_per_side: int = 400
+    max_depth: int = 12
+    max_seconds: float = 3.0
+    beam_width: int = 96
+    parallel: bool = True
+
+    def normalized(self) -> "SearchBudget":
+        return SearchBudget(
+            max_nodes_per_side=max(1, int(self.max_nodes_per_side)),
+            max_depth=max(1, int(self.max_depth)),
+            max_seconds=max(0.01, float(self.max_seconds)),
+            beam_width=max(1, int(self.beam_width)),
+            parallel=bool(self.parallel),
+        )
+
+
+@dataclass
+class BidirectionalSearchResult:
+    """Outcome of a meet-in-the-middle proof search."""
+
+    solved: bool
+    stopped: str
+    path: List[Any] = field(default_factory=list)
+    meet_state: Optional[Any] = None
+    forward_expanded: int = 0
+    backward_expanded: int = 0
+    forward_frontier: int = 0
+    backward_frontier: int = 0
+    depth: int = 0
+    elapsed_seconds: float = 0.0
+    cache_hits: int = 0
+    cache_misses: int = 0
+    meets_rejected: int = 0
+    verification: Optional[bool] = None
+    start_states: int = 0
+    target_states: int = 0
+
+    def __bool__(self) -> bool:
+        return self.solved
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "solved": self.solved,
+            "stopped": self.stopped,
+            "path": [self._describe(state) for state in self.path],
+            "meet_state": self._describe(self.meet_state),
+            "forward_expanded": self.forward_expanded,
+            "backward_expanded": self.backward_expanded,
+            "forward_frontier": self.forward_frontier,
+            "backward_frontier": self.backward_frontier,
+            "depth": self.depth,
+            "elapsed_seconds": round(self.elapsed_seconds, 4),
+            "cache_hits": self.cache_hits,
+            "cache_misses": self.cache_misses,
+            "meets_rejected": self.meets_rejected,
+            "verification": self.verification,
+            "start_states": self.start_states,
+            "target_states": self.target_states,
+        }
+
+    @staticmethod
+    def _describe(state: Any) -> Any:
+        if state is None or isinstance(state, (str, int, float, bool)):
+            return state
+        return repr(state)
+
+
+def _state_key(state: Any) -> Any:
+    """Hashable identity for a state; unhashable values degrade to repr."""
+    try:
+        hash(state)
+        return state
+    except TypeError:
+        return ("repr", repr(state))
+
+
+def _stable_repr(state: Any) -> str:
+    return state if isinstance(state, str) else repr(state)
+
+
+class SearchExpansionCache:
+    """Content-addressed cache of neighbour expansions, safe for threads."""
+
+    def __init__(self, capacity: int = 4096) -> None:
+        self.capacity = max(16, int(capacity))
+        self._entries: Dict[str, Tuple[Any, ...]] = {}
+        self._order: List[str] = []
+        self._hits = 0
+        self._misses = 0
+        self._lock = threading.Lock()
+
+    @staticmethod
+    def key(tag: str, side: str, state: Any) -> str:
+        digest = hashlib.blake2b(
+            f"{tag}|{side}|{_stable_repr(state)}".encode("utf-8", "replace"),
+            digest_size=16,
+        ).hexdigest()
+        return digest
+
+    def get(self, key: str) -> Optional[Tuple[Any, ...]]:
+        with self._lock:
+            value = self._entries.get(key)
+            if value is None:
+                self._misses += 1
+            else:
+                self._hits += 1
+            return value
+
+    def set(self, key: str, values: Tuple[Any, ...]) -> None:
+        with self._lock:
+            if key not in self._entries:
+                self._order.append(key)
+            self._entries[key] = values
+            while len(self._order) > self.capacity:
+                evicted = self._order.pop(0)
+                self._entries.pop(evicted, None)
+
+    def stats(self) -> Dict[str, int]:
+        with self._lock:
+            return {
+                "hits": self._hits,
+                "misses": self._misses,
+                "entries": len(self._entries),
+            }
+
+    def clear(self) -> None:
+        with self._lock:
+            self._entries.clear()
+            self._order.clear()
+
+
+class BidirectionalSearchEngine:
+    """Concurrent forward/backward expansion with meet-in-the-middle verification.
+
+    Forward exploration starts from axioms / initial states; backward exploration
+    starts from the target property / goal states. Cheap pre-checks run on every
+    candidate, both frontiers deduplicate through parent-linked visited maps, and
+    the expensive verifier is invoked only when the two frontiers intersect.
+    """
+
+    def __init__(
+        self,
+        forward_successors: Callable[[Any], Iterable[Any]],
+        backward_predecessors: Callable[[Any], Iterable[Any]],
+        precheck: Optional[Callable[[Any], bool]] = None,
+        verify: Optional[Callable[[Any], bool]] = None,
+        ranker: Optional[Callable[[Any], float]] = None,
+        budget: Optional[SearchBudget] = None,
+        cache: Optional[SearchExpansionCache] = None,
+        tag: Optional[str] = None,
+    ) -> None:
+        self.forward_successors = forward_successors
+        self.backward_predecessors = backward_predecessors
+        self.precheck = precheck
+        self.verify = verify
+        self.ranker = ranker
+        self.budget = (budget or SearchBudget()).normalized()
+        self.cache = cache or SearchExpansionCache()
+        self.tag = tag or (
+            f"{getattr(forward_successors, '__qualname__', 'forward')}"
+            f"|{getattr(backward_predecessors, '__qualname__', 'backward')}"
+        )
+
+    # -- neighbour generation / caching ---------------------------------
+    def _neighbors(self, side: str, state: Any) -> Tuple[Any, ...]:
+        cache_key = self.cache.key(self.tag, side, state)
+        cached = self.cache.get(cache_key)
+        if cached is not None:
+            return cached
+
+        generator = (
+            self.forward_successors if side == "forward" else self.backward_predecessors
+        )
+        try:
+            raw = list(generator(state))
+        except Exception:  # pragma: no cover - boundary guard
+            raw = []
+
+        filtered: List[Any] = []
+        seen = set()
+        for candidate in raw:
+            marker = _state_key(candidate)
+            if marker in seen:
+                continue
+            seen.add(marker)
+            if self.precheck is not None:
+                try:
+                    if not self.precheck(candidate):
+                        continue
+                except Exception:  # pragma: no cover - boundary guard
+                    continue
+            filtered.append(candidate)
+
+        result = tuple(filtered)
+        self.cache.set(cache_key, result)
+        return result
+
+    # -- one-sided expansion --------------------------------------------
+    def _expand(
+        self,
+        side: str,
+        frontier: List[SearchNode],
+        visited: Dict[Any, SearchNode],
+        expanded_so_far: int,
+    ) -> Tuple[List[SearchNode], int, int]:
+        next_frontier: List[SearchNode] = []
+        expanded = 0
+        budget = self.budget
+
+        for node in frontier:
+            if expanded_so_far + expanded >= budget.max_nodes_per_side:
+                break
+            if node.depth >= budget.max_depth:
+                continue
+            expanded += 1
+            for candidate in self._neighbors(side, node.state):
+                key = _state_key(candidate)
+                if key in visited:
+                    continue
+                child = SearchNode(
+                    state=candidate,
+                    parent=node,
+                    depth=node.depth + 1,
+                    priority=(self.ranker(candidate) if self.ranker else 0.0),
+                )
+                visited[key] = child
+                next_frontier.append(child)
+
+        if self.ranker is not None:
+            next_frontier.sort(key=lambda item: (item.priority, repr(item.state)))
+        if len(next_frontier) > budget.beam_width:
+            next_frontier = next_frontier[: budget.beam_width]
+        return next_frontier, expanded, len(next_frontier)
+
+    # -- path reconstruction --------------------------------------------
+    @staticmethod
+    def _chain(node: Optional[SearchNode]) -> List[Any]:
+        chain: List[Any] = []
+        guard = 0
+        while node is not None and guard < 4096:
+            chain.append(node.state)
+            node = node.parent
+            guard += 1
+        chain.reverse()
+        return chain
+
+    def _build_result(
+        self,
+        meet_key: Any,
+        forward_visited: Dict[Any, SearchNode],
+        backward_visited: Dict[Any, SearchNode],
+        started: float,
+        forward_expanded: int,
+        backward_expanded: int,
+        forward_frontier: int,
+        backward_frontier: int,
+        rejected: int,
+        verification: Optional[bool],
+        start_count: int,
+        target_count: int,
+    ) -> BidirectionalSearchResult:
+        fnode = forward_visited[meet_key]
+        bnode = backward_visited[meet_key]
+        forward_chain = self._chain(fnode)
+        backward_chain = self._chain(bnode)
+        # Backward parents point toward the target, so its chain runs
+        # target -> ... -> meet; reversing yields meet -> ... -> target.
+        path = forward_chain + list(reversed(backward_chain))[1:]
+        cache_stats = self.cache.stats()
+        return BidirectionalSearchResult(
+            solved=True,
+            stopped="solved",
+            path=path,
+            meet_state=fnode.state,
+            forward_expanded=forward_expanded,
+            backward_expanded=backward_expanded,
+            forward_frontier=forward_frontier,
+            backward_frontier=backward_frontier,
+            depth=fnode.depth + bnode.depth,
+            elapsed_seconds=time.monotonic() - started,
+            cache_hits=cache_stats["hits"],
+            cache_misses=cache_stats["misses"],
+            meets_rejected=rejected,
+            verification=verification,
+            start_states=start_count,
+            target_states=target_count,
+        )
+
+    # -- public search ---------------------------------------------------
+    def search(
+        self,
+        initial_states: Iterable[Any],
+        target_states: Iterable[Any],
+    ) -> BidirectionalSearchResult:
+        started = time.monotonic()
+        initial = [state for state in initial_states]
+        targets = [state for state in target_states]
+
+        forward_visited: Dict[Any, SearchNode] = {}
+        backward_visited: Dict[Any, SearchNode] = {}
+        rejected: set = set()
+
+        forward_frontier: List[SearchNode] = []
+        for state in initial:
+            key = _state_key(state)
+            if key in forward_visited:
+                continue
+            node = SearchNode(state=state, parent=None, depth=0)
+            forward_visited[key] = node
+            forward_frontier.append(node)
+
+        backward_frontier: List[SearchNode] = []
+        for state in targets:
+            key = _state_key(state)
+            if key in backward_visited:
+                continue
+            node = SearchNode(state=state, parent=None, depth=0)
+            backward_visited[key] = node
+            backward_frontier.append(node)
+
+        forward_expanded = 0
+        backward_expanded = 0
+        rejection_count = 0
+
+        def meets() -> List[Any]:
+            common = set(forward_visited).intersection(backward_visited)
+            return [key for key in common if key not in rejected]
+
+        def try_solve(frontier_f: int, frontier_b: int) -> Optional[BidirectionalSearchResult]:
+            nonlocal rejection_count
+            candidates = meets()
+            if not candidates:
+                return None
+            candidates.sort(
+                key=lambda key: (
+                    forward_visited[key].depth + backward_visited[key].depth,
+                    _stable_repr(key),
+                )
+            )
+            for key in candidates:
+                state = forward_visited[key].state
+                verified: Optional[bool] = None
+                if self.verify is not None:
+                    try:
+                        verified = bool(self.verify(state))
+                    except Exception:  # pragma: no cover - boundary guard
+                        verified = False
+                if verified is False:
+                    rejected.add(key)
+                    rejection_count += 1
+                    continue
+                return self._build_result(
+                    key,
+                    forward_visited,
+                    backward_visited,
+                    started,
+                    forward_expanded,
+                    backward_expanded,
+                    frontier_f,
+                    frontier_b,
+                    rejection_count,
+                    verified,
+                    len(initial),
+                    len(targets),
+                )
+            return None
+
+        initial_solution = try_solve(len(forward_frontier), len(backward_frontier))
+        if initial_solution is not None:
+            return initial_solution
+
+        stopped = "exhausted"
+        pool = (
+            concurrent.futures.ThreadPoolExecutor(max_workers=2)
+            if self.budget.parallel
+            else None
+        )
+        try:
+            while forward_frontier and backward_frontier:
+                elapsed = time.monotonic() - started
+                if elapsed >= self.budget.max_seconds:
+                    stopped = "time_budget"
+                    break
+                if (
+                    forward_expanded >= self.budget.max_nodes_per_side
+                    and backward_expanded >= self.budget.max_nodes_per_side
+                ):
+                    stopped = "node_budget"
+                    break
+
+                if pool is not None:
+                    futures = {
+                        "forward": pool.submit(
+                            self._expand,
+                            "forward",
+                            forward_frontier,
+                            forward_visited,
+                            forward_expanded,
+                        ),
+                        "backward": pool.submit(
+                            self._expand,
+                            "backward",
+                            backward_frontier,
+                            backward_visited,
+                            backward_expanded,
+                        ),
+                    }
+                    outcomes = {side: future.result() for side, future in futures.items()}
+                else:
+                    outcomes = {
+                        "forward": self._expand(
+                            "forward", forward_frontier, forward_visited, forward_expanded
+                        ),
+                        "backward": self._expand(
+                            "backward", backward_frontier, backward_visited, backward_expanded
+                        ),
+                    }
+
+                forward_frontier, f_expanded, _ = outcomes["forward"]
+                backward_frontier, b_expanded, _ = outcomes["backward"]
+                forward_expanded += f_expanded
+                backward_expanded += b_expanded
+
+                solution = try_solve(len(forward_frontier), len(backward_frontier))
+                if solution is not None:
+                    return solution
+        finally:
+            if pool is not None:
+                pool.shutdown(wait=False)
+
+        cache_stats = self.cache.stats()
+        return BidirectionalSearchResult(
+            solved=False,
+            stopped=stopped,
+            forward_expanded=forward_expanded,
+            backward_expanded=backward_expanded,
+            forward_frontier=len(forward_frontier),
+            backward_frontier=len(backward_frontier),
+            elapsed_seconds=time.monotonic() - started,
+            cache_hits=cache_stats["hits"],
+            cache_misses=cache_stats["misses"],
+            meets_rejected=rejection_count,
+            start_states=len(initial),
+            target_states=len(targets),
+        )
+
+
 class ProverInterface:
     """Subprocess execution coordinator with timeout management, isolation, and formal verifiers."""
 
     def __init__(self, default_timeout: float = 60.0) -> None:
         self.default_timeout = default_timeout
         self.lean = Lean4Prover(default_timeout=default_timeout)
+        self._search_cache = SearchExpansionCache()
+
+    def bidirectional_search(
+        self,
+        initial_states: Iterable[Any],
+        target_states: Iterable[Any],
+        forward_successors: Callable[[Any], Iterable[Any]],
+        backward_predecessors: Optional[Callable[[Any], Iterable[Any]]] = None,
+        precheck: Optional[Callable[[Any], bool]] = None,
+        verify: Optional[Callable[[Any], bool]] = None,
+        ranker: Optional[Callable[[Any], float]] = None,
+        budget: Optional[SearchBudget] = None,
+        tag: Optional[str] = None,
+    ) -> BidirectionalSearchResult:
+        """Run a cached meet-in-the-middle search between initial and target states.
+
+        If no backward generator is supplied, forward siblings are used as a
+        symmetric approximation so callers with undirected graphs still benefit
+        from bidirectional pruning.
+        """
+        if backward_predecessors is None:
+            backward_predecessors = forward_successors
+        engine = BidirectionalSearchEngine(
+            forward_successors=forward_successors,
+            backward_predecessors=backward_predecessors,
+            precheck=precheck,
+            verify=verify,
+            ranker=ranker,
+            budget=budget,
+            cache=self._search_cache,
+            tag=tag,
+        )
+        return engine.search(initial_states, target_states)
 
     @staticmethod
     def resolve_executable(name: str) -> Optional[str]:

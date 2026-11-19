@@ -135,6 +135,32 @@ class ProofEvaluation:
         return asdict(self)
 
 
+@dataclass
+class CounterfactualBranch:
+    """One sandboxed perturbation of the trusted baseline framework."""
+
+    id: str
+    operator: str
+    framework_id: str
+    framework_name: str
+    score: float
+    baseline_score: float
+    delta: float
+    success: bool
+    steps: int
+    compactness: float
+    residual: float
+    assumption_deltas: Dict[str, Any] = field(default_factory=dict)
+    invariants: Dict[str, bool] = field(default_factory=dict)
+    projection: Dict[str, Any] = field(default_factory=dict)
+    verified: bool = False
+    promoted: bool = False
+    rejection_reason: str = ""
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
 class AxiomRegistry:
     """Registry of mutable axioms, type systems, and inference-rule sets."""
 
@@ -346,6 +372,9 @@ class MetaProver:
         self._best_by_goal: Dict[str, Dict[str, Any]] = {}
         self._evaluations = 0
         self._searches = 0
+        self._counterfactual_runs = 0
+        self._promotions: List[Dict[str, Any]] = []
+        self._promoted_by_goal: Dict[str, Dict[str, Any]] = {}
         self._load()
 
     # ------------------------------------------------------------------
@@ -357,8 +386,13 @@ class MetaProver:
         goal: str,
         framework: LogicalFramework,
         generation: int = 0,
+        record: bool = True,
     ) -> ProofEvaluation:
-        """Score one goal/framework pair using the structural model."""
+        """Score one goal/framework pair using the structural model.
+
+        ``record=False`` keeps sandboxed/counterfactual trials out of the
+        trusted evaluation history.
+        """
         started = time.monotonic()
         signature = framework.signature()
         base = _hash_unit(goal, signature)
@@ -423,11 +457,12 @@ class MetaProver:
                 "framework_signature": signature,
             },
         )
-        with self._lock:
-            self._evaluations += 1
-            self._history.append(evaluation)
-            if len(self._history) > self.history_limit:
-                self._history = self._history[-self.history_limit:]
+        if record:
+            with self._lock:
+                self._evaluations += 1
+                self._history.append(evaluation)
+                if len(self._history) > self.history_limit:
+                    self._history = self._history[-self.history_limit:]
         return evaluation
 
     def search(
@@ -510,6 +545,283 @@ class MetaProver:
         self.save()
         return result
 
+    # ------------------------------------------------------------------
+    # Counterfactual sandbox
+    # ------------------------------------------------------------------
+
+    def sandbox_operators(self) -> List[str]:
+        """Deterministic catalogue of assumption perturbations to trial."""
+        operators: List[str] = ["toggle:allow_sorry"]
+        for name, parameter in self.registry.DEFAULT_AXIOMS.items():
+            if name == "allow_sorry":
+                continue
+            if parameter.mutable and parameter.options:
+                operators.append(f"toggle:{name}")
+        operators.extend(f"rules:{index}" for index in range(len(self.registry.RULE_SETS)))
+        operators.extend(f"type:{name}" for name in self.registry.TYPE_SYSTEMS)
+        operators.append("relax:timeout_seconds")
+        return operators
+
+    def _sandbox_framework(
+        self, baseline: LogicalFramework, operator: str
+    ) -> LogicalFramework:
+        """Build an isolated perturbed framework; never mutates the baseline."""
+        axioms = dict(baseline.axioms)
+        rules = list(baseline.inference_rules)
+        type_system = baseline.type_system
+        kind, _, argument = operator.partition(":")
+
+        if kind == "toggle":
+            parameter = self.registry.DEFAULT_AXIOMS.get(argument)
+            if parameter is None:
+                raise ValueError(f"Unknown axiom toggle: {argument}")
+            options = parameter.options or (True, False)
+            current = axioms.get(argument)
+            index = options.index(current) if current in options else 0
+            axioms[argument] = options[(index + 1) % len(options)]
+        elif kind == "rules":
+            index = int(argument) % len(self.registry.RULE_SETS)
+            rules = list(self.registry.RULE_SETS[index])
+        elif kind == "type":
+            if argument not in self.registry.TYPE_SYSTEMS:
+                raise ValueError(f"Unknown type system: {argument}")
+            type_system = argument
+        elif kind == "relax":
+            parameter = self.registry.DEFAULT_AXIOMS.get(argument)
+            numeric_options = [
+                value
+                for value in (parameter.options if parameter else ())
+                if isinstance(value, (int, float))
+            ]
+            if not numeric_options:
+                raise ValueError(f"Cannot relax parameter: {argument}")
+            axioms[argument] = max(numeric_options, key=float)
+        else:
+            raise ValueError(f"Unsupported sandbox operator: {operator}")
+
+        token = hashlib.blake2b(
+            f"{baseline.signature()}|{operator}".encode("utf-8"), digest_size=5
+        ).hexdigest()
+        return LogicalFramework(
+            id=f"cf-{token}",
+            name=f"{baseline.name} [sandbox: {operator}]",
+            axioms=axioms,
+            inference_rules=rules,
+            type_system=type_system,
+            description=f"Isolated counterfactual of {baseline.id}: {operator}",
+            lineage=list(baseline.lineage) + [baseline.id],
+            generation=baseline.generation + 1,
+        )
+
+    def _branch_invariants(
+        self, baseline: LogicalFramework, branch: LogicalFramework
+    ) -> Dict[str, bool]:
+        """Safety and well-formedness checks every perturbation must satisfy."""
+        enabled_axioms = sum(
+            1 for value in branch.axioms.values() if isinstance(value, bool) and value
+        )
+        return {
+            "allow_sorry_remains_false": branch.axioms.get("allow_sorry", False) is False,
+            "type_system_known": branch.type_system in self.registry.TYPE_SYSTEMS,
+            "rule_set_known": any(
+                tuple(branch.inference_rules) == tuple(rule_set)
+                for rule_set in self.registry.RULE_SETS
+            ),
+            "nontrivial_delta": branch.signature() != baseline.signature(),
+            "axiom_budget": enabled_axioms <= 6,
+        }
+
+    def _project_branch(
+        self,
+        baseline: LogicalFramework,
+        branch: LogicalFramework,
+    ) -> Dict[str, Any]:
+        """Re-project a perturbation onto the trusted baseline before promotion."""
+        kept: Dict[str, Any] = {}
+        discarded: Dict[str, Any] = {}
+        for name, value in branch.axioms.items():
+            if baseline.axioms.get(name) == value:
+                continue
+            if name == "allow_sorry":
+                discarded[name] = {
+                    "from": baseline.axioms.get(name),
+                    "to": value,
+                    "reason": "safety_invariant",
+                }
+            else:
+                kept[name] = {"from": baseline.axioms.get(name), "to": value}
+
+        projected_axioms = dict(baseline.axioms)
+        for name, delta in kept.items():
+            projected_axioms[name] = delta["to"]
+        payload = {
+            "axioms": projected_axioms,
+            "inference_rules": list(branch.inference_rules),
+            "type_system": branch.type_system,
+        }
+        digest = hashlib.blake2b(
+            json.dumps(payload, sort_keys=True, default=str).encode("utf-8"),
+            digest_size=8,
+        ).hexdigest()
+        return {
+            "kept_axiom_deltas": kept,
+            "discarded_axiom_deltas": discarded,
+            "structural_deltas": {
+                "inference_rules": branch.inference_rules != baseline.inference_rules,
+                "type_system": branch.type_system != baseline.type_system,
+            },
+            "projected_signature": digest,
+            "reprojected_from_trusted_baseline": True,
+        }
+
+    def counterfactual_search(
+        self,
+        goal: str,
+        perturbations: Optional[List[str]] = None,
+        candidates_limit: int = 10,
+        min_delta: float = 0.01,
+        verifier: Optional[Any] = None,
+        promote: bool = True,
+    ) -> Dict[str, Any]:
+        """Trial perturbed assumption sets in isolation, then gate any promotion.
+
+        A branch is promoted into trusted state only when every safety invariant
+        holds, the baseline replay is deterministic, the branch strictly
+        improves the score, and the optional external verifier (e.g. Lean 4 or
+        Z3 callback) accepts it. Rejected branches remain observable but never
+        influence the preferred framework.
+        """
+        started = time.monotonic()
+        baseline_candidates = self.registry.base_frameworks()
+        baseline_eval, baseline = max(
+            ((self.evaluate(goal, framework, record=False), framework)
+             for framework in baseline_candidates),
+            key=lambda pair: (pair[0].score, pair[1].id),
+        )
+        replay = self.evaluate(goal, baseline, record=False)
+        deterministic = abs(replay.score - baseline_eval.score) <= 1e-9
+
+        if perturbations is None:
+            available = self.sandbox_operators()
+            ordered = sorted(available, key=lambda op: _hash_unit(goal, op))
+            if "toggle:allow_sorry" in ordered:
+                ordered.remove("toggle:allow_sorry")
+            ordered.insert(0, "toggle:allow_sorry")
+            perturbations = ordered[: max(1, int(candidates_limit))]
+
+        branches: List[CounterfactualBranch] = []
+        for operator in perturbations:
+            try:
+                framework = self._sandbox_framework(baseline, operator)
+            except ValueError as exc:
+                branches.append(
+                    CounterfactualBranch(
+                        id=f"cf-invalid-{len(branches)}",
+                        operator=operator,
+                        framework_id="",
+                        framework_name="",
+                        score=0.0,
+                        baseline_score=baseline_eval.score,
+                        delta=0.0,
+                        success=False,
+                        steps=0,
+                        compactness=0.0,
+                        residual=1.0,
+                        rejection_reason=f"invalid_operator: {exc}",
+                    )
+                )
+                continue
+
+            evaluation = self.evaluate(goal, framework, record=False)
+            invariants = self._branch_invariants(baseline, framework)
+            projection = self._project_branch(baseline, framework)
+            checks: Dict[str, bool] = {
+                "invariants": all(invariants.values()),
+                "deterministic_baseline": deterministic,
+                "improvement": evaluation.score > baseline_eval.score + min_delta,
+                "success": evaluation.success,
+            }
+            if verifier is not None:
+                try:
+                    checks["external_verifier"] = bool(verifier(goal, framework, evaluation))
+                except Exception:  # pragma: no cover - verifier boundary
+                    checks["external_verifier"] = False
+
+            verified = all(checks.values())
+            promoted = bool(promote and verified)
+            failures = [name for name, passed in checks.items() if not passed]
+            branch = CounterfactualBranch(
+                id=framework.id,
+                operator=operator,
+                framework_id=framework.id,
+                framework_name=framework.name,
+                score=evaluation.score,
+                baseline_score=baseline_eval.score,
+                delta=round(evaluation.score - baseline_eval.score, 6),
+                success=evaluation.success,
+                steps=evaluation.steps,
+                compactness=evaluation.compactness,
+                residual=evaluation.residual,
+                assumption_deltas={
+                    name: {"from": baseline.axioms.get(name), "to": value}
+                    for name, value in framework.axioms.items()
+                    if baseline.axioms.get(name) != value
+                },
+                invariants=invariants,
+                projection=projection,
+                verified=verified,
+                promoted=promoted,
+                rejection_reason=",".join(failures),
+            )
+            branches.append(branch)
+
+            if promoted:
+                promotion = {
+                    "goal": goal[:240],
+                    "operator": operator,
+                    "framework_id": framework.id,
+                    "score": branch.score,
+                    "delta": branch.delta,
+                    "projection": projection,
+                    "verified": True,
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                }
+                with self._lock:
+                    self._promotions.append(promotion)
+                    if len(self._promotions) > 32:
+                        self._promotions = self._promotions[-32:]
+                    self._promoted_by_goal[goal[:240]] = promotion
+
+        branches.sort(key=lambda item: item.score, reverse=True)
+        with self._lock:
+            self._counterfactual_runs += 1
+        self.save()
+
+        best = branches[0] if branches else None
+        return {
+            "goal": goal[:240],
+            "baseline_framework": baseline.id,
+            "baseline_framework_name": baseline.name,
+            "baseline_score": baseline_eval.score,
+            "branches": [branch.to_dict() for branch in branches],
+            "promoted": sum(1 for branch in branches if branch.promoted),
+            "rejected": sum(1 for branch in branches if not branch.promoted),
+            "best_operator": best.operator if best else None,
+            "best_delta": best.delta if best else 0.0,
+            "deterministic_baseline": deterministic,
+            "verification_mode": (
+                "invariants+regression+external" if verifier is not None
+                else "invariants+regression"
+            ),
+            "counterfactual_runs": self._counterfactual_runs,
+            "elapsed_seconds": round(time.monotonic() - started, 6),
+        }
+
+    def promoted_framework(self, goal: str) -> Optional[Dict[str, Any]]:
+        """Return the last promoted (verified, re-projected) branch for a goal."""
+        with self._lock:
+            return self._promoted_by_goal.get(goal[:240])
+
     def render_skeleton(self, goal: str, framework: LogicalFramework) -> str:
         """Render a Lean proof skeleton using the prover pipeline when available."""
         assertion = f"True -- {goal[:160]}"
@@ -544,6 +856,9 @@ class MetaProver:
                 "prover_backend": "prover.ProverInterface" if self.prover is not None else "structural_model",
                 "evaluations": self._evaluations,
                 "searches": self._searches,
+                "counterfactual_runs": self._counterfactual_runs,
+                "promotions": len(self._promotions),
+                "recent_promotions": self._promotions[-2:],
                 "preferred_framework": self.preferred_framework(),
                 "best_by_goal": list(self._best_by_goal.values())[-3:],
                 "recent_evaluations": recent,
@@ -556,6 +871,9 @@ class MetaProver:
                 "version": 1,
                 "evaluations": self._evaluations,
                 "searches": self._searches,
+                "counterfactual_runs": self._counterfactual_runs,
+                "promotions": self._promotions[-32:],
+                "promoted_by_goal": dict(self._promoted_by_goal),
                 "best_by_goal": dict(self._best_by_goal),
                 "history": [item.to_dict() for item in self._history[-64:]],
             }
@@ -564,6 +882,16 @@ class MetaProver:
         with self._lock:
             self._evaluations = max(self._evaluations, int(data.get("evaluations", 0)))
             self._searches = max(self._searches, int(data.get("searches", 0)))
+            self._counterfactual_runs = max(
+                self._counterfactual_runs, int(data.get("counterfactual_runs", 0))
+            )
+            for record in data.get("promotions") or []:
+                if isinstance(record, dict):
+                    self._promotions.append(record)
+            self._promotions = self._promotions[-32:]
+            for goal, record in (data.get("promoted_by_goal") or {}).items():
+                if isinstance(record, dict):
+                    self._promoted_by_goal[str(goal)] = record
             for goal, record in (data.get("best_by_goal") or {}).items():
                 if isinstance(record, dict):
                     self._best_by_goal[str(goal)] = record

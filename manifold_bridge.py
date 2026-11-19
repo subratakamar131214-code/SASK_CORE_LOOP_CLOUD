@@ -136,6 +136,46 @@ class DomainStructure:
         )
 
 
+BOUNDARY_DIMENSIONS: Tuple[str, ...] = (
+    "edge_case",
+    "scale_limit",
+    "approximation_error",
+    "resource_ceiling",
+)
+
+
+@dataclass
+class BoundaryProbe:
+    """An explicit limit-test for a structure in a scientific domain."""
+
+    id: str
+    dimension: str
+    structure_id: str
+    domain: str
+    objective: str
+    assertion: str
+    severity: float
+    safety: Dict[str, bool] = field(default_factory=dict)
+    metrics: Dict[str, Any] = field(default_factory=dict)
+    created_at: str = field(
+        default_factory=lambda: datetime.now(timezone.utc).isoformat()
+    )
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "id": self.id,
+            "dimension": self.dimension,
+            "structure_id": self.structure_id,
+            "domain": self.domain,
+            "objective": self.objective,
+            "assertion": self.assertion,
+            "severity": round(self.severity, 4),
+            "safety": dict(self.safety),
+            "metrics": dict(self.metrics),
+            "created_at": self.created_at,
+        }
+
+
 class AnalogicalManifoldBridge:
     """Shared topological embedding space with isomorphism-aware transfer."""
 
@@ -154,6 +194,7 @@ class AnalogicalManifoldBridge:
         self._transfers: List[Dict[str, Any]] = []
         self._comparisons = 0
         self._isomorphisms = 0
+        self._boundary_probes = 0
         self._seed_exemplars()
         self._load()
 
@@ -690,6 +731,144 @@ class AnalogicalManifoldBridge:
             transfers.append(self.transfer_solution(source_id, target))
         return transfers
 
+    def boundary_probes(
+        self,
+        structure_id: Optional[str] = None,
+        dimensions: Optional[Sequence[str]] = None,
+        limit: int = 8,
+    ) -> List[BoundaryProbe]:
+        """Generate deterministic boundary probes for registered structures.
+
+        Probes cover degenerate inputs, scale limits, approximation error, and
+        resource ceilings. They are read-only assertions: promoting any finding
+        still requires the verification pipeline.
+        """
+        with self._lock:
+            if structure_id is not None:
+                structures = (
+                    [self._structures[structure_id]]
+                    if structure_id in self._structures
+                    else []
+                )
+            else:
+                structures = list(self._structures.values())
+
+        wanted = set(dimensions or BOUNDARY_DIMENSIONS)
+        probes: List[BoundaryProbe] = []
+        for structure in structures:
+            probes.extend(self._probes_for_structure(structure, wanted))
+        probes.sort(key=lambda probe: (probe.structure_id, probe.dimension, probe.id))
+        with self._lock:
+            self._boundary_probes += len(probes[: max(0, int(limit))])
+        return probes[: max(0, int(limit))]
+
+    def _probes_for_structure(
+        self,
+        structure: DomainStructure,
+        wanted: set,
+    ) -> List[BoundaryProbe]:
+        adjacency = structure.adjacency()
+        degrees = [len(values) for values in adjacency.values()]
+        node_count = len(structure.nodes)
+        edge_count = len(structure.edges)
+        isolated = sum(1 for degree in degrees if degree == 0)
+        density = (
+            2.0 * edge_count / (node_count * (node_count - 1))
+            if node_count > 1
+            else 0.0
+        )
+        base_metrics = {
+            "nodes": node_count,
+            "edges": edge_count,
+            "degree_min": min(degrees) if degrees else 0,
+            "degree_max": max(degrees) if degrees else 0,
+            "isolated_nodes": isolated,
+            "density": round(density, 6),
+            "wl_rounds": self.wl_rounds,
+        }
+        safety = {
+            "read_only": True,
+            "no_state_mutation": True,
+            "requires_verification": True,
+            "deterministic": True,
+        }
+
+        def build(
+            dimension: str,
+            objective: str,
+            assertion: str,
+            severity: float,
+        ) -> BoundaryProbe:
+            token = hashlib.blake2b(
+                f"{structure.id}|{dimension}|{node_count}|{edge_count}".encode(
+                    "utf-8"
+                ),
+                digest_size=6,
+            ).hexdigest()
+            return BoundaryProbe(
+                id=f"bnd-{token}",
+                dimension=dimension,
+                structure_id=structure.id,
+                domain=structure.domain,
+                objective=objective,
+                assertion=assertion,
+                severity=max(0.0, min(1.0, severity)),
+                safety=dict(safety),
+                metrics=dict(base_metrics),
+            )
+
+        probes: List[BoundaryProbe] = []
+        if "edge_case" in wanted:
+            probes.append(
+                build(
+                    "edge_case",
+                    f"Probe the degenerate boundary of {structure.id}: reduce it to "
+                    "a single isolated vertex and one self-loop, then verify the "
+                    "detection, transfer, and verification invariants still hold.",
+                    "Invariants hold at node_count=1 and edge_count<=1 with no "
+                    "structural isomorphism false positives.",
+                    0.60,
+                )
+            )
+        if "scale_limit" in wanted:
+            scaled_nodes = max(2, node_count * 8)
+            probes.append(
+                build(
+                    "scale_limit",
+                    f"Scale {structure.id} by 8x to nodes={scaled_nodes}, "
+                    f"edges={edge_count * 8} and verify the pipeline stays within "
+                    "node/edge ceilings without superlinear blowup.",
+                    "Runtime grows at most linearly in edges up to the declared ceiling.",
+                    0.35 + min(0.4, node_count / 128.0),
+                )
+            )
+        if "approximation_error" in wanted:
+            probes.append(
+                build(
+                    "approximation_error",
+                    f"Bound the approximation error of the spectral embedding for "
+                    f"{structure.id} when WL refinement is reduced to one round; "
+                    f"compare against the {self.wl_rounds}-round baseline.",
+                    "Isomorphism decisions agree between 1-round and full-round "
+                    "signatures within the similarity threshold.",
+                    0.45,
+                )
+            )
+        if "resource_ceiling" in wanted:
+            probes.append(
+                build(
+                    "resource_ceiling",
+                    f"Enforce a resource ceiling for {structure.id}: cap analysis at "
+                    f"{max(16, node_count * 4)} expansions and "
+                    f"{round(max(0.1, edge_count * 0.02), 3)}s, then confirm no "
+                    "unverified output is promoted.",
+                    "Exhausting the ceiling yields a rejected probe, never a "
+                    "trusted-state promotion.",
+                    0.50,
+                )
+            )
+        return probes
+
     def analyze_pipeline(
         self,
         structure_id: str,
@@ -764,6 +943,8 @@ class AnalogicalManifoldBridge:
                 },
                 "comparisons": self._comparisons,
                 "isomorphisms_found": self._isomorphisms,
+                "boundary_probes_generated": self._boundary_probes,
+                "boundary_dimensions": list(BOUNDARY_DIMENSIONS),
                 "transfers": len(self._transfers),
                 "recent_transfers": list(self._transfers[-3:]),
                 "embedding_dimensions": 10,
@@ -775,6 +956,7 @@ class AnalogicalManifoldBridge:
                 "version": 1,
                 "comparisons": self._comparisons,
                 "isomorphisms": self._isomorphisms,
+                "boundary_probes": self._boundary_probes,
                 "structures": [
                     item.to_dict() for item in list(self._structures.values())[-_MAX_STRUCTURES:]
                 ],
@@ -790,6 +972,9 @@ class AnalogicalManifoldBridge:
         with self._lock:
             self._comparisons = max(self._comparisons, int(data.get("comparisons", 0)))
             self._isomorphisms = max(self._isomorphisms, int(data.get("isomorphisms", 0)))
+            self._boundary_probes = max(
+                self._boundary_probes, int(data.get("boundary_probes", 0))
+            )
             for payload in data.get("structures") or []:
                 if isinstance(payload, dict) and payload.get("id"):
                     structure = DomainStructure.from_dict(payload)

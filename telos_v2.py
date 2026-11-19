@@ -731,6 +731,102 @@ class EpistemicCuriosityEngine:
             self.save()
         return proposals
 
+    def propose_boundary_goals(
+        self,
+        probes: Iterable[Any],
+        limit: int = 4,
+        use_stream: bool = True,
+    ) -> List[Dict[str, Any]]:
+        """Ingest manifold boundary probes as executable, verified goals."""
+        records: List[Dict[str, Any]] = []
+        for probe in list(probes)[: max(0, int(limit))]:
+            payload = (
+                probe.to_dict()
+                if hasattr(probe, "to_dict")
+                else dict(probe) if isinstance(probe, dict) else {}
+            )
+            probe_id = str(payload.get("id") or "").strip()
+            objective = str(payload.get("objective") or "").strip()
+            if not probe_id or not objective:
+                continue
+            goal_id = f"boundary-{probe_id}"
+            record: Dict[str, Any] = {
+                "probe_id": probe_id,
+                "dimension": payload.get("dimension"),
+                "structure_id": payload.get("structure_id"),
+                "goal_id": goal_id,
+                "injected": False,
+                "streamed": False,
+            }
+
+            if self.goal_engine is not None and hasattr(self.goal_engine, "ingest_goal"):
+                existing = None
+                try:
+                    if hasattr(self.goal_engine, "get_goal"):
+                        existing = self.goal_engine.get_goal(goal_id)
+                except Exception:
+                    existing = None
+                if existing is not None:
+                    record["reason"] = "exists"
+                else:
+                    try:
+                        vector = (
+                            getattr(GoalVector, "FRONTIER_EXPLORE", None)
+                            if _TELOS_AVAILABLE
+                            else None
+                        )
+                        priority = (
+                            getattr(GoalPriority, "HIGH", None)
+                            if _TELOS_AVAILABLE
+                            else None
+                        )
+                        goal = self.goal_engine.ingest_goal(
+                            objective,
+                            vector=vector,
+                            priority=priority,
+                            title=f"Boundary probe: {payload.get('dimension')}",
+                            discipline_weight=1.0
+                            + float(payload.get("severity", 0.5) or 0.0),
+                            goal_id=goal_id,
+                        )
+                        goal.metadata["boundary_probe"] = payload
+                        record["injected"] = True
+                    except Exception as exc:
+                        record["ingest_error"] = f"{type(exc).__name__}: {exc}"
+
+            if use_stream and self.stream is not None and getattr(
+                self.stream, "is_running", False
+            ):
+                try:
+                    priority = (
+                        getattr(GoalPriority, "HIGH", None)
+                        if _TELOS_AVAILABLE
+                        else None
+                    )
+                    stream_info = self.stream.submit_objective(
+                        objective,
+                        level=1,
+                        priority=priority,
+                        objective_id=f"boundary-obj-{probe_id}",
+                        metadata={
+                            "source": "boundary_probe",
+                            "dimension": payload.get("dimension"),
+                            "structure_id": payload.get("structure_id"),
+                        },
+                    )
+                    record["streamed"] = bool(stream_info.get("new", True))
+                except Exception as exc:
+                    record["stream_error"] = f"{type(exc).__name__}: {exc}"
+
+            if record["injected"] or record["streamed"]:
+                with self._lock:
+                    self._proposed += 1
+            records.append(record)
+
+        if records:
+            self.save()
+        return records
+
     # ------------------------------------------------------------------
     # Autonomous tick / background loop
     # ------------------------------------------------------------------

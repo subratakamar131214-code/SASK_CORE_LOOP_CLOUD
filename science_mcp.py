@@ -155,6 +155,34 @@ _ROUTER_ALIASES: Dict[str, str] = {
     "bio": "biomolecular_router",
 }
 
+_BOUNDARY_DIMENSIONS: Tuple[str, ...] = (
+    "edge_case",
+    "scale_limit",
+    "approximation_error",
+    "resource_ceiling",
+)
+
+# Each router declares the boundary dimensions it must probe before promotion.
+_BOUNDARY_MATRIX: Dict[str, Tuple[str, ...]] = {
+    "quantum_router": ("approximation_error", "scale_limit"),
+    "atomistic_router": ("scale_limit", "resource_ceiling"),
+    "hpc_router": ("resource_ceiling", "scale_limit"),
+    "wetlab_router": ("edge_case", "resource_ceiling"),
+    "sensing_router": ("edge_case", "approximation_error"),
+    "beamline_router": ("scale_limit", "resource_ceiling"),
+    "free_grid_router": ("resource_ceiling", "scale_limit"),
+    "multiphysics_router": ("approximation_error", "edge_case"),
+    "digital_twin_router": ("edge_case", "approximation_error"),
+    "biomolecular_router": ("scale_limit", "edge_case"),
+}
+
+_BOUNDARY_MEANING: Dict[str, str] = {
+    "edge_case": "degenerate/empty input handling",
+    "scale_limit": "superlinear growth and saturation",
+    "approximation_error": "truncation error versus the full reference",
+    "resource_ceiling": "compute, memory, and wall-clock ceilings",
+}
+
 
 # ---------------------------------------------------------------------------
 # Dataclasses
@@ -779,6 +807,21 @@ def _extension_hints(router: str) -> Dict[str, Any]:
             )
         except Exception:
             pass
+    router_dimensions = _BOUNDARY_MATRIX.get(router)
+    if router_dimensions:
+        hints["boundary_dimensions"] = list(router_dimensions)
+    if (
+        manifold is not None
+        and router_dimensions
+        and hasattr(manifold, "boundary_probes")
+    ):
+        try:
+            probes = manifold.boundary_probes(
+                dimensions=router_dimensions, limit=2
+            )
+            hints["boundary_probes"] = [probe.to_dict() for probe in probes]
+        except Exception:
+            pass
     devil = extensions.get("devil_advocate") or extensions.get("devil")
     if devil is not None:
         try:
@@ -1286,6 +1329,101 @@ def run_multiscale_biological_pipeline(
     )
 
 
+@_tool
+def generate_boundary_probe_matrix(
+    domain: str = "all",
+    structure_id: Optional[str] = None,
+    limit: int = 8,
+) -> Dict[str, Any]:
+    """Map boundary probes across science domains and router families.
+
+    Covers degenerate edge cases, scale limits, approximation error, and
+    resource ceilings. Probes are read-only; any promotion requires the
+    verification pipeline.
+
+    Args:
+        domain: Domain or router filter (e.g. ``quantum``, ``all``).
+        structure_id: Optional manifold structure to probe directly.
+        limit: Maximum number of probes to return.
+    """
+    requested = str(domain or "all").strip().lower().replace("-", "_")
+    with _EXTENSION_LOCK:
+        manifold = _EXTENSIONS.get("manifold_bridge") or _EXTENSIONS.get("manifold")
+
+    probes: List[Dict[str, Any]] = []
+    source = "static_matrix"
+    error = None
+    if manifold is not None and hasattr(manifold, "boundary_probes"):
+        try:
+            generated = manifold.boundary_probes(
+                structure_id=structure_id,
+                limit=max(1, int(limit)),
+            )
+            probes = [probe.to_dict() for probe in generated]
+            source = "manifold_bridge"
+        except Exception as exc:
+            error = f"{type(exc).__name__}: {exc}"
+
+    if not probes:
+        for name in ROUTER_NAMES:
+            if requested not in ("all", "science", "router") and requested not in name:
+                continue
+            for dimension in _BOUNDARY_MATRIX.get(name, _BOUNDARY_DIMENSIONS):
+                token = hashlib.blake2b(
+                    f"{name}|{dimension}".encode("utf-8"), digest_size=6
+                ).hexdigest()
+                probes.append(
+                    {
+                        "id": f"bnd-router-{token}",
+                        "dimension": dimension,
+                        "structure_id": name,
+                        "domain": "science_router",
+                        "router": name,
+                        "objective": (
+                            f"Router {name} boundary probe ({dimension}): verify "
+                            f"{_BOUNDARY_MEANING[dimension]} before any output is "
+                            "promoted."
+                        ),
+                        "assertion": (
+                            "Boundary behavior is reproduced deterministically and "
+                            "no unverified result reaches trusted state."
+                        ),
+                        "severity": 0.5,
+                        "safety": {
+                            "read_only": True,
+                            "requires_verification": True,
+                        },
+                    }
+                )
+
+    if requested not in ("all", "science", "router"):
+        probes = [
+            probe
+            for probe in probes
+            if requested
+            in (
+                str(probe.get("domain", ""))
+                + "|"
+                + str(probe.get("router", ""))
+                + "|"
+                + str(probe.get("structure_id", ""))
+            ).lower()
+        ]
+
+    result: Dict[str, Any] = {
+        "operation": "generate_boundary_probe_matrix",
+        "success": True,
+        "domain": requested,
+        "source": source,
+        "dimensions": list(_BOUNDARY_DIMENSIONS),
+        "probes": probes[: max(1, int(limit))],
+        "safety": {"read_only": True, "requires_verification": True},
+    }
+    if error is not None:
+        result["manifold_error"] = error
+    return result
+
+
 _ROUTER_FUNCTIONS: Dict[str, Callable[..., Dict[str, Any]]] = {
     "quantum_router": run_hyper_specialized_quantum_swarm,
     "atomistic_router": run_live_calibrated_atomistic_sim,
@@ -1388,6 +1526,7 @@ def get_science_telemetry() -> Dict[str, Any]:
         "fastmcp_available": FASTMCP_AVAILABLE,
         "router_count": len(ROUTER_NAMES),
         "routers": list(ROUTER_NAMES),
+        "boundary_dimensions": list(_BOUNDARY_DIMENSIONS),
         "adapters": adapters,
         "optimizer": self_optimizer.telemetry(),
         "specialization": specialization_engine.describe(),

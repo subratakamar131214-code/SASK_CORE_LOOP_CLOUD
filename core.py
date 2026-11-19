@@ -38,7 +38,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 
 # Module integrations
 from mutate import CodeInspector, CodeMutator, SurgicalAstModifier
-from prover import ProverInterface
+from prover import ProverInterface, SearchBudget
 from telos import (
     GoalIngestionEngine,
     GoalPriority,
@@ -50,6 +50,13 @@ from telos import (
 from verify import ComponentIntegrityChecker, VerificationRunner
 
 # Optional integrations — degrade gracefully if unavailable
+try:
+    from egraph_engine import EquivalenceSaturationEngine  # type: ignore[import]
+
+    _EGRAPH_AVAILABLE = True
+except ImportError:
+    _EGRAPH_AVAILABLE = False
+
 try:
     from drives import UnifiedDisciplineEngine  # type: ignore[import]
     _DRIVES_AVAILABLE = True
@@ -204,6 +211,18 @@ class AutomationKernel:
         )
         self.telos = self._build_pipeline_engine()
 
+        # Equivalence saturation engine (e-graph superposition)
+        self.egraph: Optional[Any] = None
+        if _EGRAPH_AVAILABLE:
+            try:
+                self.egraph = EquivalenceSaturationEngine(
+                    state_file=self.workspace_root / ".sask_egraph.json"
+                )
+            except Exception as exc:
+                logger.warning(f"E-graph engine initialization failed: {exc}")
+        else:
+            logger.warning("egraph_engine.py not available — equivalence compression disabled.")
+
         # Unified Discipline Engine (drives.py)
         if _DRIVES_AVAILABLE:
             self.drives: Optional[Any] = UnifiedDisciplineEngine()
@@ -289,6 +308,7 @@ class AutomationKernel:
             "curiosity": self.curiosity,
             "manifold_bridge": self.manifold,
             "devil_advocate": self.devil,
+            "egraph": self.egraph,
         }
         for name, engine in mapping.items():
             if engine is None:
@@ -302,7 +322,7 @@ class AutomationKernel:
         """Persist every extension for container handoff; never fatal."""
         saved: List[str] = []
         failures: Dict[str, str] = {}
-        for name in ("meta_prover", "curiosity", "manifold", "devil"):
+        for name in ("meta_prover", "curiosity", "manifold", "devil", "egraph"):
             engine = getattr(self, name, None)
             if engine is None or not hasattr(engine, "save"):
                 continue
@@ -625,6 +645,141 @@ class AutomationKernel:
 
         return {"goal_id": goal_id, "injected": True, "streamed": streamed}
 
+    def _bidirectional_pipeline_search(
+        self,
+        modules: List[str],
+        edges: List[Tuple[str, str]],
+    ) -> Dict[str, Any]:
+        """Prove a concrete import path from core to a verification engine."""
+        module_set = set(modules)
+        forward_map: Dict[str, List[str]] = {}
+        backward_map: Dict[str, List[str]] = {}
+        for source, target in edges:
+            forward_map.setdefault(source, []).append(target)
+            backward_map.setdefault(target, []).append(source)
+
+        roots = [name for name in ("core", "verify") if name in module_set] or modules[:1]
+        targets = [
+            name for name in ("verify", "prover", "science_mcp") if name in module_set
+        ]
+        targets = [name for name in targets if name not in roots]
+        if not roots or not targets:
+            return {"available": True, "solved": False, "reason": "graph_incomplete"}
+
+        def precheck(state: str) -> bool:
+            return state in module_set
+
+        def ranker(state: str) -> float:
+            return 0.0 if state in targets else 1.0
+
+        budget = SearchBudget(
+            max_nodes_per_side=64,
+            max_depth=8,
+            max_seconds=1.0,
+            beam_width=48,
+        )
+        try:
+            result = self.prover.bidirectional_search(
+                roots,
+                targets,
+                lambda state: forward_map.get(state, []),
+                lambda state: backward_map.get(state, []),
+                precheck=precheck,
+                verify=precheck,
+                ranker=ranker,
+                budget=budget,
+                tag="pipeline-imports",
+            )
+        except Exception as exc:
+            return {
+                "available": True,
+                "solved": False,
+                "reason": f"{type(exc).__name__}: {exc}",
+            }
+        payload = result.to_dict()
+        payload["available"] = True
+        return payload
+
+    def _run_egraph_superposition(
+        self,
+        metrics: Dict[str, float],
+        module_count: int,
+        include_sources: bool = False,
+    ) -> Dict[str, Any]:
+        """Superpose equivalent metric formulations and expose the best forms."""
+        if self.egraph is None:
+            return {"available": False}
+
+        a = max(0.001, round(float(metrics.get("system_mastery", 0.0)) + 1.0, 4))
+        b = max(0.001, round(float(metrics.get("unified_discipline", 1.0)) + 0.5, 4))
+        c = float(max(2, module_count))
+        expressions = [
+            f"{a} + 0",
+            f"0 + {a}",
+            f"{a} * 1",
+            f"1 * {a}",
+            f"({a} + {b}) + {c}",
+            f"{a} + ({b} + {c})",
+            f"{a} - {a}",
+            f"{a} ** 2",
+            f"{a} * ({b} + {c})",
+            f"{a} * {b} + {a} * {c}",
+        ]
+        report = self.egraph.superpose(
+            expressions,
+            goal=f"{a} * 1",
+            verify=True,
+            form_limit=3,
+            origin="cycle_metrics",
+        )
+        merged = report.get("merged_classes") or []
+        total = max(1, int(report.get("expressions", 0)))
+        best_forms = [
+            {
+                "input": entry["input"],
+                "best": entry["best"]["expression"],
+                "verified": entry["best"]["verified"],
+                "score": entry["best"]["score"],
+            }
+            for entry in report.get("results", [])
+            if entry.get("best")
+        ][:4]
+        telemetry: Dict[str, Any] = {
+            "available": True,
+            "expressions": report.get("expressions", 0),
+            "merged_classes": len(merged),
+            "merged_members": [group.get("members") for group in merged][:4],
+            "rewrites": (report.get("saturation") or {}).get("rewrites", 0),
+            "elapsed_seconds": (report.get("saturation") or {}).get("elapsed_seconds", 0.0),
+            "best_forms": best_forms,
+            "goal_matched": bool((report.get("goal") or {}).get("matched")),
+            "equivalence_gain": round(len(merged) / total, 6),
+        }
+        if include_sources:
+            sources: Dict[str, str] = {}
+            for path in sorted(self.workspace_root.glob("*.py")):
+                try:
+                    sources[path.stem] = path.read_text(encoding="utf-8")
+                except OSError:
+                    continue
+            try:
+                source_report = self.egraph.superpose_source_fragments(
+                    sources, max_fragments=16
+                )
+                telemetry["source_fragments"] = {
+                    "expressions": source_report.get("expressions", 0),
+                    "merged_classes": len(source_report.get("merged_classes") or []),
+                    "rewrites": (source_report.get("saturation") or {}).get(
+                        "rewrites", 0
+                    ),
+                    "origins": source_report.get("origins", {}),
+                }
+            except Exception as exc:
+                telemetry["source_fragments"] = {
+                    "error": f"{type(exc).__name__}: {exc}"
+                }
+        return telemetry
+
     def _run_extensions(
         self,
         cycle_details: Dict[str, Any],
@@ -637,6 +792,8 @@ class AutomationKernel:
             "curiosity": {"available": self.curiosity is not None},
             "manifold": {"available": self.manifold is not None},
             "devil_advocate": {"available": self.devil is not None},
+            "egraph": {"available": self.egraph is not None},
+            "bidirectional": {"available": True},
         }
         if not self.extensions_enabled:
             return telemetry
@@ -686,6 +843,22 @@ class AutomationKernel:
                     )
                 }
                 compact["available"] = True
+                try:
+                    counterfactual = self.meta_prover.counterfactual_search(
+                        target_goal, candidates_limit=6, promote=True
+                    )
+                    compact["counterfactual"] = {
+                        "promoted": counterfactual.get("promoted", 0),
+                        "rejected": counterfactual.get("rejected", 0),
+                        "branches": len(counterfactual.get("branches") or []),
+                        "best_operator": counterfactual.get("best_operator"),
+                        "best_delta": counterfactual.get("best_delta"),
+                        "verification_mode": counterfactual.get("verification_mode"),
+                    }
+                except Exception as exc:
+                    compact["counterfactual"] = {
+                        "error": f"{type(exc).__name__}: {exc}"
+                    }
                 telemetry["meta_prover"] = compact
                 cycle_details["meta_prover"] = compact
                 fusion_components["meta_prover_score"] = float(
@@ -764,6 +937,30 @@ class AutomationKernel:
                     "transfers": transfers,
                     "injected_goals": injected,
                 }
+                boundary = self.manifold.boundary_probes(limit=4)
+                boundary_goals: List[Dict[str, Any]] = []
+                if boundary and self.curiosity is not None:
+                    try:
+                        boundary_goals = self.curiosity.propose_boundary_goals(
+                            boundary, limit=2
+                        )
+                    except Exception as exc:
+                        logger.warning(f"Boundary goal ingestion failed: {exc}")
+                telemetry["manifold"].update(
+                    {
+                        "boundary_probes": [
+                            probe.to_dict() for probe in boundary[:2]
+                        ],
+                        "boundary_goals": boundary_goals,
+                    }
+                )
+                cycle_details["manifold"]["boundary_probes"] = [
+                    probe.to_dict() for probe in boundary
+                ]
+                if boundary:
+                    fusion_components["boundary_pressure"] = max(
+                        float(probe.severity) for probe in boundary
+                    )
                 if transfers:
                     fusion_components["manifold_confidence"] = float(
                         transfers[0].get("confidence", 0.0)
@@ -782,6 +979,7 @@ class AutomationKernel:
                     drive_engine=self.drives,
                     goal_engine=self.telos.goal_engine,
                     stream=self.telos.stream if self.stream_enabled else None,
+                    sandbox=self.meta_prover,
                 )
                 probes = challenge.get("probes") or []
                 assessment = challenge.get("assessment") or {}
@@ -790,6 +988,10 @@ class AutomationKernel:
                     "challenged": challenge.get("challenged"),
                     "reason": challenge.get("reason"),
                     "probes": probes,
+                    "counterfactual": challenge.get("counterfactual") or [],
+                    "counterfactual_promotions": challenge.get(
+                        "counterfactual_promotions", 0
+                    ),
                     "cooldown_remaining": challenge.get("cooldown_remaining"),
                     "stagnation": assessment.get("stagnation"),
                     "local_convergence": assessment.get("local_convergence"),
@@ -806,7 +1008,53 @@ class AutomationKernel:
                     "error": f"{type(exc).__name__}: {exc}",
                 }
 
-        # 5. Fuse extension pressure into the permanent drive matrix
+        # 5. Bidirectional meet-in-the-middle import-path proof search
+        modules: List[str] = []
+        try:
+            modules, edges = self._inspect_pipeline_graph()
+            bidirectional = self._bidirectional_pipeline_search(modules, edges)
+            telemetry["bidirectional"] = bidirectional
+            cycle_details["bidirectional"] = bidirectional
+            if bidirectional.get("solved"):
+                depth = max(1, int(bidirectional.get("depth", 1)))
+                fusion_components["bidirectional_success"] = 1.0
+                fusion_components["path_compression"] = min(1.0, 1.0 / depth)
+        except Exception as exc:
+            telemetry["bidirectional"] = {
+                "available": True,
+                "error": f"{type(exc).__name__}: {exc}",
+            }
+
+        # 6. Equivalence saturation: retain every equivalent metric formulation
+        if self.egraph is not None and (
+            self.current_cycle == 1 or self.current_cycle % 2 == 0
+        ):
+            try:
+                egraph_telemetry = self._run_egraph_superposition(
+                    metrics,
+                    len(modules) or 1,
+                    include_sources=(
+                        self.current_cycle == 1 or self.current_cycle % 5 == 0
+                    ),
+                )
+                telemetry["egraph"] = egraph_telemetry
+                cycle_details["egraph"] = {
+                    "merged_classes": egraph_telemetry.get("merged_classes"),
+                    "rewrites": egraph_telemetry.get("rewrites"),
+                    "goal_matched": egraph_telemetry.get("goal_matched"),
+                    "best_forms": egraph_telemetry.get("best_forms"),
+                    "source_fragments": egraph_telemetry.get("source_fragments"),
+                }
+                fusion_components["equivalence_gain"] = float(
+                    egraph_telemetry.get("equivalence_gain", 0.0)
+                )
+            except Exception as exc:
+                telemetry["egraph"] = {
+                    "available": True,
+                    "error": f"{type(exc).__name__}: {exc}",
+                }
+
+        # 7. Fuse extension pressure into the permanent drive matrix
         if self.drives is not None and fusion_components:
             try:
                 telemetry["drive_fusion"] = self.drives.fuse_extension_metrics(
@@ -1257,7 +1505,7 @@ class AutomationKernel:
 
         # Meta-cognitive extension telemetry
         extensions_telemetry: Dict[str, Any] = {"enabled": self.extensions_enabled}
-        for name in ("meta_prover", "curiosity", "manifold", "devil"):
+        for name in ("meta_prover", "curiosity", "manifold", "devil", "egraph"):
             engine = getattr(self, name, None)
             if engine is None:
                 extensions_telemetry[name] = {"available": False}
@@ -1269,6 +1517,13 @@ class AutomationKernel:
                     "available": True,
                     "error": f"{type(exc).__name__}: {exc}",
                 }
+
+        last_details = self.cycle_history[-1].details if self.cycle_history else {}
+        bidirectional_telemetry = last_details.get("bidirectional") or {
+            "available": True,
+            "solved": False,
+            "reason": "not_run",
+        }
 
         payload = {
             "state": self.state.value,
@@ -1289,6 +1544,7 @@ class AutomationKernel:
             "science_engine": science_telemetry,
             "goal_stream": goal_stream,
             "extensions": extensions_telemetry,
+            "bidirectional_search": bidirectional_telemetry,
             "cycles": [asdict(c) for c in self.cycle_history],
         }
         return json.dumps(payload, indent=2)

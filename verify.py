@@ -147,6 +147,58 @@ class ComponentIntegrityChecker:
             return {sym: False for sym in expected_symbols}
 
 
+class FastFailPrecheck:
+    """Cheap pre-flight gate that aborts before the expensive test depth loop."""
+
+    REQUIRED_FILES = (
+        "core.py",
+        "drives.py",
+        "bio_gen.py",
+        "telos.py",
+        "mutate.py",
+        "prover.py",
+        "verify.py",
+        "science_mcp.py",
+        "meta_prover.py",
+        "telos_v2.py",
+        "manifold_bridge.py",
+        "devil_advocate.py",
+        "egraph_engine.py",
+        "requirements.txt",
+    )
+
+    @classmethod
+    def run(cls, root: Optional[Path] = None) -> Dict[str, Any]:
+        started = time.monotonic()
+        base = Path(root) if root is not None else Path(__file__).resolve().parent
+        failures: List[str] = []
+        checked = 0
+
+        for filename in cls.REQUIRED_FILES:
+            checked += 1
+            if not (base / filename).is_file():
+                failures.append(f"PRE-CHECK: required file missing: {filename}")
+
+        for path in sorted(base.glob("*.py")):
+            checked += 1
+            try:
+                source = path.read_text(encoding="utf-8")
+                compile(source, str(path), "exec")
+            except SyntaxError as exc:
+                failures.append(
+                    f"PRE-CHECK: syntax error in {path.name}:{exc.lineno}: {exc.msg}"
+                )
+            except OSError as exc:
+                failures.append(f"PRE-CHECK: unreadable source {path.name}: {exc}")
+
+        return {
+            "success": not failures,
+            "checks": checked,
+            "failures": failures,
+            "elapsed_seconds": round(time.monotonic() - started, 4),
+        }
+
+
 class VerificationRunner:
     """Automated test runner orchestrating discovery and programmatic execution."""
 
@@ -218,6 +270,22 @@ class VerificationRunner:
         """
         depth = self._resolve_depth(depth_override)
         run_reports: List[VerificationReport] = []
+
+        precheck = FastFailPrecheck.run()
+        if not precheck["success"]:
+            return VerificationReport(
+                total_checks=precheck["checks"],
+                passed_checks=precheck["checks"] - len(precheck["failures"]),
+                failed_checks=len(precheck["failures"]),
+                errors=list(precheck["failures"]),
+                duration_seconds=precheck["elapsed_seconds"],
+                details={
+                    "overthinking_depth": depth,
+                    "passes_completed": 0,
+                    "precheck": precheck,
+                    "fast_failed": True,
+                },
+            )
 
         for _ in range(depth):
             report = self.run_self_verification()
@@ -1033,8 +1101,264 @@ class PipelineComponentTests(unittest.TestCase):
                 reloaded.get_telemetry()["challenges_issued"], 1
             )
 
+    def test_egraph_equivalence_saturation_and_compression(self) -> None:
+        """Verify saturation merges equivalent forms, verifies them, and compresses traces."""
+        import tempfile
+
+        from egraph_engine import EquivalenceSaturationEngine
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            state_file = Path(tmp_dir) / "egraph.json"
+            engine = EquivalenceSaturationEngine(
+                state_file=state_file,
+                max_iterations=6,
+                node_budget=2000,
+                match_budget=2000,
+                time_budget=1.0,
+            )
+            report = engine.superpose(
+                [
+                    "x + 0",
+                    "0 + x",
+                    "x * 1",
+                    "(a + b) + c",
+                    "a + (b + c)",
+                    "a * (b + c)",
+                    "a * b + a * c",
+                ],
+                goal="x * 1",
+                form_limit=3,
+            )
+            self.assertEqual(report["expressions"], 7)
+            groups = [set(group["members"]) for group in report["merged_classes"]]
+            self.assertTrue(
+                any({"x + 0", "0 + x", "x * 1"} <= group for group in groups)
+            )
+            self.assertTrue(
+                any({"a * (b + c)", "a * b + a * c"} <= group for group in groups)
+            )
+            self.assertTrue(report["goal"]["matched"])
+            self.assertIn("x * 1", report["goal"]["proved_from"])
+            for entry in report["results"]:
+                self.assertIsNotNone(entry["best"])
+                self.assertTrue(entry["best"]["verified"])
+            simplification = next(
+                entry for entry in report["results"] if entry["input"] == "x * 1"
+            )
+            self.assertEqual(simplification["best"]["expression"], "x")
+            self.assertGreater(report["saturation"]["rewrites"], 0)
+
+            trace = engine.compress_solver_trace(["x + 0", "0 + x", "x", "x * 1"])
+            self.assertEqual(trace["output_steps"], ["x"])
+            self.assertLess(trace["compression_ratio"], 1.0)
+
+            self.assertTrue(state_file.is_file())
+            reloaded = EquivalenceSaturationEngine(state_file=state_file)
+            telemetry = reloaded.get_telemetry()
+            self.assertGreaterEqual(telemetry["superpositions"], 2)
+            self.assertGreater(telemetry["rewrites"], 0)
+
+    def test_prover_bidirectional_meet_in_the_middle(self) -> None:
+        """Verify meet-in-the-middle paths, verifier rejection, budgets, and cache reuse."""
+        from prover import ProverInterface, SearchBudget
+
+        prover = ProverInterface()
+        undirected = lambda node: [n for n in (node - 1, node + 1) if 0 <= n <= 20]
+        directed = lambda node: [node + 1] if node < 20 else []
+        predecessors = lambda node: [node - 1] if node > 0 else []
+        budget = SearchBudget(
+            max_nodes_per_side=32,
+            max_depth=10,
+            max_seconds=2.0,
+            beam_width=16,
+            parallel=True,
+        )
+
+        result = prover.bidirectional_search(
+            [0], [20], undirected, budget=budget, tag="undirected-line"
+        )
+        self.assertTrue(result.solved)
+        self.assertEqual(result.path[0], 0)
+        self.assertEqual(result.path[-1], 20)
+        for left, right in zip(result.path, result.path[1:]):
+            self.assertIn(right, undirected(left))
+        self.assertEqual(result.meets_rejected, 0)
+
+        directed_result = prover.bidirectional_search(
+            [0],
+            [20],
+            directed,
+            backward_predecessors=predecessors,
+            budget=budget,
+            tag="directed-line",
+        )
+        self.assertTrue(directed_result.solved)
+        self.assertEqual(directed_result.path, list(range(21)))
+
+        rejected = prover.bidirectional_search(
+            [0],
+            [20],
+            undirected,
+            verify=lambda state: False,
+            budget=budget,
+            tag="rejected-line",
+        )
+        self.assertFalse(rejected.solved)
+        self.assertGreaterEqual(rejected.meets_rejected, 1)
+        self.assertEqual(rejected.stopped, "exhausted")
+
+        first = prover.bidirectional_search(
+            [0], [20], undirected, budget=budget, tag="cached-line"
+        )
+        self.assertTrue(first.solved)
+        second = prover.bidirectional_search(
+            [0], [20], undirected, budget=budget, tag="cached-line"
+        )
+        self.assertTrue(second.solved)
+        self.assertGreater(second.cache_hits, 0)
+
+    def test_counterfactual_sandbox_invariants_and_promotion(self) -> None:
+        """Verify sandbox isolation, invariant rejection, projection, and gated promotion."""
+        import tempfile
+
+        from meta_prover import MetaProver
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            state_path = Path(tmp_dir) / "meta.json"
+            prover = MetaProver(
+                state_path=state_path,
+                population=6,
+                max_generations=2,
+            )
+            goal = (
+                "verify an isomorphism and transport equivalence across "
+                "distributed proof states"
+            )
+            result = prover.counterfactual_search(
+                goal,
+                perturbations=["toggle:allow_sorry", "type:refinement"],
+                min_delta=-1.0,
+            )
+            self.assertEqual(result["verification_mode"], "invariants+regression")
+            self.assertTrue(result["deterministic_baseline"])
+            branches = {branch["operator"]: branch for branch in result["branches"]}
+
+            unsafe = branches["toggle:allow_sorry"]
+            self.assertFalse(unsafe["promoted"])
+            self.assertFalse(unsafe["invariants"]["allow_sorry_remains_false"])
+            self.assertIn("invariants", unsafe["rejection_reason"])
+            self.assertIn(
+                "allow_sorry", unsafe["projection"]["discarded_axiom_deltas"]
+            )
+
+            safe = branches["type:refinement"]
+            self.assertTrue(safe["verified"])
+            self.assertTrue(all(safe["invariants"].values()))
+            self.assertTrue(safe["projection"]["reprojected_from_trusted_baseline"])
+            self.assertTrue(safe["promoted"])
+            self.assertEqual(result["promoted"], 1)
+            self.assertEqual(result["rejected"], 1)
+
+            promotion = prover.promoted_framework(goal)
+            self.assertIsNotNone(promotion)
+            self.assertEqual(promotion["framework_id"], safe["framework_id"])
+            self.assertTrue(state_path.is_file())
+
+            reloaded = MetaProver(state_path=state_path)
+            self.assertIsNotNone(reloaded.promoted_framework(goal))
+            self.assertGreaterEqual(
+                reloaded.get_telemetry()["counterfactual_runs"], 1
+            )
+
+    def test_boundary_probes_goal_injection_and_science_matrix(self) -> None:
+        """Verify four-dimension probes, safety flags, goal injection, and router matrix."""
+        import tempfile
+
+        from manifold_bridge import BOUNDARY_DIMENSIONS, AnalogicalManifoldBridge
+        from science_mcp import generate_boundary_probe_matrix, get_science_telemetry
+        from telos import GoalIngestionEngine
+        from telos_v2 import EpistemicCuriosityEngine
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            root = Path(tmp_dir)
+            bridge = AnalogicalManifoldBridge(state_path=root / "manifold.json")
+            probes = bridge.boundary_probes(limit=64)
+            self.assertTrue(probes)
+            self.assertEqual(len({probe.id for probe in probes}), len(probes))
+            self.assertTrue(
+                set(BOUNDARY_DIMENSIONS).issubset(
+                    {probe.dimension for probe in probes}
+                )
+            )
+            for probe in probes:
+                self.assertTrue(all(probe.safety.values()))
+                self.assertGreaterEqual(probe.severity, 0.0)
+                self.assertLessEqual(probe.severity, 1.0)
+
+            subset = bridge.boundary_probes(
+                structure_id="net-ring-6", dimensions=["resource_ceiling"]
+            )
+            self.assertEqual(len(subset), 1)
+            self.assertEqual(subset[0].structure_id, "net-ring-6")
+
+            goal_engine = GoalIngestionEngine()
+            curiosity = EpistemicCuriosityEngine(
+                goal_engine=goal_engine,
+                state_path=root / "curiosity.json",
+                seed=5,
+                min_proposal_score=0.0,
+            )
+            records = curiosity.propose_boundary_goals(probes, limit=2)
+            self.assertEqual(len(records), 2)
+            self.assertTrue(all(record["injected"] for record in records))
+            injected = {
+                goal.metadata.get("boundary_probe", {}).get("id")
+                for goal in goal_engine.get_all_goals()
+            }
+            self.assertTrue(
+                {record["probe_id"] for record in records} <= injected
+            )
+
+            matrix = generate_boundary_probe_matrix(domain="all", limit=8)
+            self.assertTrue(matrix["success"])
+            self.assertTrue(matrix["probes"])
+            self.assertLessEqual(len(matrix["probes"]), 8)
+            telemetry = get_science_telemetry()
+            self.assertEqual(
+                telemetry["boundary_dimensions"], list(BOUNDARY_DIMENSIONS)
+            )
+
+    def test_fast_fail_precheck_and_syntax_cache(self) -> None:
+        """Verify cheap preflight checks abort early and syntax verdicts are cached."""
+        import tempfile
+
+        from mutate import CodeMutator
+        from verify import FastFailPrecheck
+
+        precheck = FastFailPrecheck.run()
+        self.assertTrue(precheck["success"], precheck["failures"])
+        self.assertGreaterEqual(
+            precheck["checks"], len(FastFailPrecheck.REQUIRED_FILES)
+        )
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            empty_root = Path(tmp_dir)
+            (empty_root / "requirements.txt").write_text("", encoding="utf-8")
+            failed = FastFailPrecheck.run(empty_root)
+            self.assertFalse(failed["success"])
+            self.assertTrue(
+                any("required file missing" in item for item in failed["failures"])
+            )
+
+        self.assertTrue(CodeMutator.ensure_valid_syntax("value = 1\n"))
+        before = CodeMutator.syntax_cache_stats()
+        self.assertTrue(CodeMutator.ensure_valid_syntax("value = 1\n"))
+        after = CodeMutator.syntax_cache_stats()
+        self.assertGreaterEqual(after["hits"], before["hits"] + 1)
+        self.assertFalse(CodeMutator.ensure_valid_syntax("def broken(:\n"))
+
     def test_core_extensions_wiring_and_export(self) -> None:
-        """Verify the kernel runs and exports all four extensions with state."""
+        """Verify the kernel runs and exports all five extensions with state."""
         import tempfile
 
         from core import AutomationKernel
@@ -1051,6 +1375,7 @@ class PipelineComponentTests(unittest.TestCase):
             self.assertIsNotNone(kernel.curiosity)
             self.assertIsNotNone(kernel.manifold)
             self.assertIsNotNone(kernel.devil)
+            self.assertIsNotNone(kernel.egraph)
 
             extensions = kernel._run_extensions({}, error_count=0)
             self.assertTrue(extensions["meta_prover"]["available"])
@@ -1061,6 +1386,10 @@ class PipelineComponentTests(unittest.TestCase):
             self.assertTrue(extensions["manifold"]["available"])
             self.assertGreaterEqual(extensions["manifold"]["transfers"], 1)
             self.assertTrue(extensions["persistence"]["state_files"])
+            self.assertTrue(extensions["egraph"]["available"])
+            self.assertGreaterEqual(extensions["egraph"]["merged_classes"], 1)
+            self.assertTrue(extensions["egraph"]["goal_matched"])
+            self.assertIn("bidirectional", extensions)
 
             science_extensions = get_science_telemetry()["extensions"]
             for name in (
@@ -1068,6 +1397,7 @@ class PipelineComponentTests(unittest.TestCase):
                 "meta_prover",
                 "manifold_bridge",
                 "devil_advocate",
+                "egraph",
             ):
                 self.assertIn(name, science_extensions)
 
@@ -1076,6 +1406,11 @@ class PipelineComponentTests(unittest.TestCase):
             self.assertGreaterEqual(
                 payload["extensions"]["meta_prover"]["searches"], 1
             )
+            self.assertTrue(payload["extensions"]["egraph"]["available"])
+            self.assertGreaterEqual(
+                payload["extensions"]["egraph"]["superpositions"], 1
+            )
+            self.assertIn("solved", payload["bidirectional_search"])
             self.assertGreaterEqual(
                 kernel.drives.get_unified_discipline(), 0.90
             )
@@ -1084,6 +1419,7 @@ class PipelineComponentTests(unittest.TestCase):
                 ".sask_curiosity.json",
                 ".sask_manifold.json",
                 ".sask_devil_advocate.json",
+                ".sask_egraph.json",
             ):
                 self.assertTrue((root / filename).is_file(), filename)
 

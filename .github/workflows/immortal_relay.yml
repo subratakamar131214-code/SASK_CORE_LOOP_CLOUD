@@ -58,6 +58,14 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Restore pip download cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            pip-${{ runner.os }}-
+
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
@@ -79,8 +87,9 @@ jobs:
       - name: Pre-Flight Syntax & Import Gate
         run: |
           python -m py_compile core.py drives.py bio_gen.py telos.py mutate.py prover.py verify.py science_mcp.py \
-            meta_prover.py telos_v2.py manifold_bridge.py devil_advocate.py
-          python -c "import core, drives, bio_gen, telos, mutate, prover, verify, science_mcp, meta_prover, telos_v2, manifold_bridge, devil_advocate; print('SASK KERNEL + 10 ROUTERS + 4 EXTENSIONS FULLY INTEGRATED')"
+            meta_prover.py telos_v2.py manifold_bridge.py devil_advocate.py egraph_engine.py
+          python -c "import core, drives, bio_gen, telos, mutate, prover, verify, science_mcp, meta_prover, telos_v2, manifold_bridge, devil_advocate, egraph_engine; print('SASK KERNEL + 10 ROUTERS + 5 EXTENSIONS FULLY INTEGRATED')"
+          python -c "from verify import FastFailPrecheck; r = FastFailPrecheck.run(); print(r); raise SystemExit(0 if r['success'] else 1)"
 
       - name: Execute Core Event Loop
         run: |
@@ -117,6 +126,7 @@ jobs:
             .sask_goal_stream.json
             .sask_meta_prover.json
             .sask_curiosity.json
+            .sask_egraph.json
             .sask_manifold.json
             .sask_devil_advocate.json
             goals_manifest.json

@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "superpositions": 1,
+  "rewrites": 572,
+  "promotions": 10,
+  "rejections": 0,
+  "last": {
+    "origin": "cycle_metrics",
+    "expressions": 10,
+    "merged_classes": 3,
+    "rewrites": 572,
+    "elapsed_seconds": 0.518,
+    "goal_matched": true
+  },
+  "history": [
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.518,
+      "goal_matched": true
+    }
+  ]
+}

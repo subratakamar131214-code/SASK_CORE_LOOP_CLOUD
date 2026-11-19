@@ -374,6 +374,7 @@ class DevilAdvocate:
         drive_engine: Optional[Any] = None,
         goal_engine: Optional[Any] = None,
         stream: Optional[Any] = None,
+        sandbox: Optional[Any] = None,
         force: bool = False,
     ) -> Dict[str, Any]:
         """Assess telemetry; when warranted, invert assumptions and inject goals."""
@@ -390,6 +391,7 @@ class DevilAdvocate:
                 "reason": "cooldown",
                 "assessment": assessment,
                 "probes": [],
+                "counterfactual": [],
                 "cooldown_remaining": self._cooldown,
             }
         if not triggered:
@@ -398,6 +400,7 @@ class DevilAdvocate:
                 "reason": "no_stagnation",
                 "assessment": assessment,
                 "probes": [],
+                "counterfactual": [],
                 "cooldown_remaining": self._cooldown,
             }
 
@@ -488,6 +491,34 @@ class DevilAdvocate:
                 except Exception as exc:
                     logger.warning("Counter-goal stream injection failed: %s", exc)
 
+        sandbox_reports: List[Dict[str, Any]] = []
+        if sandbox is not None and probes:
+            search = getattr(sandbox, "counterfactual_search", None)
+            if callable(search):
+                for probe in probes[:2]:
+                    try:
+                        report = search(probe.counter_goal, candidates_limit=8)
+                        sandbox_reports.append(
+                            {
+                                "probe_id": probe.id,
+                                "metric": probe.metric,
+                                "promoted": int(report.get("promoted", 0)),
+                                "rejected": int(report.get("rejected", 0)),
+                                "branches": len(report.get("branches") or []),
+                                "best_delta": report.get("best_delta"),
+                                "best_operator": report.get("best_operator"),
+                                "verification_mode": report.get("verification_mode"),
+                                "baseline_score": report.get("baseline_score"),
+                            }
+                        )
+                    except Exception as exc:
+                        sandbox_reports.append(
+                            {
+                                "probe_id": probe.id,
+                                "error": f"{type(exc).__name__}: {exc}",
+                            }
+                        )
+
         with self._lock:
             if probes:
                 self._challenges += 1
@@ -507,6 +538,10 @@ class DevilAdvocate:
             "reason": reasons[0] if reasons else ("forced" if force else "unknown"),
             "assessment": assessment,
             "probes": [probe.to_dict() for probe in probes],
+            "counterfactual": sandbox_reports,
+            "counterfactual_promotions": sum(
+                int(report.get("promoted", 0)) for report in sandbox_reports
+            ),
             "drive_stimulus_applied": bool(probes and drive_engine is not None),
             "goals_injected": bool(probes and (goal_engine is not None or stream is not None)),
             "cooldown_remaining": self._cooldown,

@@ -11,9 +11,12 @@ from __future__ import annotations
 
 import ast
 import difflib
+import hashlib
 import os
 import re
 import shutil
+import sys
+import threading
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
@@ -306,17 +309,86 @@ class SurgicalAstModifier:
         )
 
 
+class ContentAddressedCache:
+    """Thread-safe memo keyed by a content hash of the exact inputs.
+
+    The digest includes the interpreter's major/minor version so a cached
+    verdict from a different Python grammar can never leak across runtimes.
+    """
+
+    def __init__(self, capacity: int = 4096, namespace: str = "syntax") -> None:
+        self.capacity = max(16, int(capacity))
+        self.namespace = str(namespace)
+        self._entries: Dict[str, bool] = {}
+        self._order: List[str] = []
+        self._hits = 0
+        self._misses = 0
+        self._lock = threading.Lock()
+
+    def digest(self, payload: str) -> str:
+        runtime = f"{sys.version_info[0]}.{sys.version_info[1]}"
+        material = "\x1f".join((self.namespace, runtime, payload))
+        return hashlib.blake2b(
+            material.encode("utf-8", "replace"), digest_size=20
+        ).hexdigest()
+
+    def get(self, payload: str) -> Optional[bool]:
+        key = self.digest(payload)
+        with self._lock:
+            value = self._entries.get(key)
+            if value is None:
+                self._misses += 1
+            else:
+                self._hits += 1
+            return value
+
+    def set(self, payload: str, value: bool) -> None:
+        key = self.digest(payload)
+        with self._lock:
+            if key not in self._entries:
+                self._order.append(key)
+            self._entries[key] = value
+            while len(self._order) > self.capacity:
+                evicted = self._order.pop(0)
+                self._entries.pop(evicted, None)
+
+    def stats(self) -> Dict[str, int]:
+        with self._lock:
+            return {
+                "hits": self._hits,
+                "misses": self._misses,
+                "entries": len(self._entries),
+                "capacity": self.capacity,
+            }
+
+    def clear(self) -> None:
+        with self._lock:
+            self._entries.clear()
+            self._order.clear()
+
+
 class CodeMutator:
     """Coordinates AST parsing and structured source code transformations."""
 
-    @staticmethod
-    def ensure_valid_syntax(source_code: str) -> bool:
+    _syntax_cache = ContentAddressedCache(namespace="ast-parse")
+
+    @classmethod
+    def ensure_valid_syntax(cls, source_code: str) -> bool:
         """Validate whether the given string is syntactically valid Python."""
+        cached = cls._syntax_cache.get(source_code)
+        if cached is not None:
+            return cached
         try:
             ast.parse(source_code)
-            return True
-        except SyntaxError:
-            return False
+            valid = True
+        except (SyntaxError, ValueError):
+            valid = False
+        cls._syntax_cache.set(source_code, valid)
+        return valid
+
+    @classmethod
+    def syntax_cache_stats(cls) -> Dict[str, int]:
+        return cls._syntax_cache.stats()
 
     @classmethod
     def apply_docstring(
