@@ -102,6 +102,22 @@ except Exception:  # pragma: no cover - depends on environment
 mcp = FastMCP("SASK 10-Router Hyper-Specialized Science Engine")
 
 
+def _tool(fn: Callable[..., Any]) -> Callable[..., Any]:
+    """Register a router with FastMCP but keep the raw callable for dispatch.
+
+    fastmcp>=2 replaces decorated functions with a non-callable ``FunctionTool``
+    wrapper, so the registry must retain the undecorated function.
+    """
+    try:
+        mcp.tool()(fn)
+    except Exception:  # pragma: no cover - registration must not block dispatch
+        logger.warning(
+            "FastMCP tool registration failed for %s; dispatch remains in-process.",
+            getattr(fn, "__name__", fn),
+        )
+    return fn
+
+
 # ---------------------------------------------------------------------------
 # Router identity
 # ---------------------------------------------------------------------------
@@ -986,7 +1002,7 @@ def unregister_adapter(router_name: str) -> bool:
 # Ten universal science routers (FastMCP tools)
 # ---------------------------------------------------------------------------
 
-@mcp.tool()
+@_tool
 def run_hyper_specialized_quantum_swarm(
     qasm_batch: Optional[List[str]] = None,
     target_backends: Optional[List[str]] = None,
@@ -1017,7 +1033,7 @@ def run_hyper_specialized_quantum_swarm(
     )
 
 
-@mcp.tool()
+@_tool
 def run_live_calibrated_atomistic_sim(
     atoms_batch: Optional[List[Dict[str, Any]]] = None,
     calculator_chain: Optional[List[str]] = None,
@@ -1047,7 +1063,7 @@ def run_live_calibrated_atomistic_sim(
     )
 
 
-@mcp.tool()
+@_tool
 def dispatch_segmented_hpc_pipeline(
     execution_segments: Optional[List[Dict[str, Any]]] = None,
     target_hpc_matrix: Optional[List[str]] = None,
@@ -1073,7 +1089,7 @@ def dispatch_segmented_hpc_pipeline(
     )
 
 
-@mcp.tool()
+@_tool
 def execute_precision_wetlab_protocol(
     protocol_rdf_graphs: Optional[List[Dict[str, Any]]] = None,
     facility_matrix: Optional[List[str]] = None,
@@ -1098,7 +1114,7 @@ def execute_precision_wetlab_protocol(
     )
 
 
-@mcp.tool()
+@_tool
 def stream_ultra_fresh_sensor_telemetry(
     bbox: Optional[Any] = None,
     datetime_range: Optional[Dict[str, str]] = None,
@@ -1131,7 +1147,7 @@ def stream_ultra_fresh_sensor_telemetry(
     )
 
 
-@mcp.tool()
+@_tool
 def orchestrate_multi_beamline_flyscans(
     scan_plans: Optional[List[Dict[str, Any]]] = None,
     beamline_nodes: Optional[List[str]] = None,
@@ -1156,7 +1172,7 @@ def orchestrate_multi_beamline_flyscans(
     )
 
 
-@mcp.tool()
+@_tool
 def execute_hyper_parallel_grid_swarm(
     executable_cmds: Optional[List[str]] = None,
     input_matrix: Optional[List[List[Any]]] = None,
@@ -1184,7 +1200,7 @@ def execute_hyper_parallel_grid_swarm(
     )
 
 
-@mcp.tool()
+@_tool
 def solve_composite_multiphysics_pde(
     mesh_files: Optional[List[Any]] = None,
     physics_domains: Optional[List[str]] = None,
@@ -1212,7 +1228,7 @@ def solve_composite_multiphysics_pde(
     )
 
 
-@mcp.tool()
+@_tool
 def simulate_kinematic_digital_twin_matrix(
     usd_scenes: Optional[List[Any]] = None,
     physics_engines: Optional[List[str]] = None,
@@ -1241,7 +1257,7 @@ def simulate_kinematic_digital_twin_matrix(
     )
 
 
-@mcp.tool()
+@_tool
 def run_multiscale_biological_pipeline(
     pdb_ids: Optional[List[str]] = None,
     pipeline_steps: Optional[List[str]] = None,

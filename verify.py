@@ -575,10 +575,19 @@ class PipelineComponentTests(unittest.TestCase):
 
     def test_science_router_matrix(self) -> None:
         """Verify all ten science routers execute and return bounded telemetry."""
-        from science_mcp import ROUTER_NAMES, dispatch_router, get_science_telemetry
+        from science_mcp import (
+            ROUTER_NAMES,
+            _ROUTER_FUNCTIONS,
+            dispatch_router,
+            get_science_telemetry,
+        )
 
         self.assertEqual(len(ROUTER_NAMES), 10)
         for router in ROUTER_NAMES:
+            self.assertTrue(
+                callable(_ROUTER_FUNCTIONS[router]),
+                f"{router} registry entry is not callable: {_ROUTER_FUNCTIONS[router]!r}",
+            )
             result = dispatch_router(router, payload={})
             self.assertTrue(
                 result.get("success"),
