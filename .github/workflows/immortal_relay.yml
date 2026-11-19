@@ -4,6 +4,11 @@ on:
   schedule:
     # Scheduled 6-hour cron trigger (standard 5-field cron syntax)
     - cron: '15 */6 * * *'
+  push:
+    # Start a full relay cycle on every default-branch change so the loop does
+    # not depend solely on GitHub's best-effort cron delivery. Relay state
+    # commits carry [skip ci], so this never self-retriggers.
+    branches: [ main, master ]
   workflow_dispatch:
     inputs:
       window_minutes:
