@@ -1,7 +1,658 @@
 {
   "version": 1,
-  "evaluations": 37856,
-  "searches": 2704,
+  "evaluations": 48916,
+  "searches": 3494,
+  "counterfactual_runs": 2368,
+  "promotions": [
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:14:35.988273+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:15:01.514299+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:15:27.165425+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:15:53.463060+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:16:19.557461+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:16:45.838211+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:17:12.271838+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:17:38.794453+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:18:05.084022+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:18:31.080085+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:18:57.252756+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:19:23.519639+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:19:49.327851+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:20:15.141039+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:20:41.024786+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:21:06.597121+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:21:32.080327+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:21:57.664310+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:22:23.548143+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:22:49.755182+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:23:15.552041+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:23:41.597429+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:24:07.353207+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:24:33.641217+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:24:59.754725+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:25:25.816335+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:25:51.894198+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:26:17.750701+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:26:43.862382+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:27:10.132899+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:27:35.727443+00:00"
+    },
+    {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:28:01.490310+00:00"
+    }
+  ],
+  "promoted_by_goal": {
+    "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint": {
+      "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
+      "operator": "rules:5",
+      "framework_id": "cf-58283ad1a3",
+      "score": 0.9304,
+      "delta": 0.0153,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "7537ffb7ae71bd7b",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T19:28:01.490310+00:00"
+    },
+    "Challenge zero-error optimization: design a fault-injection experiment that surfaces latent invariants, then strengthen the verification gate from the observed failure mode.": {
+      "goal": "Challenge zero-error optimization: design a fault-injection experiment that surfaces latent invariants, then strengthen the verification gate from the observed failure mode.",
+      "operator": "rules:2",
+      "framework_id": "cf-51b2b4db0d",
+      "score": 0.877263,
+      "delta": 0.018406,
+      "projection": {
+        "kept_axiom_deltas": {},
+        "discarded_axiom_deltas": {},
+        "structural_deltas": {
+          "inference_rules": true,
+          "type_system": false
+        },
+        "projected_signature": "5917e5b879e342bb",
+        "reprojected_from_trusted_baseline": true
+      },
+      "verified": true,
+      "timestamp": "2026-11-19T13:50:24.721510+00:00"
+    }
+  },
   "best_by_goal": {
     "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint": {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -63,7 +714,7 @@
         }
       ],
       "lean_skeleton": "-- Formal Verification Specification generated by SASK Prover Pipeline\n-- Lean 4 Compiler Verification Module\n\nimport Mathlib\n\ntheorem meta_ebda20a1 : True -- Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint := by\n  sorry\n",
-      "timestamp": "2026-11-19T05:57:33.783162+00:00"
+      "timestamp": "2026-11-19T19:28:01.487478+00:00"
     }
   },
   "history": [
