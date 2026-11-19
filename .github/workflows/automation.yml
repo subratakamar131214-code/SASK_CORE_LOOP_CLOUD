@@ -43,7 +43,20 @@ jobs:
 
       - name: Step 2 - Ancestral Verification Gate
         run: |
-          python verify.py
+          set -o pipefail
+          python verify.py 2>&1 | tee verify_output.log
+
+      - name: Publish Verification Diagnostics
+        if: always()
+        run: |
+          if [ -f verify_output.log ]; then
+            {
+              echo "### Ancestral Verification Output"
+              echo '```'
+              tail -n 150 verify_output.log
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: Step 3 - Execute Automation Kernel Cycle
         run: |
