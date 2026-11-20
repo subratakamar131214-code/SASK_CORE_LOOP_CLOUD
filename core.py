@@ -98,6 +98,15 @@ try:
 except ImportError:
     _DEVIL_AVAILABLE = False
 
+# Elastic auto-scaling orchestrator & constitutional governor
+try:
+    from scale_orchestrator import ScaleOrchestrator  # type: ignore[import]
+
+    _SCALE_AVAILABLE = True
+except Exception:  # pragma: no cover - scaling must never block the kernel
+    ScaleOrchestrator = None  # type: ignore[assignment]
+    _SCALE_AVAILABLE = False
+
 # Real cycle telemetry ledger (per-cycle/per-step CPU, RSS, durations)
 try:
     import cycle_telemetry  # type: ignore[import]
@@ -176,6 +185,61 @@ class WallClockTimer:
         return self.elapsed_seconds >= (self.window_seconds - self.margin_seconds)
 
 
+def _inspect_source_file(py_file: Path) -> Dict[str, Any]:
+    """AST inspection unit dispatched to the elastic worker pool."""
+    content = py_file.read_text(encoding="utf-8")
+    metrics = CodeInspector.inspect(content)
+    SurgicalAstModifier.parse_source(content)
+    return metrics
+
+
+def _ast_syntax_check(py_file: Path) -> Dict[str, Any]:
+    try:
+        compile(py_file.read_text(encoding="utf-8"), str(py_file), "exec")
+        return {"success": True, "stderr": ""}
+    except SyntaxError as exc:
+        return {"success": False, "stderr": f"{exc.msg} (line {exc.lineno})"}
+    except OSError as exc:
+        return {"success": False, "stderr": str(exc)}
+
+
+def _prover_syntax_scan(
+    files: List[Path],
+    prover: Any,
+    stop_event: Optional[Any] = None,
+) -> Dict[str, Dict[str, Any]]:
+    """Subprocess proof strategy; cooperatively stops between files."""
+    results: Dict[str, Dict[str, Any]] = {}
+    for py_file in files:
+        if stop_event is not None and stop_event.is_set():
+            break
+        try:
+            result = prover.verify_python_syntax(py_file)
+            results[py_file.name] = {
+                "success": bool(result.success),
+                "stderr": result.stderr.strip(),
+            }
+        except Exception as exc:
+            results[py_file.name] = {
+                "success": False,
+                "stderr": f"{type(exc).__name__}: {exc}",
+            }
+    return results
+
+
+def _ast_syntax_scan(
+    files: List[Path],
+    stop_event: Optional[Any] = None,
+) -> Dict[str, Dict[str, Any]]:
+    """In-process compile strategy; races the subprocess prover."""
+    results: Dict[str, Dict[str, Any]] = {}
+    for py_file in files:
+        if stop_event is not None and stop_event.is_set():
+            break
+        results[py_file.name] = _ast_syntax_check(py_file)
+    return results
+
+
 class AutomationKernel:
     """Core continuous execution loop coordinating all micro-services and handoff timers."""
 
@@ -232,6 +296,16 @@ class AutomationKernel:
             ratchet_path=self.workspace_root / ".sask_ego_ratchet.json"
         )
         self.zero_trust = ZeroTrustPipeline(root=self.workspace_root)
+
+        # Elastic auto-scaling orchestrator & meta-scheduler (constitutional)
+        self.scale: Optional[Any] = None
+        if _SCALE_AVAILABLE:
+            try:
+                self.scale = ScaleOrchestrator(root=self.workspace_root)
+            except Exception as exc:
+                logger.warning(f"Scale orchestrator initialization failed: {exc}")
+                self.scale = None
+
         self.telos = self._build_pipeline_engine()
 
         # Equivalence saturation engine (e-graph superposition)
@@ -1107,6 +1181,7 @@ class AutomationKernel:
         # 4. Adversarial counter-intuition injection on stagnation
         self._mark_boundary("manifold", "manifold_bridge")
         if self.devil is not None:
+            devil_started = time.monotonic()
             try:
                 challenge = self.devil.challenge(
                     metrics,
@@ -1144,6 +1219,18 @@ class AutomationKernel:
                     "available": True,
                     "error": f"{type(exc).__name__}: {exc}",
                 }
+            if self.scale is not None:
+                try:
+                    status = telemetry.get("devil_advocate") or {}
+                    probes = status.get("probes") or []
+                    self.scale.record_strategy(
+                        "devil_probe",
+                        success="error" not in status,
+                        speedup=1.0 + 0.1 * len(probes),
+                        cost_seconds=max(0.0, time.monotonic() - devil_started),
+                    )
+                except Exception:
+                    pass
 
         # 5. Bidirectional meet-in-the-middle import-path proof search
         self._mark_boundary("devil_advocate", "devil_advocate")
@@ -1168,6 +1255,7 @@ class AutomationKernel:
         if self.egraph is not None and (
             self.current_cycle == 1 or self.current_cycle % 2 == 0
         ):
+            egraph_started = time.monotonic()
             try:
                 egraph_telemetry = self._run_egraph_superposition(
                     metrics,
@@ -1192,6 +1280,17 @@ class AutomationKernel:
                     "available": True,
                     "error": f"{type(exc).__name__}: {exc}",
                 }
+            if self.scale is not None:
+                try:
+                    status = telemetry.get("egraph") or {}
+                    self.scale.record_strategy(
+                        "egraph_batch",
+                        success="error" not in status,
+                        speedup=1.0 + min(2.0, float(status.get("merged_classes") or 0) / 10.0),
+                        cost_seconds=max(0.0, time.monotonic() - egraph_started),
+                    )
+                except Exception:
+                    pass
 
         # 7. Fuse extension pressure into the permanent drive matrix
         self._mark_boundary("egraph", "egraph_engine")
@@ -1253,12 +1352,35 @@ class AutomationKernel:
 
             self._mark_boundary("env_check", "core")
 
+            # 1.5 Elastic scale tick: discover hardware and size this cycle.
+            if self.scale is not None:
+                try:
+                    previous_records = (
+                        cycle_telemetry.read_records(limit=8)
+                        if _TELEMETRY_AVAILABLE and cycle_telemetry is not None
+                        else []
+                    )
+                    scale_tick = self.scale.tick(
+                        cycle_id=self.current_cycle,
+                        telemetry_records=previous_records,
+                    )
+                    cycle_details["scale"] = scale_tick
+                    active_workers = max(1, int(scale_tick.get("active_workers") or 1))
+                    self.stream_concurrency = max(
+                        1, min(self.stream_concurrency, active_workers)
+                    )
+                except Exception as exc:
+                    logger.warning(f"Elastic scale tick error (non-fatal): {exc}")
+                    cycle_details["scale_error"] = str(exc)
+                self._mark_boundary("scale_tick", "scale_orchestrator")
+
             # Check timer threshold between tactical phases
             if self.timer.is_threshold_reached():
                 logger.warning("Execution window threshold reached during reconnaissance phase.")
                 return self._finalize_cycle_metrics(cycle_start_time, start_iso, success=True, details=cycle_details)
 
             # Stage 1.5: Asynchronous goal stream consumption with harness fallback
+            dispatch_started = time.monotonic()
             try:
                 manifest_path = str(self.workspace_root / "goals_manifest.json")
                 loaded = self.telos.goal_engine.load_manifest(manifest_path)
@@ -1363,20 +1485,40 @@ class AutomationKernel:
                 cycle_details["goal_dispatch_error"] = str(exc)
 
             self._mark_boundary("goal_dispatch", "telos")
+            if self.scale is not None:
+                try:
+                    self.scale.record_strategy(
+                        "goal_dispatch",
+                        success=error_count == 0,
+                        cost_seconds=max(0.0, time.monotonic() - dispatch_started),
+                    )
+                except Exception:
+                    pass
 
             # 2. Transformation: AST Parsing & Code Structure Inspection
             self.telos.update_status("code_analysis", MilestoneStatus.RUNNING)
             analysis_summary: Dict[str, Any] = {}
-            for py_file in self.workspace_root.glob("*.py"):
-                try:
-                    content = py_file.read_text(encoding="utf-8")
-                    metrics = CodeInspector.inspect(content)
-                    analysis_summary[py_file.name] = metrics
-                    # Verify AST parse integrity via SurgicalAstModifier
-                    SurgicalAstModifier.parse_source(content)
-                except Exception as exc:
-                    logger.warning(f"Could not parse/inspect {py_file.name}: {exc}")
+            source_files = list(self.workspace_root.glob("*.py"))
+            if self.scale is not None and len(source_files) > 1:
+                analysis = self.scale.run_parallel(
+                    [
+                        (py_file.name, lambda path=py_file: _inspect_source_file(path))
+                        for py_file in source_files
+                    ],
+                    strategy="code_analysis",
+                    cycle_id=self.current_cycle,
+                )
+                analysis_summary = dict(analysis.get("results") or {})
+                for name, error in (analysis.get("errors") or {}).items():
+                    logger.warning(f"Could not parse/inspect {name}: {error}")
                     error_count += 1
+            else:
+                for py_file in source_files:
+                    try:
+                        analysis_summary[py_file.name] = _inspect_source_file(py_file)
+                    except Exception as exc:
+                        logger.warning(f"Could not parse/inspect {py_file.name}: {exc}")
+                        error_count += 1
 
             self.telos.update_status(
                 "code_analysis",
@@ -1396,21 +1538,86 @@ class AutomationKernel:
             syntax_errors: List[str] = []
             syntax_cache_hits = 0
             syntax_cache_misses = 0
+            uncached: List[Path] = []
             for py_file in self.workspace_root.glob("*.py"):
                 cached = self._syntax_cache_lookup(py_file)
                 if cached is not None:
-                    ok, stderr_text = cached
                     syntax_cache_hits += 1
+                    ok, stderr_text = cached
+                    if not ok:
+                        syntax_passed = False
+                        syntax_errors.append(f"{py_file.name}: {stderr_text}")
+                        error_count += 1
                 else:
-                    result = self.prover.verify_python_syntax(py_file)
-                    ok = bool(result.success)
-                    stderr_text = result.stderr.strip()
-                    self._syntax_cache_store(py_file, ok, stderr_text)
+                    uncached.append(py_file)
                     syntax_cache_misses += 1
-                if not ok:
-                    syntax_passed = False
-                    syntax_errors.append(f"{py_file.name}: {stderr_text}")
-                    error_count += 1
+
+            syntax_results: Dict[str, Dict[str, Any]] = {}
+            if uncached:
+                if self.scale is not None and len(uncached) > 1:
+                    race = self.scale.run_race(
+                        [
+                            (
+                                "prover_subprocess",
+                                lambda files=list(uncached), stop_event=None: _prover_syntax_scan(
+                                    files, self.prover, stop_event
+                                ),
+                            ),
+                            (
+                                "ast_compile",
+                                lambda files=list(uncached), stop_event=None: _ast_syntax_scan(
+                                    files, stop_event
+                                ),
+                            ),
+                        ],
+                        is_winner=lambda value: (
+                            isinstance(value, dict)
+                            and len(value) == len(uncached)
+                            and all(item.get("success") for item in value.values())
+                        ),
+                        strategy="syntax_proving",
+                        max_seconds=max(5.0, 2.5 * len(uncached)),
+                        cost_hint=0.25 * max(1, len(uncached) - 1),
+                        cycle_id=self.current_cycle,
+                    )
+                    for value in (race.get("results") or {}).values():
+                        if isinstance(value, dict):
+                            for name, outcome in value.items():
+                                syntax_results.setdefault(name, outcome)
+                    cycle_details["syntax_race"] = {
+                        "winner": race.get("winner_name"),
+                        "early_stopped": race.get("early_stopped"),
+                        "saved_compute_seconds": race.get("saved_compute_seconds"),
+                        "fastest_seconds": race.get("elapsed_seconds"),
+                    }
+                else:
+                    scan_started = time.monotonic()
+                    syntax_results = _prover_syntax_scan(uncached, self.prover)
+                    if self.scale is not None:
+                        try:
+                            self.scale.record_strategy(
+                                "syntax_proving",
+                                success=all(
+                                    item.get("success") for item in syntax_results.values()
+                                ),
+                                cost_seconds=max(0.0, time.monotonic() - scan_started),
+                            )
+                        except Exception:
+                            pass
+
+                for py_file in uncached:
+                    outcome = syntax_results.get(py_file.name) or {
+                        "success": False,
+                        "stderr": "syntax proof strategy produced no verdict",
+                    }
+                    ok = bool(outcome.get("success"))
+                    stderr_text = str(outcome.get("stderr") or "")
+                    self._syntax_cache_store(py_file, ok, stderr_text)
+                    if not ok:
+                        syntax_passed = False
+                        syntax_errors.append(f"{py_file.name}: {stderr_text}")
+                        error_count += 1
+
             cycle_details["syntax_cache"] = {
                 "hits": syntax_cache_hits,
                 "misses": syntax_cache_misses,
@@ -1505,6 +1712,43 @@ class AutomationKernel:
 
             summary = self.telos.get_summary()
             cycle_details["milestone_summary"] = summary
+
+            # 5.5 Meta-scheduler: calibrate from real telemetry, A/B upgrade, rollback.
+            if self.scale is not None:
+                try:
+                    records = (
+                        cycle_telemetry.read_records(limit=8)
+                        if _TELEMETRY_AVAILABLE and cycle_telemetry is not None
+                        else []
+                    )
+                    workload: List[float] = []
+                    if records:
+                        latest_steps = records[-1].get("steps") or []
+                        for step in latest_steps:
+                            seconds = float(step.get("duration_ms", 0.0) or 0.0) / 1000.0
+                            if seconds > 0:
+                                workload.append(seconds)
+                    scale_details = cycle_details.setdefault("scale", {})
+                    if workload and test_report.is_successful and self.current_cycle % 3 == 1:
+                        scale_details["upgrade"] = self.scale.maybe_self_upgrade(
+                            workload,
+                            telemetry_records=records,
+                            cycle_id=self.current_cycle,
+                        )
+                    if workload:
+                        failed_checks = int(test_report.failed_checks or 0) + int(error_count)
+                        failure_rate = failed_checks / max(1, int(test_report.total_checks or 1))
+                        scale_details["live"] = self.scale.observe_live(
+                            max(workload) * 1000.0,
+                            min(1.0, failure_rate),
+                            cycle_id=self.current_cycle,
+                        )
+                    scale_details.update(self.scale.snapshot())
+                except Exception as exc:
+                    logger.warning(f"Meta-scheduler tuning error (non-fatal): {exc}")
+                    cycle_details["scale_error"] = str(exc)
+                self._mark_boundary("scale_tuning", "scale_orchestrator")
+
             self.telos.update_status("telemetry_report", MilestoneStatus.COMPLETED)
             self._mark_boundary("telemetry_report", "telos")
 
@@ -1748,6 +1992,11 @@ class AutomationKernel:
             "goal_stream": goal_stream,
             "extensions": extensions_telemetry,
             "bidirectional_search": bidirectional_telemetry,
+            "scale": (
+                self.scale.snapshot()
+                if self.scale is not None
+                else {"available": False}
+            ),
             "cycles": [asdict(c) for c in self.cycle_history],
         }
         return json.dumps(payload, indent=2)

@@ -172,6 +172,7 @@ class FastFailPrecheck:
         "manifold_bridge.py",
         "devil_advocate.py",
         "egraph_engine.py",
+        "scale_orchestrator.py",
         "requirements.txt",
     )
 
@@ -260,6 +261,12 @@ class VerificationRunner:
         """Prove the tiered gate still catches tampering, regressions, and spikes."""
         loader = unittest.TestLoader()
         suite = loader.loadTestsFromTestCase(ZeroTrustPipelineTests)
+        return self.run_suite(suite)
+
+    def run_scale_orchestrator_verification(self) -> VerificationReport:
+        """Prove elastic racing, constitutional ceilings, and policy promotion."""
+        loader = unittest.TestLoader()
+        suite = loader.loadTestsFromTestCase(ScaleOrchestratorTests)
         return self.run_suite(suite)
 
     def run_diff_scoped(
@@ -376,6 +383,23 @@ class VerificationRunner:
             "duration_seconds": zero_trust_report.duration_seconds,
         }
 
+        scale_report = self.run_scale_orchestrator_verification()
+        consensus.total_checks += scale_report.total_checks
+        consensus.passed_checks += scale_report.passed_checks
+        consensus.failed_checks += scale_report.failed_checks
+        consensus.errors.extend(
+            f"[scale-orchestrator] {error}" for error in scale_report.errors
+        )
+        consensus.duration_seconds = round(
+            consensus.duration_seconds + scale_report.duration_seconds, 4
+        )
+        consensus.details["scale_orchestrator_self_test"] = {
+            "total": scale_report.total_checks,
+            "passed": scale_report.passed_checks,
+            "failed": scale_report.failed_checks,
+            "duration_seconds": scale_report.duration_seconds,
+        }
+
         ratchet_info = self.gate.evaluate(consensus, depth=depth)
         consensus.details["ego_ratchet"] = ratchet_info
         return consensus
@@ -397,6 +421,9 @@ PROTECTED_ARTIFACTS: Tuple[str, ...] = (
     "verify_golden_suite.json",
     "verify_holdout_suite.json",
 )
+# The constitutional governor is sealed by whole-file digest: policy tuning may
+# never rewrite the ceiling code, and any legitimate change must be resealed.
+GOVERNOR_ARTIFACTS: Tuple[str, ...] = ("scale_orchestrator.py",)
 # Suites are append-only by design (ratcheting), so they are sealed per-case
 # rather than by whole-file digest.
 SUITE_ARTIFACTS: Tuple[str, ...] = (
@@ -534,6 +561,7 @@ class CandidateSpec:
     enforce_budget: bool = True
     use_cache: bool = True
     label: str = "candidate"
+    policy: Optional[Dict[str, Any]] = None
 
 
 def _utc_now() -> str:
@@ -627,7 +655,7 @@ class IntegrityGuard:
             "invariant_version": INVARIANT_VERSION,
             "algorithm": "sha256-lf-normalized",
             "sealed_at": _utc_now(),
-            "files": cls.snapshot(root, ("verify.py",)),
+            "files": cls.snapshot(root, ("verify.py", *GOVERNOR_ARTIFACTS)),
             "suites": {
                 name: {"cases": cls._suite_cases(root / name) or {}}
                 for name in SUITE_ARTIFACTS
@@ -659,9 +687,13 @@ class IntegrityGuard:
                 f"invariant_version {manifest.get('invariant_version')!r} != {INVARIANT_VERSION!r}"
             )
         recorded = manifest.get("files") or {}
-        for name in ("verify.py",):
+        for name in ("verify.py", *GOVERNOR_ARTIFACTS):
             current = _file_digest(root / name)
             expected = recorded.get(name)
+            if name in GOVERNOR_ARTIFACTS and current is None:
+                # Absence is rejected by the constitutional report (module must
+                # be importable); temp roots without a governor skip the digest.
+                continue
             if expected is None:
                 failures.append(f"{name}: absent from sealed manifest")
             elif current is None:
@@ -1340,6 +1372,103 @@ class ZeroTrustPipeline:
                 entries.append(entry)
         return entries
 
+    @staticmethod
+    def _load_scale_module() -> Optional[Any]:
+        try:
+            import scale_orchestrator  # type: ignore[import]
+
+            return scale_orchestrator
+        except Exception:
+            pass
+        try:
+            path = Path(__file__).resolve().parent / "scale_orchestrator.py"
+            spec = importlib.util.spec_from_file_location("scale_orchestrator", path)
+            if spec is None or spec.loader is None:
+                return None
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            return module
+        except Exception:
+            return None
+
+    @classmethod
+    def _constitutional_report(
+        cls, spec: Optional[CandidateSpec] = None
+    ) -> Dict[str, Any]:
+        """Independently re-check the governor and reject any weakening attempt."""
+        scale = cls._load_scale_module()
+        if scale is None:
+            return {
+                "ok": False,
+                "reason_code": "scale_orchestrator_unavailable",
+                "reason": "constitutional governor module is missing",
+                "violations": ["scale_orchestrator.py could not be loaded"],
+            }
+        try:
+            actual = dict(scale.CONSTITUTIONAL_LIMITS.as_dict())
+            expected = dict(scale.expected_constitutional_values())
+        except Exception as exc:
+            return {
+                "ok": False,
+                "reason_code": "constitutional_tampering",
+                "reason": f"constitutional limits unreadable: {exc}",
+                "violations": [f"{type(exc).__name__}: {exc}"],
+            }
+
+        violations: List[str] = []
+        reason_code = "ok"
+        for key in (
+            "max_ram_fraction",
+            "max_local_workers",
+            "max_cloud_shards",
+            "max_cycle_seconds",
+            "min_exploration_floor",
+            "required_tiers",
+        ):
+            if actual.get(key) != expected.get(key):
+                violations.append(
+                    f"{key}: expected {expected.get(key)!r}, observed {actual.get(key)!r}"
+                )
+                reason_code = "constitutional_tampering"
+
+        if spec is not None:
+            try:
+                tampering = scale.detect_constitutional_tampering(spec.module_source or "")
+            except Exception as exc:
+                tampering = [{"line": 0, "message": str(exc)}]
+            for finding in tampering:
+                violations.append(
+                    f"source line {finding.get('line', 0)}: {finding.get('message', 'tampering')}"
+                )
+                reason_code = "constitutional_tampering"
+
+            if spec.policy is not None:
+                try:
+                    report = scale.validate_policy(spec.policy)
+                except Exception as exc:
+                    report = {
+                        "valid": False,
+                        "violations": [f"{type(exc).__name__}: {exc}"],
+                    }
+                if not report.get("valid", True):
+                    for violation in report.get("violations") or []:
+                        violations.append(f"policy: {violation}")
+                    if reason_code == "ok":
+                        reason_code = "constitutional_violation"
+
+        return {
+            "ok": not violations,
+            "reason_code": reason_code,
+            "reason": (
+                "constitutional governor rejected candidate"
+                if violations
+                else "constitutional limits intact"
+            ),
+            "violations": violations[:8],
+            "limits": actual,
+            "expected": expected,
+        }
+
     # -- tier implementations -------------------------------------------
     def _tier0(self, spec: CandidateSpec) -> Dict[str, Any]:
         if self.enforce_integrity:
@@ -1352,6 +1481,18 @@ class ZeroTrustPipeline:
                     "counterexample": detail,
                     "feedback": ["Tier0: verifier integrity failed — restore protected files or reseal."],
                 }
+        constitutional = self._constitutional_report(spec)
+        if not constitutional["ok"]:
+            return {
+                "passed": False,
+                "reason_code": str(constitutional["reason_code"]),
+                "reason": constitutional["reason"],
+                "counterexample": constitutional,
+                "feedback": [
+                    "Tier0: constitutional ceilings and Tiers 0-4 cannot be weakened.",
+                    *constitutional["violations"][:4],
+                ],
+            }
         input_literals: List[Any] = []
         for entry in self._suite_entries(self.golden):
             input_literals.extend(_case_args(entry.get("args", [])))
@@ -2078,6 +2219,7 @@ class ZeroTrustPipeline:
             "enforce_budget": bool(spec.enforce_budget),
             "metamorphic": spec.metamorphic,
             "invariants": spec.invariants,
+            "policy": spec.policy,
             "golden": _file_digest(self.golden.path),
             "holdout": _file_digest(self.holdout.path),
             "protected": IntegrityGuard.snapshot(self.root),
@@ -3684,6 +3826,342 @@ class ZeroTrustPipelineTests(unittest.TestCase):
         self.assertFalse(verdict["passed"])
         self.assertTrue(verdict["integrity"]["reason_code"] == "integrity_ok")
         self.assertTrue(any(item.get("file") == "bad.py" for item in verdict["violations"]))
+
+
+class ScaleOrchestratorTests(unittest.TestCase):
+    """Prove elastic racing, constitutional ceilings, and A/B policy upgrades."""
+
+    @staticmethod
+    def _orchestrator(root: Path) -> Any:
+        import random
+
+        import scale_orchestrator as scale
+
+        resources = scale.ResourceProbe().probe(
+            cpu_count=8,
+            ram=(16000.0, 12000.0),
+            gpu=(False, []),
+            endpoints=[],
+        )
+        return scale.ScaleOrchestrator(
+            root=root,
+            policy_path=root / "scale_policy.json",
+            backup_dir=root / "scale_policy_backups",
+            limits=scale.ConstitutionalLimits(cpu_count=8),
+            resources=resources,
+            rng=random.Random(7),
+            telemetry_enabled=False,
+        )
+
+    def test_winner_takes_all_cancels_losing_strategies(self) -> None:
+        import threading  # noqa: F401
+        import time
+
+        from scale_orchestrator import WinnerPool
+
+        def fast(stop_event: Any = None) -> Dict[str, Any]:
+            time.sleep(0.02)
+            return {"ok": True, "name": "fast"}
+
+        def slow(stop_event: Any = None) -> Dict[str, Any]:
+            for _ in range(50):
+                if stop_event is not None and stop_event.is_set():
+                    return {"ok": False, "name": "slow", "stopped": True}
+                time.sleep(0.01)
+            return {"ok": True, "name": "slow"}
+
+        def loser(stop_event: Any = None) -> Dict[str, Any]:
+            for _ in range(50):
+                if stop_event is not None and stop_event.is_set():
+                    return {"ok": False, "name": "loser", "stopped": True}
+                time.sleep(0.01)
+            return {"ok": True, "name": "loser"}
+
+        pool = WinnerPool(max_workers=3)
+        race = pool.run_race(
+            [("fast", fast), ("slow", slow), ("loser", loser)],
+            is_winner=lambda value: bool(value.get("ok")),
+            max_seconds=2.0,
+            cost_hint=0.5,
+        )
+        self.assertEqual(race.winner_name, "fast")
+        self.assertGreaterEqual(race.early_stopped, 1)
+        self.assertGreater(race.saved_compute_seconds, 0.0)
+        self.assertLess(race.elapsed_seconds, 0.4)
+
+        parallel = pool.run_parallel([("a", lambda: 1), ("b", lambda: 2)])
+        self.assertEqual(parallel["results"], {"a": 1, "b": 2})
+        self.assertEqual(parallel["errors"], {})
+
+    def test_constitutional_limits_are_immutable_and_clamped(self) -> None:
+        import scale_orchestrator as scale
+
+        limits = scale.CONSTITUTIONAL_LIMITS
+        with self.assertRaises(AttributeError):
+            limits.max_ram_fraction = 0.99  # type: ignore[misc]
+        with self.assertRaises(AttributeError):
+            limits.max_local_workers = 999  # type: ignore[misc]
+        with self.assertRaises(AttributeError):
+            del limits.max_cloud_shards  # type: ignore[misc]
+
+        self.assertLessEqual(limits.max_ram_fraction, 0.80)
+        self.assertLessEqual(limits.max_local_workers, max(1, (os.cpu_count() or 1) - 1))
+        self.assertEqual(limits.max_cloud_shards, 4)
+        self.assertEqual(tuple(limits.required_tiers), (0, 1, 2, 3, 4))
+
+        adversarial = {
+            "local_workers": limits.max_local_workers + 100,
+            "cloud_shards": limits.max_cloud_shards + 100,
+            "ram_fraction": 0.99,
+            "cycle_seconds": limits.max_cycle_seconds + 100.0,
+            "exploration_floor": 0.0,
+            "batch_size": 999,
+            "solver_timeout_seconds": 9999.0,
+            "verify_tiers": [0, 1],
+        }
+        report = scale.validate_policy(adversarial)
+        self.assertFalse(report["valid"])
+        self.assertTrue(any("tiers_weakened" in item for item in report["violations"]))
+
+        clamped, notes = scale.clamp_policy(adversarial)
+        self.assertLessEqual(clamped["local_workers"], limits.max_local_workers)
+        self.assertLessEqual(clamped["cloud_shards"], limits.max_cloud_shards)
+        self.assertLessEqual(clamped["ram_fraction"], limits.max_ram_fraction)
+        self.assertLessEqual(clamped["cycle_seconds"], limits.max_cycle_seconds)
+        self.assertGreaterEqual(clamped["exploration_floor"], limits.min_exploration_floor)
+        self.assertEqual(clamped["verify_tiers"], [0, 1, 2, 3, 4])
+        self.assertTrue(notes)
+
+        findings = scale.detect_constitutional_tampering(
+            "CONSTITUTIONAL_LIMITS.max_ram_fraction = 1.0\n"
+        )
+        self.assertTrue(findings)
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            store = scale.PolicyStore(
+                path=Path(tmp_dir) / "scale_policy.json",
+                backup_dir=Path(tmp_dir) / "scale_policy_backups",
+            )
+            with self.assertRaises(scale.ConstitutionalViolation):
+                store.save(adversarial, strict=True)
+            stored = store.save(adversarial)
+            self.assertLessEqual(stored["local_workers"], limits.max_local_workers)
+            self.assertEqual(stored["verify_tiers"], [0, 1, 2, 3, 4])
+
+    def test_tier0_rejects_policy_breach_and_limit_tampering(self) -> None:
+        bad_policy = {
+            "local_workers": scale_max_workers() + 50,
+            "cloud_shards": 99,
+            "ram_fraction": 0.99,
+            "verify_tiers": [0],
+        }
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            root = Path(tmp_dir)
+            pipeline = ZeroTrustPipeline(
+                root=root,
+                golden_path=root / "golden.json",
+                holdout_path=root / "holdout.json",
+                manifest_path=root / "manifest.json",
+                cache_path=root / "cache.json",
+                enforce_integrity=False,
+                telemetry=False,
+            )
+            breach = pipeline.evaluate(
+                CandidateSpec(
+                    module_source="def solve(x):\n    return x + 1\n",
+                    cases=[[1]],
+                    label="scale-policy-breach",
+                    policy=bad_policy,
+                    use_cache=False,
+                )
+            )
+            self.assertFalse(breach.passed)
+            self.assertEqual(breach.failed_tier, "tier0")
+            self.assertEqual(breach.reason_code, "constitutional_violation")
+
+            tampered = pipeline.evaluate(
+                CandidateSpec(
+                    module_source=(
+                        "def solve(x):\n    return x\n"
+                        "CONSTITUTIONAL_LIMITS.max_ram_fraction = 1.0\n"
+                    ),
+                    cases=[[1]],
+                    label="scale-limit-tamper",
+                    use_cache=False,
+                )
+            )
+            self.assertFalse(tampered.passed)
+            self.assertEqual(tampered.failed_tier, "tier0")
+            self.assertEqual(tampered.reason_code, "constitutional_tampering")
+
+    def test_bandit_keeps_exploration_floor_and_persists(self) -> None:
+        import random
+
+        import scale_orchestrator as scale
+
+        bandit = scale.StrategyBandit(
+            strategies=["alpha", "beta", "gamma", "delta"],
+            exploration_floor=0.15,
+            rng=random.Random(11),
+        )
+        allocation = bandit.allocate(10)
+        self.assertEqual(sum(allocation.values()), 10)
+        self.assertGreaterEqual(allocation["alpha"], 1)
+        self.assertGreaterEqual(allocation["beta"], 1)
+
+        bandit.record("alpha", True, speedup=2.0, cost_seconds=0.1)
+        bandit.record("alpha", True, speedup=1.5, cost_seconds=0.1)
+        self.assertGreater(bandit.win_rate("alpha"), 0.5)
+        self.assertGreater(bandit.avg_speedup("alpha"), 1.0)
+        self.assertIn("alpha", bandit.weights())
+
+        restored = scale.StrategyBandit(state=bandit.as_dict())
+        self.assertEqual(restored.arm("alpha")["pulls"], 2)
+        self.assertGreater(restored.win_rate("alpha"), 0.5)
+
+        low_floor = scale.StrategyBandit(["alpha", "beta"], exploration_floor=0.0)
+        self.assertEqual(
+            low_floor.exploration_floor,
+            scale.CONSTITUTIONAL_LIMITS.min_exploration_floor,
+        )
+
+    def test_calibrator_p95_and_ram_growth(self) -> None:
+        import scale_orchestrator as scale
+
+        records = [
+            {
+                "steps": [
+                    {"duration_ms": 100.0, "rss_mb": 100.0, "rss_delta_mb": 10.0},
+                    {"duration_ms": 200.0, "rss_mb": 120.0, "rss_delta_mb": 20.0},
+                    {"duration_ms": 400.0, "rss_mb": 150.0, "rss_delta_mb": 30.0},
+                    {"duration_ms": 50.0, "rss_mb": 160.0, "rss_delta_mb": 10.0},
+                ]
+            }
+        ]
+        calibration = scale.Calibrator().calibrate(records)
+        self.assertEqual(calibration["samples"], 4)
+        self.assertAlmostEqual(calibration["p95_seconds"], 0.37, delta=0.01)
+        self.assertGreater(calibration["ram_growth_mb"], 0.0)
+        recommendations = calibration["recommendations"]
+        self.assertGreaterEqual(recommendations["batch_size"], 1)
+        self.assertLessEqual(
+            recommendations["local_workers"], scale.CONSTITUTIONAL_LIMITS.max_local_workers
+        )
+        self.assertGreater(recommendations["solver_timeout_seconds"], 0.0)
+
+    def test_cloud_shards_backoff_is_bounded(self) -> None:
+        import scale_orchestrator as scale
+
+        clock_state = {"now": 0.0}
+        governor = scale.CloudShardGovernor(clock=lambda: clock_state["now"])
+        granted = governor.request(999)
+        self.assertEqual(granted["active_shards"], scale.CONSTITUTIONAL_LIMITS.max_cloud_shards)
+
+        throttled = governor.request(rate_limited=True)
+        self.assertGreater(throttled["cooldown_seconds"], 0.0)
+        self.assertLessEqual(
+            throttled["active_shards"], scale.CONSTITUTIONAL_LIMITS.max_cloud_shards
+        )
+        severe = governor.request(rate_limited=True)
+        self.assertEqual(severe["active_shards"], 0)
+
+        clock_state["now"] += 1000.0
+        recovered = governor.request(2)
+        self.assertEqual(recovered["active_shards"], 2)
+        self.assertLessEqual(
+            governor.active_shards, scale.CONSTITUTIONAL_LIMITS.max_cloud_shards
+        )
+
+    def test_policy_promotion_rejection_and_live_rollback(self) -> None:
+        import scale_orchestrator as scale
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            root = Path(tmp_dir)
+            orchestrator = self._orchestrator(root)
+            baseline = scale.default_policy()
+            baseline.update({"batch_size": 2, "local_workers": 1, "cloud_shards": 2})
+            orchestrator.store.save(baseline)
+
+            workload = [0.5] * 16
+            promoted = orchestrator.maybe_self_upgrade(
+                workload, candidate={"batch_size": 8, "local_workers": 4}
+            )
+            self.assertEqual(promoted["decision"], "promote", promoted.get("reasons"))
+            self.assertGreater(promoted["speedup"], 1.0)
+            self.assertTrue(Path(promoted["snapshot"]).is_file())
+            self.assertEqual(promoted["version"], 2)
+
+            version_after_promotion = orchestrator.store.load()["version"]
+            worse = orchestrator.maybe_self_upgrade(
+                workload, candidate={"batch_size": 1, "local_workers": 1}
+            )
+            self.assertEqual(worse["decision"], "reject")
+            self.assertTrue(worse["reasons"])
+            self.assertEqual(orchestrator.store.load()["version"], version_after_promotion)
+
+            adversarial = orchestrator.maybe_self_upgrade(
+                workload,
+                candidate={
+                    "batch_size": 999,
+                    "local_workers": 9999,
+                    "cloud_shards": 99,
+                    "ram_fraction": 0.99,
+                    "verify_tiers": [0],
+                },
+            )
+            self.assertEqual(adversarial["decision"], "reject")
+            self.assertTrue(
+                any("tiers" in reason or "out_of_bounds" in reason for reason in adversarial["reasons"])
+            )
+            self.assertEqual(orchestrator.store.load()["version"], version_after_promotion)
+
+            orchestrator.store.set_live_baseline(100.0, 0.0)
+            observation = orchestrator.observe_live(500.0, 0.0)
+            self.assertTrue(observation["regressed"])
+            self.assertTrue(observation["rollback"]["rolled_back"])
+            restored = orchestrator.store.load()
+            self.assertEqual(restored["batch_size"], 2)
+            self.assertTrue(
+                any(event["kind"] == "policy_rolled_back" for event in orchestrator._events)
+            )
+
+    def test_tick_reports_bounded_workers_and_slots(self) -> None:
+        import scale_orchestrator as scale
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            root = Path(tmp_dir)
+            orchestrator = self._orchestrator(root)
+            records = [
+                {
+                    "steps": [
+                        {"duration_ms": 120.0, "rss_mb": 90.0, "rss_delta_mb": 5.0},
+                        {"duration_ms": 240.0, "rss_mb": 110.0, "rss_delta_mb": 10.0},
+                    ]
+                }
+            ]
+            snapshot = orchestrator.tick(cycle_id=1, telemetry_records=records)
+            self.assertLessEqual(
+                snapshot["active_workers"], orchestrator.limits.max_local_workers
+            )
+            self.assertEqual(
+                sum(snapshot["strategy_slots"].values()), snapshot["active_workers"]
+            )
+            self.assertIn("bandit", snapshot)
+            self.assertIn("early_cancel", snapshot)
+            self.assertIn("limits", snapshot)
+            self.assertEqual(
+                snapshot["limits"]["max_ram_fraction"],
+                orchestrator.limits.max_ram_fraction,
+            )
+
+
+def scale_max_workers() -> int:
+    try:
+        from scale_orchestrator import CONSTITUTIONAL_LIMITS
+
+        return CONSTITUTIONAL_LIMITS.max_local_workers
+    except Exception:
+        return max(1, (os.cpu_count() or 1) - 1)
 
 
 if __name__ == "__main__":

@@ -55,3 +55,8 @@ sask_tuning.json
 .sask_verify_cache.json.tmp
 .hypothesis/
 .pytest_cache/
+
+# Elastic orchestrator runtime policy and rollback snapshots (local only)
+scale_policy.json
+scale_policy.json.tmp
+scale_policy_backups/

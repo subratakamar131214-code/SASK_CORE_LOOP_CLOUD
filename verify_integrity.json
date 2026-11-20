@@ -1,9 +1,10 @@
 {
   "invariant_version": "zt-1",
   "algorithm": "sha256-lf-normalized",
-  "sealed_at": "2026-11-20T12:55:38.790705+00:00",
+  "sealed_at": "2026-11-20T13:33:24.340535+00:00",
   "files": {
-    "verify.py": "c3266ba213c2504311e580d140a9125a2b7e808dd4e4389026a827c693a423e7"
+    "verify.py": "ce6e774c384bf6b1e7434c18257f13fcae79f30701d11e7abbb11f0a48e43708",
+    "scale_orchestrator.py": "a088bd2a5a19a8f76407f36e8c6cc84f80a7137070d0764e67230823dfcde2c9"
   },
   "suites": {
     "verify_golden_suite.json": {

@@ -34,6 +34,8 @@ MAX_RECORDS = 120
 MAX_FIXES = 200
 
 VERDICT_RECORD_TYPE = "verification_verdict"
+SCALE_RECORD_TYPE = "scale_event"
+_EVENT_RECORD_TYPES = (VERDICT_RECORD_TYPE, SCALE_RECORD_TYPE)
 
 _LEDGER_LOCK = threading.RLock()
 _FIX_LOCK = threading.RLock()
@@ -361,7 +363,7 @@ def read_records(limit: int = 40) -> List[Dict[str, Any]]:
         return [
             row
             for row in records[-limit:]
-            if isinstance(row, dict) and row.get("record_type") != VERDICT_RECORD_TYPE
+            if isinstance(row, dict) and row.get("record_type") not in _EVENT_RECORD_TYPES
         ]
     rows: List[Dict[str, Any]] = []
     try:
@@ -374,7 +376,7 @@ def read_records(limit: int = 40) -> List[Dict[str, Any]]:
                     item = json.loads(line)
                 except ValueError:
                     continue
-                if isinstance(item, dict) and item.get("record_type") != VERDICT_RECORD_TYPE:
+                if isinstance(item, dict) and item.get("record_type") not in _EVENT_RECORD_TYPES:
                     rows.append(item)
     except OSError:
         return []
@@ -435,6 +437,75 @@ def read_verification_verdicts(limit: int = 40) -> List[Dict[str, Any]]:
                 except ValueError:
                     continue
                 if isinstance(item, dict) and item.get("record_type") == VERDICT_RECORD_TYPE:
+                    events.append(item)
+    except OSError:
+        return []
+    return events[-limit:]
+
+
+# ---------------------------------------------------------------------------
+# Scale event stream (elastic orchestrator & meta-scheduler)
+# ---------------------------------------------------------------------------
+
+
+def record_scale_event(
+    event: Dict[str, Any],
+    context: Optional[Dict[str, Any]] = None,
+) -> None:
+    """Append one elastic-scaling event without touching cycle analytics."""
+    context = context or {}
+    payload = {
+        "record_type": SCALE_RECORD_TYPE,
+        "ts": _utc_now(),
+        "kind": str(event.get("kind") or "scale_event")[:64],
+        "cycle_id": context.get("cycle_id", event.get("cycle_id")),
+    }
+    for key, value in event.items():
+        if key in ("kind", "cycle_id", "at"):
+            continue
+        payload[key] = _json_safe_scale(value)
+    with _LEDGER_LOCK:
+        try:
+            LEDGER_PATH.parent.mkdir(parents=True, exist_ok=True)
+            with LEDGER_PATH.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps(payload, ensure_ascii=False, default=str) + "\n")
+        except OSError:
+            pass
+
+
+def _json_safe_scale(value: Any, depth: int = 0) -> Any:
+    if depth > 3:
+        return "<depth-limit>"
+    if isinstance(value, float):
+        if value != value or value in (float("inf"), float("-inf")):
+            return None
+        return round(value, 6)
+    if isinstance(value, (str, int, bool)) or value is None:
+        return value[:280] if isinstance(value, str) else value
+    if isinstance(value, (list, tuple)):
+        return [_json_safe_scale(item, depth + 1) for item in list(value)[:24]]
+    if isinstance(value, dict):
+        return {
+            str(key)[:64]: _json_safe_scale(item, depth + 1)
+            for key, item in list(value.items())[:24]
+        }
+    return str(value)[:200]
+
+
+def read_scale_events(limit: int = 40) -> List[Dict[str, Any]]:
+    """Return the most recent elastic-scaling events from the ledger."""
+    events: List[Dict[str, Any]] = []
+    try:
+        with LEDGER_PATH.open("r", encoding="utf-8") as handle:
+            for line in handle:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    item = json.loads(line)
+                except ValueError:
+                    continue
+                if isinstance(item, dict) and item.get("record_type") == SCALE_RECORD_TYPE:
                     events.append(item)
     except OSError:
         return []
