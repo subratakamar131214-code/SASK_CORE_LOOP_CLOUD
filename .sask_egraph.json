@@ -1,15 +1,15 @@
 {
   "version": 1,
-  "superpositions": 1423,
-  "rewrites": 690953,
-  "promotions": 15652,
+  "superpositions": 2620,
+  "rewrites": 1271837,
+  "promotions": 28822,
   "rejections": 0,
   "last": {
     "origin": "cycle_metrics",
     "expressions": 10,
     "merged_classes": 3,
     "rewrites": 572,
-    "elapsed_seconds": 0.0767,
+    "elapsed_seconds": 0.0877,
     "goal_matched": true
   },
   "history": [
@@ -18,7 +18,31 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0762,
+      "elapsed_seconds": 0.0877,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.087,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0878,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0877,
       "goal_matched": true
     },
     {
@@ -26,7 +50,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 53,
-      "elapsed_seconds": 0.0129,
+      "elapsed_seconds": 0.0147,
       "goal_matched": false
     },
     {
@@ -34,7 +58,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0773,
+      "elapsed_seconds": 0.088,
       "goal_matched": true
     },
     {
@@ -42,7 +66,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0769,
+      "elapsed_seconds": 0.0871,
       "goal_matched": true
     },
     {
@@ -50,7 +74,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0767,
+      "elapsed_seconds": 0.0876,
       "goal_matched": true
     },
     {
@@ -58,7 +82,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0762,
+      "elapsed_seconds": 0.0874,
       "goal_matched": true
     },
     {
@@ -66,7 +90,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0767,
+      "elapsed_seconds": 0.0879,
       "goal_matched": true
     },
     {
@@ -74,7 +98,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 53,
-      "elapsed_seconds": 0.0131,
+      "elapsed_seconds": 0.0149,
       "goal_matched": false
     },
     {
@@ -82,7 +106,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0771,
+      "elapsed_seconds": 0.0885,
       "goal_matched": true
     },
     {
@@ -90,7 +114,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.077,
+      "elapsed_seconds": 0.0874,
       "goal_matched": true
     },
     {
@@ -98,7 +122,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.076,
+      "elapsed_seconds": 0.0872,
       "goal_matched": true
     },
     {
@@ -106,7 +130,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0768,
+      "elapsed_seconds": 0.0883,
       "goal_matched": true
     },
     {
@@ -114,7 +138,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0772,
+      "elapsed_seconds": 0.0886,
       "goal_matched": true
     },
     {
@@ -122,7 +146,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 53,
-      "elapsed_seconds": 0.013,
+      "elapsed_seconds": 0.0148,
       "goal_matched": false
     },
     {
@@ -130,7 +154,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0767,
+      "elapsed_seconds": 0.0882,
       "goal_matched": true
     },
     {
@@ -138,7 +162,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0771,
+      "elapsed_seconds": 0.0871,
       "goal_matched": true
     },
     {
@@ -146,7 +170,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0768,
+      "elapsed_seconds": 0.0879,
       "goal_matched": true
     },
     {
@@ -154,7 +178,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0811,
+      "elapsed_seconds": 0.0872,
       "goal_matched": true
     },
     {
@@ -162,7 +186,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0764,
+      "elapsed_seconds": 0.087,
       "goal_matched": true
     },
     {
@@ -170,7 +194,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 53,
-      "elapsed_seconds": 0.013,
+      "elapsed_seconds": 0.0147,
       "goal_matched": false
     },
     {
@@ -178,31 +202,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0777,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0765,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0771,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0767,
+      "elapsed_seconds": 0.0877,
       "goal_matched": true
     }
   ]
