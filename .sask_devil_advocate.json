@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "cycles_observed": 12390,
-  "challenges": 4130,
-  "stagnation_events": 12387,
-  "local_convergence_events": 12388,
+  "cycles_observed": 13920,
+  "challenges": 4640,
+  "stagnation_events": 13917,
+  "local_convergence_events": 13918,
   "cooldown": 3,
   "last_intensity": 0.85,
   "history": {
@@ -76,38 +76,38 @@
       1.0
     ],
     "success_rate": [
-      0.990224,
-      0.990224,
-      0.990226,
-      0.990226,
-      0.990226,
-      0.990228,
-      0.990228,
-      0.990228,
-      0.99023,
-      0.99023,
-      0.99023,
-      0.990232,
-      0.990232,
-      0.990232,
-      0.990235,
-      0.990235,
-      0.990235,
-      0.990237,
-      0.990237,
-      0.990237,
-      0.990239,
-      0.990239,
-      0.990239,
-      0.990241,
-      0.990241,
-      0.990241,
-      0.990243,
-      0.990243,
-      0.990243,
-      0.990246,
-      0.990246,
-      0.990246
+      0.991516,
+      0.991516,
+      0.991518,
+      0.991518,
+      0.991518,
+      0.99152,
+      0.99152,
+      0.99152,
+      0.991521,
+      0.991521,
+      0.991521,
+      0.991523,
+      0.991523,
+      0.991523,
+      0.991525,
+      0.991525,
+      0.991525,
+      0.991526,
+      0.991526,
+      0.991526,
+      0.991528,
+      0.991528,
+      0.991528,
+      0.99153,
+      0.99153,
+      0.99153,
+      0.991531,
+      0.991531,
+      0.991531,
+      0.991533,
+      0.991533,
+      0.991533
     ],
     "error_count": [
       0.0,
@@ -146,7 +146,7 @@
   },
   "probes": [
     {
-      "id": "adv-6d26ebc97328",
+      "id": "adv-913cc282b78e",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -155,10 +155,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T05:58:39.932612+00:00"
+      "created_at": "2026-11-20T17:38:09.966378+00:00"
     },
     {
-      "id": "adv-715fc4c0cf43",
+      "id": "adv-9a8fc5edb531",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -167,10 +167,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T05:58:39.932681+00:00"
+      "created_at": "2026-11-20T17:38:09.966490+00:00"
     },
     {
-      "id": "adv-2aa28ca21b43",
+      "id": "adv-e51460bba0d4",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -179,10 +179,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T05:59:11.917913+00:00"
+      "created_at": "2026-11-20T17:38:50.403770+00:00"
     },
     {
-      "id": "adv-b1e93326fb68",
+      "id": "adv-dfa11d3616f7",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -191,10 +191,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T05:59:11.917977+00:00"
+      "created_at": "2026-11-20T17:38:50.403846+00:00"
     },
     {
-      "id": "adv-fb0815c46542",
+      "id": "adv-7281f406016e",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -203,10 +203,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T05:59:42.942838+00:00"
+      "created_at": "2026-11-20T17:39:30.386609+00:00"
     },
     {
-      "id": "adv-6585140ab54f",
+      "id": "adv-c94b82d1b457",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -215,10 +215,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T05:59:42.942903+00:00"
+      "created_at": "2026-11-20T17:39:30.386695+00:00"
     },
     {
-      "id": "adv-430b6ad62855",
+      "id": "adv-6c8ce299febb",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -227,10 +227,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:00:13.983446+00:00"
+      "created_at": "2026-11-20T17:40:10.591372+00:00"
     },
     {
-      "id": "adv-a9f3e6cd0107",
+      "id": "adv-73375c81b56e",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -239,10 +239,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:00:13.983511+00:00"
+      "created_at": "2026-11-20T17:40:10.591483+00:00"
     },
     {
-      "id": "adv-258338d1fc9b",
+      "id": "adv-94441ac58109",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -251,10 +251,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:00:44.778325+00:00"
+      "created_at": "2026-11-20T17:40:50.437788+00:00"
     },
     {
-      "id": "adv-075e3051c84a",
+      "id": "adv-b9346b54952b",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -263,10 +263,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:00:44.778395+00:00"
+      "created_at": "2026-11-20T17:40:50.437868+00:00"
     },
     {
-      "id": "adv-bb51b01c1556",
+      "id": "adv-9a7bec596aa6",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -275,10 +275,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:01:15.579163+00:00"
+      "created_at": "2026-11-20T17:41:31.230662+00:00"
     },
     {
-      "id": "adv-30e5954b7024",
+      "id": "adv-14fc59810002",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -287,10 +287,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:01:15.579226+00:00"
+      "created_at": "2026-11-20T17:41:31.230744+00:00"
     },
     {
-      "id": "adv-ec673a8a2907",
+      "id": "adv-5213639b8e0d",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -299,10 +299,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:01:46.175360+00:00"
+      "created_at": "2026-11-20T17:42:10.993050+00:00"
     },
     {
-      "id": "adv-d161e0baa78f",
+      "id": "adv-038588a178ab",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -311,10 +311,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:01:46.175425+00:00"
+      "created_at": "2026-11-20T17:42:10.993132+00:00"
     },
     {
-      "id": "adv-1388986af8b4",
+      "id": "adv-96965aec9ae2",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -323,10 +323,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:02:16.994469+00:00"
+      "created_at": "2026-11-20T17:42:50.508846+00:00"
     },
     {
-      "id": "adv-8f0473f3457d",
+      "id": "adv-1707f08a2958",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -335,10 +335,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:02:16.994535+00:00"
+      "created_at": "2026-11-20T17:42:50.508931+00:00"
     },
     {
-      "id": "adv-f06ae86619ea",
+      "id": "adv-ebff8c435540",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -347,10 +347,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:02:47.744505+00:00"
+      "created_at": "2026-11-20T17:43:30.095922+00:00"
     },
     {
-      "id": "adv-4b87192da2e1",
+      "id": "adv-41520fbaa3a0",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -359,10 +359,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:02:47.744574+00:00"
+      "created_at": "2026-11-20T17:43:30.096006+00:00"
     },
     {
-      "id": "adv-4e35c6a2906f",
+      "id": "adv-37401c9466fb",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -371,10 +371,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:03:18.443077+00:00"
+      "created_at": "2026-11-20T17:44:09.690902+00:00"
     },
     {
-      "id": "adv-13cc5c000941",
+      "id": "adv-512931d8e93c",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -383,10 +383,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:03:18.443141+00:00"
+      "created_at": "2026-11-20T17:44:09.690980+00:00"
     },
     {
-      "id": "adv-fc3b64cb9a68",
+      "id": "adv-1d426f5f275f",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -395,10 +395,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:03:49.649797+00:00"
+      "created_at": "2026-11-20T17:44:48.718512+00:00"
     },
     {
-      "id": "adv-c65a357344c3",
+      "id": "adv-1ed1286d19da",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -407,10 +407,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:03:49.649865+00:00"
+      "created_at": "2026-11-20T17:44:48.718592+00:00"
     },
     {
-      "id": "adv-da5234fedb5f",
+      "id": "adv-cde623c39dc5",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -419,10 +419,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:04:20.696935+00:00"
+      "created_at": "2026-11-20T17:45:27.820031+00:00"
     },
     {
-      "id": "adv-d96188f4f8b4",
+      "id": "adv-5f875570a22d",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -431,10 +431,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:04:20.696997+00:00"
+      "created_at": "2026-11-20T17:45:27.820118+00:00"
     },
     {
-      "id": "adv-91768fa43cd9",
+      "id": "adv-4bb3d5cfd351",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -443,10 +443,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:04:51.361906+00:00"
+      "created_at": "2026-11-20T17:46:07.579459+00:00"
     },
     {
-      "id": "adv-42c95ddbc906",
+      "id": "adv-68c2c9258e28",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -455,10 +455,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:04:51.361975+00:00"
+      "created_at": "2026-11-20T17:46:07.579543+00:00"
     },
     {
-      "id": "adv-3f091476c4f6",
+      "id": "adv-c7f291ffaacb",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -467,10 +467,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:05:22.298551+00:00"
+      "created_at": "2026-11-20T17:46:47.976851+00:00"
     },
     {
-      "id": "adv-74c110dc9d42",
+      "id": "adv-bf57c0739e46",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -479,10 +479,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:05:22.298618+00:00"
+      "created_at": "2026-11-20T17:46:47.976937+00:00"
     },
     {
-      "id": "adv-ab91e8f6870e",
+      "id": "adv-30979405cdd4",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -491,10 +491,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:05:53.014332+00:00"
+      "created_at": "2026-11-20T17:47:27.913703+00:00"
     },
     {
-      "id": "adv-3b9a4bba7278",
+      "id": "adv-4ad13b6c59bd",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -503,10 +503,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:05:53.014415+00:00"
+      "created_at": "2026-11-20T17:47:27.913782+00:00"
     },
     {
-      "id": "adv-bc15fad76e67",
+      "id": "adv-1c78868ee060",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -515,10 +515,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:06:23.913087+00:00"
+      "created_at": "2026-11-20T17:48:06.864569+00:00"
     },
     {
-      "id": "adv-8d61a197cbee",
+      "id": "adv-cf1a9529f28d",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -527,10 +527,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:06:23.913153+00:00"
+      "created_at": "2026-11-20T17:48:06.864654+00:00"
     },
     {
-      "id": "adv-0edbbee8b45e",
+      "id": "adv-f96a6c18e6a7",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -539,10 +539,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:06:54.581829+00:00"
+      "created_at": "2026-11-20T17:48:46.959501+00:00"
     },
     {
-      "id": "adv-096cd931c41b",
+      "id": "adv-fa32d7182ac7",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -551,10 +551,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:06:54.581896+00:00"
+      "created_at": "2026-11-20T17:48:46.959588+00:00"
     },
     {
-      "id": "adv-4bab1e462538",
+      "id": "adv-81397b8b2b84",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -563,10 +563,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:07:25.669499+00:00"
+      "created_at": "2026-11-20T17:49:25.530205+00:00"
     },
     {
-      "id": "adv-090d6c3c581c",
+      "id": "adv-5164b27d403d",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -575,10 +575,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:07:25.669565+00:00"
+      "created_at": "2026-11-20T17:49:25.530288+00:00"
     },
     {
-      "id": "adv-ba364b5d4ddf",
+      "id": "adv-93423f3a4a1c",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -587,10 +587,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:07:56.393393+00:00"
+      "created_at": "2026-11-20T17:50:04.693243+00:00"
     },
     {
-      "id": "adv-80b2dac88ab3",
+      "id": "adv-901c62e9e924",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -599,10 +599,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:07:56.393456+00:00"
+      "created_at": "2026-11-20T17:50:04.693322+00:00"
     },
     {
-      "id": "adv-ec297be23081",
+      "id": "adv-68109d72cb2b",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -611,10 +611,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:08:27.244259+00:00"
+      "created_at": "2026-11-20T17:50:48.128752+00:00"
     },
     {
-      "id": "adv-4ef9b2b3a5be",
+      "id": "adv-4f224e157573",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -623,10 +623,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:08:27.244351+00:00"
+      "created_at": "2026-11-20T17:50:48.128830+00:00"
     },
     {
-      "id": "adv-e489fb16e2cf",
+      "id": "adv-0ea51e5a5147",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -635,10 +635,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:08:57.869163+00:00"
+      "created_at": "2026-11-20T17:51:28.016212+00:00"
     },
     {
-      "id": "adv-b50d42d54e1b",
+      "id": "adv-cb5ecb9c3f1a",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -647,10 +647,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:08:57.869228+00:00"
+      "created_at": "2026-11-20T17:51:28.016299+00:00"
     },
     {
-      "id": "adv-37f56a30498f",
+      "id": "adv-53d1232adca5",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -659,10 +659,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:09:28.876129+00:00"
+      "created_at": "2026-11-20T17:52:08.567488+00:00"
     },
     {
-      "id": "adv-dcc2cc793287",
+      "id": "adv-12ac4be2678c",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -671,10 +671,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:09:28.876195+00:00"
+      "created_at": "2026-11-20T17:52:08.567569+00:00"
     },
     {
-      "id": "adv-e793c53e7b95",
+      "id": "adv-f12023ebf4b4",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -683,10 +683,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:09:59.639188+00:00"
+      "created_at": "2026-11-20T17:52:49.559317+00:00"
     },
     {
-      "id": "adv-3c2ff6f3eb9d",
+      "id": "adv-cfe961f0acc5",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -695,10 +695,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:09:59.639269+00:00"
+      "created_at": "2026-11-20T17:52:49.559404+00:00"
     },
     {
-      "id": "adv-ac2850759fed",
+      "id": "adv-41b328491111",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -707,10 +707,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:10:30.448855+00:00"
+      "created_at": "2026-11-20T17:53:29.179897+00:00"
     },
     {
-      "id": "adv-e17d041e6f38",
+      "id": "adv-21396e871c60",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -719,10 +719,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:10:30.448921+00:00"
+      "created_at": "2026-11-20T17:53:29.179982+00:00"
     },
     {
-      "id": "adv-38af4cebef8a",
+      "id": "adv-7d90e3d3e6db",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -731,10 +731,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:11:01.913038+00:00"
+      "created_at": "2026-11-20T17:54:08.461542+00:00"
     },
     {
-      "id": "adv-213b419c053a",
+      "id": "adv-763340201d81",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -743,10 +743,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:11:01.913107+00:00"
+      "created_at": "2026-11-20T17:54:08.461621+00:00"
     },
     {
-      "id": "adv-c06f311fead2",
+      "id": "adv-bbcaaac0acc5",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -755,10 +755,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:11:33.366430+00:00"
+      "created_at": "2026-11-20T17:54:50.389704+00:00"
     },
     {
-      "id": "adv-f2d0011968c4",
+      "id": "adv-0b053b495835",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -767,10 +767,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:11:33.366495+00:00"
+      "created_at": "2026-11-20T17:54:50.389781+00:00"
     },
     {
-      "id": "adv-f77b8ed6df68",
+      "id": "adv-abfd5dbb5d30",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -779,10 +779,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:12:04.530260+00:00"
+      "created_at": "2026-11-20T17:55:34.051619+00:00"
     },
     {
-      "id": "adv-d4bbe1f14842",
+      "id": "adv-f6b671d4daee",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -791,10 +791,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:12:04.530341+00:00"
+      "created_at": "2026-11-20T17:55:34.051697+00:00"
     },
     {
-      "id": "adv-9cdb3483b374",
+      "id": "adv-ae120ee5b3f3",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -803,10 +803,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:12:35.429138+00:00"
+      "created_at": "2026-11-20T17:56:12.999164+00:00"
     },
     {
-      "id": "adv-584aac4e56d0",
+      "id": "adv-adda50a3efc9",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -815,10 +815,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:12:35.429204+00:00"
+      "created_at": "2026-11-20T17:56:12.999245+00:00"
     },
     {
-      "id": "adv-3a44cd236d69",
+      "id": "adv-d7adbf62a596",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -827,10 +827,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:13:06.188682+00:00"
+      "created_at": "2026-11-20T17:56:52.890930+00:00"
     },
     {
-      "id": "adv-0d66272c5049",
+      "id": "adv-362bb3707474",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -839,10 +839,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:13:06.188749+00:00"
+      "created_at": "2026-11-20T17:56:52.891007+00:00"
     },
     {
-      "id": "adv-e78746d41c53",
+      "id": "adv-fa3d5defe585",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -851,10 +851,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:13:37.331528+00:00"
+      "created_at": "2026-11-20T17:57:32.717817+00:00"
     },
     {
-      "id": "adv-82179e3d6631",
+      "id": "adv-e54fd91f9b9f",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -863,10 +863,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:13:37.331592+00:00"
+      "created_at": "2026-11-20T17:57:32.717895+00:00"
     },
     {
-      "id": "adv-c92f1ba562d3",
+      "id": "adv-b4b5948df008",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -875,10 +875,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:14:08.974741+00:00"
+      "created_at": "2026-11-20T17:58:12.688892+00:00"
     },
     {
-      "id": "adv-b901fa7262e1",
+      "id": "adv-583d2f5ee69b",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -887,10 +887,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:14:08.974805+00:00"
+      "created_at": "2026-11-20T17:58:12.688972+00:00"
     },
     {
-      "id": "adv-d02c4515c69c",
+      "id": "adv-0e9f04edab6c",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -899,10 +899,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:14:39.971023+00:00"
+      "created_at": "2026-11-20T17:58:52.194284+00:00"
     },
     {
-      "id": "adv-091542151ea1",
+      "id": "adv-a4c9886c1b6e",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -911,10 +911,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:14:39.971085+00:00"
+      "created_at": "2026-11-20T17:58:52.194358+00:00"
     },
     {
-      "id": "adv-a2214cc61bb0",
+      "id": "adv-63eb525625c7",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -923,10 +923,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:15:10.725407+00:00"
+      "created_at": "2026-11-20T17:59:31.194531+00:00"
     },
     {
-      "id": "adv-a826347d16a7",
+      "id": "adv-89c62d0f53ee",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -935,10 +935,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:15:10.725475+00:00"
+      "created_at": "2026-11-20T17:59:31.194609+00:00"
     },
     {
-      "id": "adv-89993aa162d9",
+      "id": "adv-416b823e667f",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -947,10 +947,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:15:41.531284+00:00"
+      "created_at": "2026-11-20T18:00:11.694691+00:00"
     },
     {
-      "id": "adv-93207f5fe199",
+      "id": "adv-bc59512ed7ab",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -959,10 +959,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:15:41.531373+00:00"
+      "created_at": "2026-11-20T18:00:11.694771+00:00"
     },
     {
-      "id": "adv-93a84f66d553",
+      "id": "adv-b0342f8c6ee3",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -971,10 +971,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:16:12.435041+00:00"
+      "created_at": "2026-11-20T18:00:51.135796+00:00"
     },
     {
-      "id": "adv-76714b86c8b4",
+      "id": "adv-1c6116b5f3e8",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -983,10 +983,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:16:12.435103+00:00"
+      "created_at": "2026-11-20T18:00:51.135878+00:00"
     },
     {
-      "id": "adv-00c58baed381",
+      "id": "adv-4cbce09c537d",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -995,10 +995,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:16:43.295565+00:00"
+      "created_at": "2026-11-20T18:01:30.667739+00:00"
     },
     {
-      "id": "adv-9f20beb19158",
+      "id": "adv-3fcd983a48cd",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1007,10 +1007,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:16:43.295630+00:00"
+      "created_at": "2026-11-20T18:01:30.667823+00:00"
     },
     {
-      "id": "adv-f44973770c26",
+      "id": "adv-54fbed49ac0b",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1019,10 +1019,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:17:14.906157+00:00"
+      "created_at": "2026-11-20T18:02:10.043454+00:00"
     },
     {
-      "id": "adv-cb0b4671f8cf",
+      "id": "adv-64d5811b6f11",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1031,10 +1031,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:17:14.906223+00:00"
+      "created_at": "2026-11-20T18:02:10.043536+00:00"
     },
     {
-      "id": "adv-e11bd7e1b6d0",
+      "id": "adv-453c006f5e65",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1043,10 +1043,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:17:45.954416+00:00"
+      "created_at": "2026-11-20T18:02:50.581654+00:00"
     },
     {
-      "id": "adv-0f725c2a5f1f",
+      "id": "adv-5a29ec497c66",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1055,10 +1055,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:17:45.954480+00:00"
+      "created_at": "2026-11-20T18:02:50.581736+00:00"
     },
     {
-      "id": "adv-6b725679dba6",
+      "id": "adv-f91368e61c6f",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1067,10 +1067,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:18:17.050343+00:00"
+      "created_at": "2026-11-20T18:03:30.604243+00:00"
     },
     {
-      "id": "adv-bd5459a074d1",
+      "id": "adv-75b14af3d80e",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1079,10 +1079,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:18:17.050407+00:00"
+      "created_at": "2026-11-20T18:03:30.604322+00:00"
     },
     {
-      "id": "adv-10c3d3df2c6f",
+      "id": "adv-cb622405860c",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1091,10 +1091,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:18:48.458004+00:00"
+      "created_at": "2026-11-20T18:04:10.352053+00:00"
     },
     {
-      "id": "adv-4818811c586f",
+      "id": "adv-e2520556727b",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1103,10 +1103,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:18:48.458066+00:00"
+      "created_at": "2026-11-20T18:04:10.352135+00:00"
     },
     {
-      "id": "adv-9f270ab6a77f",
+      "id": "adv-f6f24f28284a",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1115,10 +1115,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:19:19.299179+00:00"
+      "created_at": "2026-11-20T18:04:50.545297+00:00"
     },
     {
-      "id": "adv-d21b60d2e87e",
+      "id": "adv-6a58c689b4f1",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1127,10 +1127,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:19:19.299252+00:00"
+      "created_at": "2026-11-20T18:04:50.545377+00:00"
     },
     {
-      "id": "adv-d20bb8a6e59e",
+      "id": "adv-288d4aab6b36",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1139,10 +1139,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:19:51.318737+00:00"
+      "created_at": "2026-11-20T18:05:30.558889+00:00"
     },
     {
-      "id": "adv-7722aa12449a",
+      "id": "adv-57d79bbf7322",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1151,10 +1151,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:19:51.318803+00:00"
+      "created_at": "2026-11-20T18:05:30.558967+00:00"
     },
     {
-      "id": "adv-71e849df5376",
+      "id": "adv-9c7c6b3ab12c",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1163,10 +1163,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:20:22.152140+00:00"
+      "created_at": "2026-11-20T18:06:10.402502+00:00"
     },
     {
-      "id": "adv-c752c8a3b65d",
+      "id": "adv-f51f401ca647",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1175,10 +1175,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:20:22.152204+00:00"
+      "created_at": "2026-11-20T18:06:10.402582+00:00"
     },
     {
-      "id": "adv-2ff80786b6aa",
+      "id": "adv-3e7e86786820",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1187,10 +1187,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:20:53.005415+00:00"
+      "created_at": "2026-11-20T18:06:50.373745+00:00"
     },
     {
-      "id": "adv-872e694bf77a",
+      "id": "adv-14f406db6377",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1199,10 +1199,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:20:53.005478+00:00"
+      "created_at": "2026-11-20T18:06:50.373827+00:00"
     },
     {
-      "id": "adv-878300c5623c",
+      "id": "adv-cc4e6cfb92f6",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1211,10 +1211,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:21:23.674902+00:00"
+      "created_at": "2026-11-20T18:07:30.552062+00:00"
     },
     {
-      "id": "adv-e6021d03d388",
+      "id": "adv-aee23e975f38",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1223,10 +1223,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:21:23.674969+00:00"
+      "created_at": "2026-11-20T18:07:30.552148+00:00"
     },
     {
-      "id": "adv-a00f71d26385",
+      "id": "adv-297ea8659d92",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1235,10 +1235,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:21:56.370428+00:00"
+      "created_at": "2026-11-20T18:08:10.277590+00:00"
     },
     {
-      "id": "adv-ea043d6b4604",
+      "id": "adv-8216ed15c012",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1247,10 +1247,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:21:56.370491+00:00"
+      "created_at": "2026-11-20T18:08:10.277668+00:00"
     },
     {
-      "id": "adv-0287bceafe68",
+      "id": "adv-f2ee712663e7",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1259,10 +1259,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:22:30.086270+00:00"
+      "created_at": "2026-11-20T18:08:49.175861+00:00"
     },
     {
-      "id": "adv-4198a66a45df",
+      "id": "adv-9655a5f34edb",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1271,10 +1271,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:22:30.086351+00:00"
+      "created_at": "2026-11-20T18:08:49.175944+00:00"
     },
     {
-      "id": "adv-e9c973f68003",
+      "id": "adv-47da8f177607",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1283,10 +1283,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:23:01.548653+00:00"
+      "created_at": "2026-11-20T18:09:28.838743+00:00"
     },
     {
-      "id": "adv-6c77e61cac82",
+      "id": "adv-617c3b4eaba2",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1295,10 +1295,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:23:01.548715+00:00"
+      "created_at": "2026-11-20T18:09:28.838832+00:00"
     },
     {
-      "id": "adv-1fbccdffe84c",
+      "id": "adv-a2d16d0894a5",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1307,10 +1307,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:23:32.255581+00:00"
+      "created_at": "2026-11-20T18:10:08.960659+00:00"
     },
     {
-      "id": "adv-decde0bd3565",
+      "id": "adv-379fa1f2f7a6",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1319,10 +1319,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:23:32.255651+00:00"
+      "created_at": "2026-11-20T18:10:08.960736+00:00"
     },
     {
-      "id": "adv-c58d3e657652",
+      "id": "adv-138c1edd8874",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1331,10 +1331,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:24:03.013658+00:00"
+      "created_at": "2026-11-20T18:10:48.932121+00:00"
     },
     {
-      "id": "adv-e43f4d2b3f99",
+      "id": "adv-011be54570c4",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1343,10 +1343,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:24:03.013723+00:00"
+      "created_at": "2026-11-20T18:10:48.932200+00:00"
     },
     {
-      "id": "adv-3a410711303b",
+      "id": "adv-a67009302193",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1355,10 +1355,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:24:33.897412+00:00"
+      "created_at": "2026-11-20T18:11:28.365849+00:00"
     },
     {
-      "id": "adv-ec30d95254d1",
+      "id": "adv-4b24ab9d1650",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1367,10 +1367,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:24:33.897477+00:00"
+      "created_at": "2026-11-20T18:11:28.365934+00:00"
     },
     {
-      "id": "adv-6613534a93ed",
+      "id": "adv-facb881cc670",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1379,10 +1379,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:25:05.874488+00:00"
+      "created_at": "2026-11-20T18:12:08.163831+00:00"
     },
     {
-      "id": "adv-5c0a9b8fc752",
+      "id": "adv-506ec5e3841e",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1391,10 +1391,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:25:05.874554+00:00"
+      "created_at": "2026-11-20T18:12:08.163911+00:00"
     },
     {
-      "id": "adv-0966e3de31a4",
+      "id": "adv-fab9cc035ac0",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1403,10 +1403,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:25:36.622397+00:00"
+      "created_at": "2026-11-20T18:12:47.312718+00:00"
     },
     {
-      "id": "adv-9be32f33dc18",
+      "id": "adv-a98f5aeb8f66",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1415,10 +1415,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:25:36.622468+00:00"
+      "created_at": "2026-11-20T18:12:47.312795+00:00"
     },
     {
-      "id": "adv-183752a67741",
+      "id": "adv-21b4b5869747",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1427,10 +1427,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:26:08.181934+00:00"
+      "created_at": "2026-11-20T18:13:25.973293+00:00"
     },
     {
-      "id": "adv-de5740240940",
+      "id": "adv-954cd3c62d19",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1439,10 +1439,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:26:08.182000+00:00"
+      "created_at": "2026-11-20T18:13:25.973371+00:00"
     },
     {
-      "id": "adv-ecbc307a15e2",
+      "id": "adv-e2a5b0aaf50d",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1451,10 +1451,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:26:40.042149+00:00"
+      "created_at": "2026-11-20T18:14:04.855934+00:00"
     },
     {
-      "id": "adv-1b30a1d6c1f8",
+      "id": "adv-b547954eec80",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1463,10 +1463,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:26:40.042214+00:00"
+      "created_at": "2026-11-20T18:14:04.856011+00:00"
     },
     {
-      "id": "adv-42f5ca7e5ea8",
+      "id": "adv-221d81b054e1",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1475,10 +1475,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:27:11.285060+00:00"
+      "created_at": "2026-11-20T18:14:44.271901+00:00"
     },
     {
-      "id": "adv-4f730ad37d3c",
+      "id": "adv-56596e731ee2",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1487,10 +1487,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:27:11.285125+00:00"
+      "created_at": "2026-11-20T18:14:44.271985+00:00"
     },
     {
-      "id": "adv-59b5e798f161",
+      "id": "adv-9fc54f8ec381",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1499,10 +1499,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:27:42.020622+00:00"
+      "created_at": "2026-11-20T18:15:25.947912+00:00"
     },
     {
-      "id": "adv-1d4804aad795",
+      "id": "adv-83ad5dd0b715",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1511,10 +1511,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:27:42.020691+00:00"
+      "created_at": "2026-11-20T18:15:25.947991+00:00"
     },
     {
-      "id": "adv-3b9a4da60e2d",
+      "id": "adv-eaedd0bee841",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1523,10 +1523,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:28:12.974684+00:00"
+      "created_at": "2026-11-20T18:16:05.021189+00:00"
     },
     {
-      "id": "adv-ca4f4c5348e3",
+      "id": "adv-53ea189e724e",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1535,10 +1535,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:28:12.974748+00:00"
+      "created_at": "2026-11-20T18:16:05.021287+00:00"
     },
     {
-      "id": "adv-1d3d11a68003",
+      "id": "adv-6557152682c7",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1547,10 +1547,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:28:43.943111+00:00"
+      "created_at": "2026-11-20T18:16:46.712987+00:00"
     },
     {
-      "id": "adv-afb677badc57",
+      "id": "adv-438bb7770afa",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1559,10 +1559,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:28:43.943173+00:00"
+      "created_at": "2026-11-20T18:16:46.713071+00:00"
     },
     {
-      "id": "adv-6e89a833d3c4",
+      "id": "adv-12414a6a4afa",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1571,10 +1571,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:29:14.989421+00:00"
+      "created_at": "2026-11-20T18:17:26.270336+00:00"
     },
     {
-      "id": "adv-f66131e8a0e6",
+      "id": "adv-3cf1aac3dd6d",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1583,10 +1583,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:29:14.989487+00:00"
+      "created_at": "2026-11-20T18:17:26.270414+00:00"
     },
     {
-      "id": "adv-d17686970d67",
+      "id": "adv-74c094c7d9d3",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1595,10 +1595,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:29:45.966106+00:00"
+      "created_at": "2026-11-20T18:18:07.954397+00:00"
     },
     {
-      "id": "adv-1190462cfe40",
+      "id": "adv-f2ba2c1941c6",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1607,10 +1607,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:29:45.966172+00:00"
+      "created_at": "2026-11-20T18:18:07.954504+00:00"
     },
     {
-      "id": "adv-f03bcc0b0c03",
+      "id": "adv-219479963c3c",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1619,10 +1619,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:30:17.086549+00:00"
+      "created_at": "2026-11-20T18:18:50.033363+00:00"
     },
     {
-      "id": "adv-67149d3f617b",
+      "id": "adv-79791306cc1e",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1631,10 +1631,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:30:17.086614+00:00"
+      "created_at": "2026-11-20T18:18:50.033456+00:00"
     },
     {
-      "id": "adv-c46c44565c4b",
+      "id": "adv-7fca0afbeac7",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1643,10 +1643,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:30:47.919413+00:00"
+      "created_at": "2026-11-20T18:19:29.226691+00:00"
     },
     {
-      "id": "adv-fdec4b014a4e",
+      "id": "adv-223fdcd3f23c",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1655,10 +1655,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:30:47.919478+00:00"
+      "created_at": "2026-11-20T18:19:29.226778+00:00"
     },
     {
-      "id": "adv-04b003928185",
+      "id": "adv-9b37d8bd3099",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1667,10 +1667,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:31:18.822075+00:00"
+      "created_at": "2026-11-20T18:20:08.523716+00:00"
     },
     {
-      "id": "adv-543c281841e7",
+      "id": "adv-e6fd4ac55de9",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1679,10 +1679,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:31:18.822140+00:00"
+      "created_at": "2026-11-20T18:20:08.523799+00:00"
     },
     {
-      "id": "adv-130c021c1ed1",
+      "id": "adv-4a94aab727bc",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1691,10 +1691,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:31:49.561686+00:00"
+      "created_at": "2026-11-20T18:20:47.735281+00:00"
     },
     {
-      "id": "adv-4fb8d63db6a5",
+      "id": "adv-504d249c0453",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1703,10 +1703,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:31:49.561750+00:00"
+      "created_at": "2026-11-20T18:20:47.735365+00:00"
     },
     {
-      "id": "adv-a30569fabf1f",
+      "id": "adv-a099df6034bc",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1715,10 +1715,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:32:20.535775+00:00"
+      "created_at": "2026-11-20T18:21:26.819631+00:00"
     },
     {
-      "id": "adv-8a1b45d57f72",
+      "id": "adv-6664e81f94e1",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1727,10 +1727,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:32:20.535837+00:00"
+      "created_at": "2026-11-20T18:21:26.819714+00:00"
     },
     {
-      "id": "adv-7be5129d3502",
+      "id": "adv-a6cf2c3fd241",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1739,10 +1739,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:32:51.390715+00:00"
+      "created_at": "2026-11-20T18:22:07.588879+00:00"
     },
     {
-      "id": "adv-41486c9543ff",
+      "id": "adv-c2b501725626",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1751,10 +1751,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:32:51.390782+00:00"
+      "created_at": "2026-11-20T18:22:07.588966+00:00"
     },
     {
-      "id": "adv-c2185ba2bf83",
+      "id": "adv-b3e72758b058",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1763,10 +1763,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:33:22.370693+00:00"
+      "created_at": "2026-11-20T18:22:46.973699+00:00"
     },
     {
-      "id": "adv-458f857e7260",
+      "id": "adv-cb6e3039c2e5",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1775,10 +1775,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:33:22.370766+00:00"
+      "created_at": "2026-11-20T18:22:46.973774+00:00"
     },
     {
-      "id": "adv-c66b23023a94",
+      "id": "adv-a8cb7ab6044c",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1787,10 +1787,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:33:53.219943+00:00"
+      "created_at": "2026-11-20T18:23:26.228864+00:00"
     },
     {
-      "id": "adv-d8d3c852cc9f",
+      "id": "adv-90138543f0e4",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1799,10 +1799,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:33:53.220010+00:00"
+      "created_at": "2026-11-20T18:23:26.228949+00:00"
     },
     {
-      "id": "adv-8ccde82e0f56",
+      "id": "adv-c2a82d0d41a9",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1811,10 +1811,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:34:24.168044+00:00"
+      "created_at": "2026-11-20T18:24:05.560132+00:00"
     },
     {
-      "id": "adv-e58ac8a68c0f",
+      "id": "adv-742f0688ea73",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1823,10 +1823,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:34:24.168108+00:00"
+      "created_at": "2026-11-20T18:24:05.560208+00:00"
     },
     {
-      "id": "adv-4e4157d41349",
+      "id": "adv-661900482711",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1835,10 +1835,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:34:54.942451+00:00"
+      "created_at": "2026-11-20T18:24:47.692471+00:00"
     },
     {
-      "id": "adv-47467db9173f",
+      "id": "adv-f523940e9096",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1847,10 +1847,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:34:54.942516+00:00"
+      "created_at": "2026-11-20T18:24:47.692550+00:00"
     },
     {
-      "id": "adv-bd89dba972cf",
+      "id": "adv-81f834c91b7d",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1859,10 +1859,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:35:26.368291+00:00"
+      "created_at": "2026-11-20T18:25:28.439147+00:00"
     },
     {
-      "id": "adv-012e916fdb6b",
+      "id": "adv-1cf432f26dc0",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1871,10 +1871,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:35:26.368368+00:00"
+      "created_at": "2026-11-20T18:25:28.439230+00:00"
     },
     {
-      "id": "adv-0dc44ca48b9a",
+      "id": "adv-bad37317e775",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1883,10 +1883,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:35:57.116292+00:00"
+      "created_at": "2026-11-20T18:26:09.347652+00:00"
     },
     {
-      "id": "adv-3db338fc5d0f",
+      "id": "adv-708fa339284b",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1895,10 +1895,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:35:57.116373+00:00"
+      "created_at": "2026-11-20T18:26:09.347737+00:00"
     },
     {
-      "id": "adv-69df74b5f5c0",
+      "id": "adv-e5e93655a254",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1907,10 +1907,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:36:29.427909+00:00"
+      "created_at": "2026-11-20T18:26:49.016021+00:00"
     },
     {
-      "id": "adv-32e743cd4dc2",
+      "id": "adv-97c699d31f5a",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1919,10 +1919,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:36:29.427981+00:00"
+      "created_at": "2026-11-20T18:26:49.016101+00:00"
     },
     {
-      "id": "adv-9c6fb54ac259",
+      "id": "adv-c670b7591014",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1931,10 +1931,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:37:00.277072+00:00"
+      "created_at": "2026-11-20T18:27:29.002253+00:00"
     },
     {
-      "id": "adv-f5678d79b458",
+      "id": "adv-38ebe7bbca37",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1943,10 +1943,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:37:00.277141+00:00"
+      "created_at": "2026-11-20T18:27:29.002329+00:00"
     },
     {
-      "id": "adv-c8e8ca754cba",
+      "id": "adv-8f4d43f8dfd3",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1955,10 +1955,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:37:31.227253+00:00"
+      "created_at": "2026-11-20T18:28:08.332707+00:00"
     },
     {
-      "id": "adv-2b9dfc66c850",
+      "id": "adv-b35f33f4683d",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1967,10 +1967,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:37:31.227357+00:00"
+      "created_at": "2026-11-20T18:28:08.332791+00:00"
     },
     {
-      "id": "adv-0c5bd3b28bf2",
+      "id": "adv-c2060b87ebfc",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -1979,10 +1979,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:38:02.076225+00:00"
+      "created_at": "2026-11-20T18:28:48.512589+00:00"
     },
     {
-      "id": "adv-ef0c40e1c25c",
+      "id": "adv-d2d5f8d5dff4",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -1991,10 +1991,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:38:02.076289+00:00"
+      "created_at": "2026-11-20T18:28:48.512665+00:00"
     },
     {
-      "id": "adv-d521f740414a",
+      "id": "adv-c3acf6fd3018",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2003,10 +2003,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:38:33.216247+00:00"
+      "created_at": "2026-11-20T18:29:27.834018+00:00"
     },
     {
-      "id": "adv-251a41f661a4",
+      "id": "adv-25a52941926d",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2015,10 +2015,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:38:33.216321+00:00"
+      "created_at": "2026-11-20T18:29:27.834100+00:00"
     },
     {
-      "id": "adv-8ba93f5a7ea2",
+      "id": "adv-af303a30fc38",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2027,10 +2027,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:39:04.157518+00:00"
+      "created_at": "2026-11-20T18:30:07.530776+00:00"
     },
     {
-      "id": "adv-f07b6ce3479e",
+      "id": "adv-b3fa383b1fce",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2039,10 +2039,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:39:04.157582+00:00"
+      "created_at": "2026-11-20T18:30:07.530856+00:00"
     },
     {
-      "id": "adv-9f372fff0af4",
+      "id": "adv-bc76b026d749",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2051,10 +2051,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:39:35.011185+00:00"
+      "created_at": "2026-11-20T18:30:46.998235+00:00"
     },
     {
-      "id": "adv-7cd265844df7",
+      "id": "adv-50ed045ff763",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2063,10 +2063,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:39:35.011251+00:00"
+      "created_at": "2026-11-20T18:30:46.998318+00:00"
     },
     {
-      "id": "adv-177dc3866db0",
+      "id": "adv-e1b91cae155a",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2075,10 +2075,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:40:05.726299+00:00"
+      "created_at": "2026-11-20T18:31:26.853997+00:00"
     },
     {
-      "id": "adv-b90a7b3f3a13",
+      "id": "adv-296beb854864",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2087,10 +2087,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:40:05.726377+00:00"
+      "created_at": "2026-11-20T18:31:26.854073+00:00"
     },
     {
-      "id": "adv-f126040126d4",
+      "id": "adv-ea99b1d5b41c",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2099,10 +2099,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:40:37.153001+00:00"
+      "created_at": "2026-11-20T18:32:06.609641+00:00"
     },
     {
-      "id": "adv-3f622fd08eed",
+      "id": "adv-7ade4a3b77f4",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2111,10 +2111,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:40:37.153067+00:00"
+      "created_at": "2026-11-20T18:32:06.609714+00:00"
     },
     {
-      "id": "adv-780933fd801a",
+      "id": "adv-217232c46485",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2123,10 +2123,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:41:07.942361+00:00"
+      "created_at": "2026-11-20T18:32:47.625577+00:00"
     },
     {
-      "id": "adv-84a1c87d7ed6",
+      "id": "adv-6f70d514cfff",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2135,10 +2135,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:41:07.942425+00:00"
+      "created_at": "2026-11-20T18:32:47.625655+00:00"
     },
     {
-      "id": "adv-8407310b053c",
+      "id": "adv-7f120decedcc",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2147,10 +2147,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:41:38.813657+00:00"
+      "created_at": "2026-11-20T18:33:29.920576+00:00"
     },
     {
-      "id": "adv-55cf79bfafb7",
+      "id": "adv-de6c3d116fe7",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2159,10 +2159,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:41:38.813723+00:00"
+      "created_at": "2026-11-20T18:33:29.920658+00:00"
     },
     {
-      "id": "adv-988a8edf06ac",
+      "id": "adv-d4092a8b5add",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2171,10 +2171,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:42:09.863911+00:00"
+      "created_at": "2026-11-20T18:34:09.739274+00:00"
     },
     {
-      "id": "adv-a0db11ee69e8",
+      "id": "adv-646f1690aeb2",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2183,10 +2183,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:42:09.863979+00:00"
+      "created_at": "2026-11-20T18:34:09.739356+00:00"
     },
     {
-      "id": "adv-dce94078feb3",
+      "id": "adv-219fc11bddd2",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2195,10 +2195,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:42:40.835487+00:00"
+      "created_at": "2026-11-20T18:34:50.116251+00:00"
     },
     {
-      "id": "adv-52ad64bdfe8f",
+      "id": "adv-34fa015828fa",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2207,10 +2207,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:42:40.835552+00:00"
+      "created_at": "2026-11-20T18:34:50.116327+00:00"
     },
     {
-      "id": "adv-47f9a3c3a49d",
+      "id": "adv-577002606a83",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2219,10 +2219,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:43:11.883446+00:00"
+      "created_at": "2026-11-20T18:35:30.582022+00:00"
     },
     {
-      "id": "adv-9707f94db760",
+      "id": "adv-e10e12bf01c1",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2231,10 +2231,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:43:11.883513+00:00"
+      "created_at": "2026-11-20T18:35:30.582107+00:00"
     },
     {
-      "id": "adv-67e0e8c93b4f",
+      "id": "adv-b626c798505b",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2243,10 +2243,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:43:42.866498+00:00"
+      "created_at": "2026-11-20T18:36:09.932201+00:00"
     },
     {
-      "id": "adv-cd243191d57f",
+      "id": "adv-ab142d524e00",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2255,10 +2255,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:43:42.866562+00:00"
+      "created_at": "2026-11-20T18:36:09.932281+00:00"
     },
     {
-      "id": "adv-f5d973d5c7b4",
+      "id": "adv-aeed21f9c76e",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2267,10 +2267,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:44:13.856953+00:00"
+      "created_at": "2026-11-20T18:36:49.719027+00:00"
     },
     {
-      "id": "adv-018fe399cc40",
+      "id": "adv-0c889c8ddc88",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2279,10 +2279,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:44:13.857021+00:00"
+      "created_at": "2026-11-20T18:36:49.719104+00:00"
     },
     {
-      "id": "adv-a8e8c5d46575",
+      "id": "adv-e83126cf62d5",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2291,10 +2291,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:44:44.854612+00:00"
+      "created_at": "2026-11-20T18:37:30.229452+00:00"
     },
     {
-      "id": "adv-32fbd746bcda",
+      "id": "adv-dce3c184ac24",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2303,10 +2303,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:44:44.854679+00:00"
+      "created_at": "2026-11-20T18:37:30.229530+00:00"
     },
     {
-      "id": "adv-8f335e8df65c",
+      "id": "adv-bfd864240998",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2315,10 +2315,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:45:15.974991+00:00"
+      "created_at": "2026-11-20T18:38:10.933062+00:00"
     },
     {
-      "id": "adv-314079d73910",
+      "id": "adv-6d6cfb06ac64",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2327,10 +2327,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:45:15.975055+00:00"
+      "created_at": "2026-11-20T18:38:10.933147+00:00"
     },
     {
-      "id": "adv-368ba166b2f5",
+      "id": "adv-24ad5f5b35eb",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2339,10 +2339,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:45:47.419836+00:00"
+      "created_at": "2026-11-20T18:38:50.144380+00:00"
     },
     {
-      "id": "adv-0f631baac36d",
+      "id": "adv-22037534ba51",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2351,10 +2351,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:45:47.419902+00:00"
+      "created_at": "2026-11-20T18:38:50.144485+00:00"
     },
     {
-      "id": "adv-dab2e6134e79",
+      "id": "adv-9b188ab56e30",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2363,10 +2363,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:46:18.415632+00:00"
+      "created_at": "2026-11-20T18:39:29.772400+00:00"
     },
     {
-      "id": "adv-8c9d80d53408",
+      "id": "adv-2b0df7d5b9ee",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2375,10 +2375,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:46:18.415701+00:00"
+      "created_at": "2026-11-20T18:39:29.772512+00:00"
     },
     {
-      "id": "adv-d11ff1a144b3",
+      "id": "adv-884a54147244",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2387,10 +2387,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:46:49.564658+00:00"
+      "created_at": "2026-11-20T18:40:10.262638+00:00"
     },
     {
-      "id": "adv-bbed7b8f8588",
+      "id": "adv-795229c35e74",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2399,10 +2399,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:46:49.564723+00:00"
+      "created_at": "2026-11-20T18:40:10.262717+00:00"
     },
     {
-      "id": "adv-97fe6c07fcbb",
+      "id": "adv-4101cc94285e",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2411,10 +2411,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:47:20.632591+00:00"
+      "created_at": "2026-11-20T18:40:49.143154+00:00"
     },
     {
-      "id": "adv-90a697c6d3df",
+      "id": "adv-ef0f2290a71a",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2423,10 +2423,10 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:47:20.632652+00:00"
+      "created_at": "2026-11-20T18:40:49.143231+00:00"
     },
     {
-      "id": "adv-92d2f2782d89",
+      "id": "adv-71d3f99535ad",
       "metric": "system_mastery",
       "observed_value": 0.6875,
       "stability": 1.0,
@@ -2435,10 +2435,10 @@
       "counter_goal": "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the metric was hiding.",
       "intensity": 0.85,
       "rationale": "system_mastery plateaued at 0.6875 (stability 1.000); challenging: Rising system mastery monotonically implies real capability.",
-      "created_at": "2026-11-20T06:47:51.752026+00:00"
+      "created_at": "2026-11-20T18:41:29.341302+00:00"
     },
     {
-      "id": "adv-314655f0ae91",
+      "id": "adv-1957be963c69",
       "metric": "unified_discipline",
       "observed_value": 1.0,
       "stability": 1.0,
@@ -2447,7 +2447,7 @@
       "counter_goal": "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipline that was temporarily sacrificed.",
       "intensity": 0.85,
       "rationale": "unified_discipline plateaued at 1.0000 (stability 1.000); challenging: Higher unified discipline is always the optimal control input.",
-      "created_at": "2026-11-20T06:47:51.752099+00:00"
+      "created_at": "2026-11-20T18:41:29.341380+00:00"
     }
   ]
 }

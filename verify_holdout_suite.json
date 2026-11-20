@@ -3,5 +3,55 @@
   "version": "zt-1",
   "sanitizer": "verify.ratchet.v1",
   "created_at": "2026-11-20T12:55:38.789813+00:00",
-  "cases": []
+  "cases": [
+    {
+      "kind": "goal_probe",
+      "args": [
+        "Challenge zero-error optimization: design a fault-injection experiment that surfaces latent invariants, then strengthen the verification gate from the observed failure mode."
+      ],
+      "metric": "error_count",
+      "source": "devil_advocate",
+      "reason_code": "adversarial_counter_goal",
+      "id": "67230d76dfc79c24",
+      "created_at": "2026-11-20T13:02:56.906051+00:00",
+      "sanitizer": "verify.ratchet.v1"
+    },
+    {
+      "kind": "goal_probe",
+      "args": [
+        "Invert the success-rate objective: select the three lowest-probability hypotheses from the curiosity engine and execute them under falsification criteria, reporting the information gain regardless of "
+      ],
+      "metric": "success_rate",
+      "source": "devil_advocate",
+      "reason_code": "adversarial_counter_goal",
+      "id": "411dbcf0056f4b04",
+      "created_at": "2026-11-20T13:02:56.907577+00:00",
+      "sanitizer": "verify.ratchet.v1"
+    },
+    {
+      "kind": "goal_probe",
+      "args": [
+        "Adversarially falsify the mastery metric: construct a probe where system_mastery decreases while verified correctness and residual quality stay fixed, then repair the underlying capability gap the met"
+      ],
+      "metric": "system_mastery",
+      "source": "devil_advocate",
+      "reason_code": "adversarial_counter_goal",
+      "id": "984ab8338cf8c6f3",
+      "created_at": "2026-11-20T13:04:15.745827+00:00",
+      "sanitizer": "verify.ratchet.v1"
+    },
+    {
+      "kind": "goal_probe",
+      "args": [
+        "Invert the discipline assumption: schedule a bounded exploration window where the agent deliberately relaxes its highest-confidence heuristic, then quantify the information gained against the discipli"
+      ],
+      "metric": "unified_discipline",
+      "source": "devil_advocate",
+      "reason_code": "adversarial_counter_goal",
+      "id": "c520c658b4fd39b7",
+      "created_at": "2026-11-20T13:04:54.688638+00:00",
+      "sanitizer": "verify.ratchet.v1"
+    }
+  ],
+  "updated_at": "2026-11-20T13:04:54.688645+00:00"
 }
