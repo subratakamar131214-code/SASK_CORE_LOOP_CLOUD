@@ -47,7 +47,7 @@ from telos import (
     TacticalPhase,
     TelosEngine,
 )
-from verify import ComponentIntegrityChecker, VerificationRunner
+from verify import ComponentIntegrityChecker, VerificationRunner, ZeroTrustPipeline
 
 # Optional integrations — degrade gracefully if unavailable
 try:
@@ -97,6 +97,15 @@ try:
     _DEVIL_AVAILABLE = True
 except ImportError:
     _DEVIL_AVAILABLE = False
+
+# Real cycle telemetry ledger (per-cycle/per-step CPU, RSS, durations)
+try:
+    import cycle_telemetry  # type: ignore[import]
+
+    _TELEMETRY_AVAILABLE = True
+except Exception:  # pragma: no cover - telemetry must never block the kernel
+    cycle_telemetry = None  # type: ignore[assignment]
+    _TELEMETRY_AVAILABLE = False
 
 logging.basicConfig(
     level=logging.INFO,
@@ -204,11 +213,25 @@ class AutomationKernel:
         self.extensions_enabled = bool(extensions_enabled)
         self.curiosity_interval_seconds = max(0.0, float(curiosity_interval_seconds))
 
+        # Real cycle telemetry: recorder + applied safe-remediation tuning
+        self._cycle_recorder: Optional[Any] = None
+        self.last_cycle_telemetry: Optional[Dict[str, Any]] = None
+        self._syntax_cache: Dict[str, Tuple[int, int, bool, str]] = {}
+        self._tuning: Dict[str, Any] = {}
+        if _TELEMETRY_AVAILABLE and cycle_telemetry is not None:
+            try:
+                self._tuning = cycle_telemetry.load_tuning()
+            except Exception as exc:
+                logger.warning(f"Telemetry tuning unavailable: {exc}")
+                self._tuning = {}
+        self._apply_tuning()
+
         # Integrated sub-services
         self.prover = ProverInterface()
         self.verifier = VerificationRunner(
             ratchet_path=self.workspace_root / ".sask_ego_ratchet.json"
         )
+        self.zero_trust = ZeroTrustPipeline(root=self.workspace_root)
         self.telos = self._build_pipeline_engine()
 
         # Equivalence saturation engine (e-graph superposition)
@@ -336,6 +359,90 @@ class AutomationKernel:
         if failures:
             result["save_failures"] = failures
         return result
+
+    def _apply_tuning(self) -> Dict[str, Any]:
+        """Apply safe, locally-tuned limits (git-ignored ``sask_tuning.json``)."""
+        budget = self._tuning.get("stream_max_goals_per_cycle") if self._tuning else None
+        if isinstance(budget, (int, float)) and budget > 0:
+            self.stream_max_goals_per_cycle = min(
+                self.stream_max_goals_per_cycle, max(1, int(budget))
+            )
+        return self._tuning
+
+    def _new_cycle_recorder(self) -> Optional[Any]:
+        """Start a real telemetry recorder for the current cycle (never fatal)."""
+        self._cycle_recorder = None
+        if not _TELEMETRY_AVAILABLE or cycle_telemetry is None:
+            return None
+        try:
+            self._tuning = cycle_telemetry.load_tuning()
+            self._apply_tuning()
+            self._cycle_recorder = cycle_telemetry.CycleRecorder(
+                cycle_id=self.current_cycle
+            )
+        except Exception as exc:
+            logger.warning(f"Cycle telemetry recorder unavailable: {exc}")
+            self._cycle_recorder = None
+        return self._cycle_recorder
+
+    def _mark_boundary(self, phase: str, module: str) -> None:
+        """Close the current telemetry segment and attribute it to a phase."""
+        recorder = self._cycle_recorder
+        if recorder is None:
+            return
+        try:
+            recorder.boundary(phase, module)
+        except Exception:
+            return
+
+    def _finish_cycle_recorder(
+        self, success: bool, details: Dict[str, Any]
+    ) -> Optional[Dict[str, Any]]:
+        """Persist the cycle record to the telemetry ledger (never fatal)."""
+        recorder = self._cycle_recorder
+        self._cycle_recorder = None
+        if recorder is None:
+            return None
+        if success and self.state == CoreState.COMPLETED:
+            exit_status = "completed"
+        elif not success:
+            exit_status = "failed"
+        elif self.timer.is_threshold_reached():
+            exit_status = "handoff_ready"
+        else:
+            exit_status = str(self.state.value).lower()
+        try:
+            return recorder.finish(success, exit_status, details, timer=self.timer)
+        except Exception as exc:
+            logger.warning(f"Cycle telemetry finalize failed: {exc}")
+            return None
+
+    def _syntax_cache_lookup(self, py_file: Path) -> Optional[Tuple[bool, str]]:
+        """Return a cached syntax result when mtime+size are unchanged."""
+        if not bool(self._tuning.get("syntax_cache_enabled", True)):
+            return None
+        try:
+            stat = py_file.stat()
+        except OSError:
+            return None
+        cached = self._syntax_cache.get(py_file.name)
+        if cached and cached[0] == stat.st_mtime_ns and cached[1] == stat.st_size:
+            return cached[2], cached[3]
+        return None
+
+    def _syntax_cache_store(
+        self, py_file: Path, success: bool, stderr: str
+    ) -> None:
+        try:
+            stat = py_file.stat()
+        except OSError:
+            return
+        self._syntax_cache[py_file.name] = (
+            stat.st_mtime_ns,
+            stat.st_size,
+            bool(success),
+            stderr,
+        )
 
     def _register_signal_handlers(self) -> None:
         """Register OS signal handlers for graceful shutdown and state preservation."""
@@ -780,6 +887,29 @@ class AutomationKernel:
                 }
         return telemetry
 
+    def _ratchet_devil_counterexamples(self, probes: List[Dict[str, Any]]) -> int:
+        """Persist adversarial counter-goals so past failure modes cannot recur."""
+        ratcheted = 0
+        for probe in probes[:3]:
+            counter_goal = probe.get("counter_goal")
+            if not counter_goal:
+                continue
+            try:
+                self.zero_trust.ratchet(
+                    {
+                        "kind": "goal_probe",
+                        "args": [str(counter_goal)[:200]],
+                        "metric": probe.get("metric"),
+                        "source": "devil_advocate",
+                    },
+                    "holdout",
+                    "adversarial_counter_goal",
+                )
+                ratcheted += 1
+            except Exception as exc:
+                logger.warning(f"Counterexample ratchet failed: {exc}")
+        return ratcheted
+
     def _run_extensions(
         self,
         cycle_details: Dict[str, Any],
@@ -796,6 +926,7 @@ class AutomationKernel:
             "bidirectional": {"available": True},
         }
         if not self.extensions_enabled:
+            self._mark_boundary("extensions_skipped", "core")
             return telemetry
 
         summary = self.telos.get_summary()
@@ -871,6 +1002,7 @@ class AutomationKernel:
                 }
 
         # 2. Epistemic curiosity — intrinsic reward and autonomous hypotheses
+        self._mark_boundary("meta_prover", "meta_prover")
         if self.curiosity is not None:
             try:
                 tick = self.curiosity.tick(
@@ -904,6 +1036,7 @@ class AutomationKernel:
                 }
 
         # 3. Cross-domain analogical manifold bridge
+        self._mark_boundary("curiosity", "telos")
         if self.manifold is not None and (
             self.current_cycle == 1 or self.current_cycle % 4 == 0
         ):
@@ -972,6 +1105,7 @@ class AutomationKernel:
                 }
 
         # 4. Adversarial counter-intuition injection on stagnation
+        self._mark_boundary("manifold", "manifold_bridge")
         if self.devil is not None:
             try:
                 challenge = self.devil.challenge(
@@ -1002,6 +1136,9 @@ class AutomationKernel:
                     fusion_components["adversarial_intensity"] = max(
                         float(probe.get("intensity", 0.0)) for probe in probes
                     )
+                    telemetry["devil_advocate"]["counterexamples_ratcheted"] = (
+                        self._ratchet_devil_counterexamples(probes)
+                    )
             except Exception as exc:
                 telemetry["devil_advocate"] = {
                     "available": True,
@@ -1009,6 +1146,7 @@ class AutomationKernel:
                 }
 
         # 5. Bidirectional meet-in-the-middle import-path proof search
+        self._mark_boundary("devil_advocate", "devil_advocate")
         modules: List[str] = []
         try:
             modules, edges = self._inspect_pipeline_graph()
@@ -1026,6 +1164,7 @@ class AutomationKernel:
             }
 
         # 6. Equivalence saturation: retain every equivalent metric formulation
+        self._mark_boundary("bidirectional", "prover")
         if self.egraph is not None and (
             self.current_cycle == 1 or self.current_cycle % 2 == 0
         ):
@@ -1055,6 +1194,7 @@ class AutomationKernel:
                 }
 
         # 7. Fuse extension pressure into the permanent drive matrix
+        self._mark_boundary("egraph", "egraph_engine")
         if self.drives is not None and fusion_components:
             try:
                 telemetry["drive_fusion"] = self.drives.fuse_extension_metrics(
@@ -1074,7 +1214,9 @@ class AutomationKernel:
         except Exception as exc:
             logger.warning(f"Manifest persistence after extensions failed: {exc}")
 
+        self._mark_boundary("drive_fusion", "drives")
         telemetry["persistence"] = self._save_extension_state()
+        self._mark_boundary("extension_persistence", "core")
         return telemetry
 
     def run_cycle(self) -> CycleMetrics:
@@ -1083,6 +1225,7 @@ class AutomationKernel:
         cycle_start_time = time.monotonic()
         start_iso = datetime.now(timezone.utc).isoformat()
         self.state = CoreState.RUNNING
+        self._new_cycle_recorder()
 
         logger.info(
             f"=== Execution Cycle #{self.current_cycle} "
@@ -1108,6 +1251,8 @@ class AutomationKernel:
                 error_count += 1
                 raise RuntimeError(err)
 
+            self._mark_boundary("env_check", "core")
+
             # Check timer threshold between tactical phases
             if self.timer.is_threshold_reached():
                 logger.warning("Execution window threshold reached during reconnaissance phase.")
@@ -1127,6 +1272,9 @@ class AutomationKernel:
                 stream = self.telos.stream
                 stream_active = self.stream_enabled and stream.is_running
                 budget = self.stream_max_goals_per_cycle if stream_active else 3
+                tuned_budget = self._tuning.get("stream_max_goals_per_cycle")
+                if isinstance(tuned_budget, (int, float)) and tuned_budget > 0:
+                    budget = min(budget, max(1, int(tuned_budget)))
 
                 if stream_active:
                     # Non-blocking pull bounded by free worker slots.
@@ -1214,6 +1362,8 @@ class AutomationKernel:
                 logger.warning(f"Goal dispatch stage error (non-fatal): {exc}")
                 cycle_details["goal_dispatch_error"] = str(exc)
 
+            self._mark_boundary("goal_dispatch", "telos")
+
             # 2. Transformation: AST Parsing & Code Structure Inspection
             self.telos.update_status("code_analysis", MilestoneStatus.RUNNING)
             analysis_summary: Dict[str, Any] = {}
@@ -1234,6 +1384,7 @@ class AutomationKernel:
                 metadata={"files_inspected": len(analysis_summary)},
             )
             cycle_details["code_metrics"] = analysis_summary
+            self._mark_boundary("code_analysis", "mutate")
 
             if self.timer.is_threshold_reached():
                 logger.warning("Execution window threshold reached during transformation phase.")
@@ -1243,12 +1394,27 @@ class AutomationKernel:
             self.telos.update_status("syntax_proving", MilestoneStatus.RUNNING)
             syntax_passed = True
             syntax_errors: List[str] = []
+            syntax_cache_hits = 0
+            syntax_cache_misses = 0
             for py_file in self.workspace_root.glob("*.py"):
-                result = self.prover.verify_python_syntax(py_file)
-                if not result.success:
+                cached = self._syntax_cache_lookup(py_file)
+                if cached is not None:
+                    ok, stderr_text = cached
+                    syntax_cache_hits += 1
+                else:
+                    result = self.prover.verify_python_syntax(py_file)
+                    ok = bool(result.success)
+                    stderr_text = result.stderr.strip()
+                    self._syntax_cache_store(py_file, ok, stderr_text)
+                    syntax_cache_misses += 1
+                if not ok:
                     syntax_passed = False
-                    syntax_errors.append(f"{py_file.name}: {result.stderr.strip()}")
+                    syntax_errors.append(f"{py_file.name}: {stderr_text}")
                     error_count += 1
+            cycle_details["syntax_cache"] = {
+                "hits": syntax_cache_hits,
+                "misses": syntax_cache_misses,
+            }
 
             # Prover Lean 4 status check
             toolchain = self.prover.lean.get_toolchain_info()
@@ -1261,6 +1427,31 @@ class AutomationKernel:
                 self.telos.update_status("syntax_proving", MilestoneStatus.FAILED, error=err)
                 raise RuntimeError(f"Syntax proving failed: {err}")
 
+            self._mark_boundary("syntax_proving", "prover")
+
+            # 3.5 Zero-trust Tier-0 integrity sweep. A sealed manifest is
+            # fail-closed; a missing manifest is a bootstrap condition so a
+            # fresh checkout can still generate its first seal.
+            manifest_path = Path(self.zero_trust.manifest_path)
+            zero_trust_report = self.zero_trust.scan_workspace(
+                self.workspace_root, files=[]
+            )
+            integrity = zero_trust_report.get("integrity") or {}
+            cycle_details["zero_trust"] = {
+                "passed": zero_trust_report["passed"],
+                "integrity": integrity.get("reason_code"),
+                "failures": list(integrity.get("failures") or [])[:5],
+                "duration_ms": zero_trust_report["duration_ms"],
+                "bootstrap": not manifest_path.is_file(),
+            }
+            self._mark_boundary("zero_trust", "verify")
+            if not zero_trust_report["passed"] and manifest_path.is_file():
+                error_count += 1
+                raise RuntimeError(
+                    "Zero-trust integrity failed: "
+                    + "; ".join(cycle_details["zero_trust"]["failures"])
+                )
+
             if self.timer.is_threshold_reached():
                 logger.warning("Execution window threshold reached during verification phase.")
                 return self._finalize_cycle_metrics(cycle_start_time, start_iso, success=True, details=cycle_details)
@@ -1268,6 +1459,7 @@ class AutomationKernel:
             # 4. Automated Verification Suite — Ancestral Regression Gate
             self.telos.update_status("test_verification", MilestoneStatus.RUNNING)
             test_report = self.verifier.run_ancestral_gate()
+            self._mark_boundary("ancestral_gate", "verify")
             cycle_details["test_report"] = {
                 "total": test_report.total_checks,
                 "passed": test_report.passed_checks,
@@ -1288,6 +1480,7 @@ class AutomationKernel:
                 except Exception as exc:
                     logger.warning(f"Extension stage error (non-fatal): {exc}")
                     cycle_details["extension_error"] = str(exc)
+                self._mark_boundary("extensions", "core")
 
             if test_report.is_successful:
                 self.telos.update_status(
@@ -1313,6 +1506,7 @@ class AutomationKernel:
             summary = self.telos.get_summary()
             cycle_details["milestone_summary"] = summary
             self.telos.update_status("telemetry_report", MilestoneStatus.COMPLETED)
+            self._mark_boundary("telemetry_report", "telos")
 
             # Apply drives stimulus based on cumulative error count
             if self.drives is not None:
@@ -1321,6 +1515,7 @@ class AutomationKernel:
                     cycle_details["drives_discipline"] = self.drives.get_unified_discipline()
                 except Exception as exc:
                     logger.warning(f"Drives stimulus error (non-fatal): {exc}")
+            self._mark_boundary("drives_stimulus", "drives")
 
             self.state = CoreState.COMPLETED
             success = True
@@ -1358,6 +1553,7 @@ class AutomationKernel:
             details=details,
         )
         self.cycle_history.append(metrics)
+        self.last_cycle_telemetry = self._finish_cycle_recorder(success, details)
         if self.extensions_enabled:
             try:
                 self._save_extension_state()
@@ -1372,9 +1568,16 @@ class AutomationKernel:
     def run_continuous_loop(
         self,
         max_cycles: Optional[int] = None,
-        cycle_delay_seconds: float = 0.0,
+        cycle_delay_seconds: Optional[float] = None,
     ) -> None:
         """Run continuous execution cycles bounded by max_cycles or the 340-minute wall-clock timer."""
+        if cycle_delay_seconds is None:
+            tuned_delay = self._tuning.get("cycle_delay_seconds")
+            cycle_delay_seconds = (
+                max(0.0, float(tuned_delay))
+                if isinstance(tuned_delay, (int, float))
+                else 0.0
+            )
         logger.info(
             f"Starting continuous execution loop. Wall-clock window: {self.timer.window_minutes}m, "
             f"Max cycles: {max_cycles if max_cycles is not None else 'UNLIMITED'}"

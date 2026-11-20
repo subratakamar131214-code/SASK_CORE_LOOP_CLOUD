@@ -371,6 +371,7 @@ class CodeMutator:
     """Coordinates AST parsing and structured source code transformations."""
 
     _syntax_cache = ContentAddressedCache(namespace="ast-parse")
+    _last_verdict: Optional[Dict[str, Any]] = None
 
     @classmethod
     def ensure_valid_syntax(cls, source_code: str) -> bool:
@@ -389,6 +390,49 @@ class CodeMutator:
     @classmethod
     def syntax_cache_stats(cls) -> Dict[str, int]:
         return cls._syntax_cache.stats()
+
+    @classmethod
+    def gate_candidate(cls, spec: Any, pipeline: Any = None) -> Dict[str, Any]:
+        """Run a candidate through the tiered zero-trust pipeline.
+
+        Returns the serialized ``VerificationVerdict`` and remembers it so the
+        kernel can surface structured feedback without threading state through
+        every mutation call site.
+        """
+        from verify import VerificationRunner  # type: ignore[import]
+
+        verdict = VerificationRunner.evaluate_candidate(spec, pipeline)
+        cls._last_verdict = verdict.to_dict()
+        return cls._last_verdict
+
+    @classmethod
+    def gate_transformation(
+        cls,
+        original: str,
+        transformed: str,
+        cases: List[Any],
+        **spec_kwargs: Any,
+    ) -> Dict[str, Any]:
+        """Gate a mutated source against its baseline with structured verdict feedback."""
+        from verify import CandidateSpec  # type: ignore[import]
+
+        spec = CandidateSpec(
+            module_source=transformed,
+            baseline_source=original,
+            cases=list(cases),
+            label=str(spec_kwargs.pop("label", "mutation")),
+            **spec_kwargs,
+        )
+        return cls.gate_candidate(spec)
+
+    @classmethod
+    def last_verdict(cls) -> Optional[Dict[str, Any]]:
+        return cls._last_verdict
+
+    @classmethod
+    def verdict_feedback(cls) -> List[str]:
+        verdict = cls._last_verdict or {}
+        return list(verdict.get("feedback") or [])
 
     @classmethod
     def apply_docstring(

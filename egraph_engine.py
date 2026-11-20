@@ -204,6 +204,7 @@ class EGraph:
         self._rank: Dict[int, int] = {}
         self._hashcons: Dict[Tuple[str, Tuple[int, ...], Optional[float]], int] = {}
         self._next_id = 0
+        self._class_index_cache: Optional[Dict[int, List[ENode]]] = None
 
     # -- construction ---------------------------------------------------
     def _add(self, op: str, children: Tuple[int, ...], value: Optional[float]) -> int:
@@ -216,6 +217,7 @@ class EGraph:
         self._parent[cid] = cid
         self._rank[cid] = 0
         self._hashcons[key] = cid
+        self._class_index_cache = None
         return cid
 
     def add_leaf(self, op: str, value: Any = None) -> int:
@@ -255,6 +257,7 @@ class EGraph:
         self._parent[rb] = ra
         if self._rank[ra] == self._rank[rb]:
             self._rank[ra] += 1
+        self._class_index_cache = None
         return True
 
     # -- congruence closure ---------------------------------------------
@@ -283,6 +286,7 @@ class EGraph:
                     merges += 1
             if not merged:
                 break
+        self._class_index_cache = None
         return merges
 
     # -- views ----------------------------------------------------------
@@ -294,12 +298,15 @@ class EGraph:
 
     def class_index(self) -> Dict[int, List[ENode]]:
         """Map every class root to the list of e-nodes it contains."""
+        if self._class_index_cache is not None:
+            return self._class_index_cache
         index: Dict[int, List[ENode]] = {}
         for (op, children, value), cid in self._hashcons.items():
             root = self.find(cid)
             index.setdefault(root, []).append(
                 ENode(op=op, children=tuple(self.find(c) for c in children), value=value)
             )
+        self._class_index_cache = index
         return index
 
     # -- e-matching -----------------------------------------------------

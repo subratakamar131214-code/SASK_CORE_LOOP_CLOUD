@@ -1,0 +1,16 @@
+{
+  "invariant_version": "zt-1",
+  "algorithm": "sha256-lf-normalized",
+  "sealed_at": "2026-11-20T12:55:38.790705+00:00",
+  "files": {
+    "verify.py": "c3266ba213c2504311e580d140a9125a2b7e808dd4e4389026a827c693a423e7"
+  },
+  "suites": {
+    "verify_golden_suite.json": {
+      "cases": {}
+    },
+    "verify_holdout_suite.json": {
+      "cases": {}
+    }
+  }
+}

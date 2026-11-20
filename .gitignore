@@ -39,3 +39,19 @@ venv.bak/
 *.tmp
 execution_state.json
 run_state.json
+
+# Local-only command center artifacts (never pushed)
+ui_telemetry.json
+ui_evolver_log.json
+ui_backups/
+ui/evolved.css
+cycle_telemetry.jsonl
+cycle_telemetry.json
+sask_agent_fix_queue.json
+sask_tuning.json
+
+# Verifier runtime caches and tool scratch (never pushed)
+.sask_verify_cache.json
+.sask_verify_cache.json.tmp
+.hypothesis/
+.pytest_cache/
