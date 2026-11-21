@@ -1,16 +1,16 @@
 {
   "version": 1,
-  "superpositions": 3540,
-  "rewrites": 1712761,
-  "promotions": 38946,
+  "superpositions": 4644,
+  "rewrites": 2242313,
+  "promotions": 51090,
   "rejections": 0,
   "last": {
-    "origin": "source_fragments",
-    "expressions": 16,
-    "merged_classes": 0,
-    "rewrites": 18,
-    "elapsed_seconds": 0.0027,
-    "goal_matched": false
+    "origin": "cycle_metrics",
+    "expressions": 10,
+    "merged_classes": 3,
+    "rewrites": 572,
+    "elapsed_seconds": 0.0589,
+    "goal_matched": true
   },
   "history": [
     {
@@ -18,39 +18,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0884,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0876,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0886,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0893,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0875,
+      "elapsed_seconds": 0.0589,
       "goal_matched": true
     },
     {
@@ -58,7 +26,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0026,
+      "elapsed_seconds": 0.0017,
       "goal_matched": false
     },
     {
@@ -66,7 +34,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0881,
+      "elapsed_seconds": 0.0591,
       "goal_matched": true
     },
     {
@@ -74,7 +42,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0889,
+      "elapsed_seconds": 0.0608,
       "goal_matched": true
     },
     {
@@ -82,7 +50,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0882,
+      "elapsed_seconds": 0.0579,
       "goal_matched": true
     },
     {
@@ -90,7 +58,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0877,
+      "elapsed_seconds": 0.0569,
       "goal_matched": true
     },
     {
@@ -98,7 +66,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0881,
+      "elapsed_seconds": 0.058,
       "goal_matched": true
     },
     {
@@ -106,7 +74,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0026,
+      "elapsed_seconds": 0.0017,
       "goal_matched": false
     },
     {
@@ -114,7 +82,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0876,
+      "elapsed_seconds": 0.062,
       "goal_matched": true
     },
     {
@@ -122,7 +90,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0884,
+      "elapsed_seconds": 0.0609,
       "goal_matched": true
     },
     {
@@ -130,7 +98,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0876,
+      "elapsed_seconds": 0.0612,
       "goal_matched": true
     },
     {
@@ -138,7 +106,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0888,
+      "elapsed_seconds": 0.0608,
       "goal_matched": true
     },
     {
@@ -146,7 +114,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0881,
+      "elapsed_seconds": 0.0605,
       "goal_matched": true
     },
     {
@@ -154,7 +122,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0026,
+      "elapsed_seconds": 0.0018,
       "goal_matched": false
     },
     {
@@ -162,7 +130,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0927,
+      "elapsed_seconds": 0.0564,
       "goal_matched": true
     },
     {
@@ -170,7 +138,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0879,
+      "elapsed_seconds": 0.0568,
       "goal_matched": true
     },
     {
@@ -178,7 +146,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0881,
+      "elapsed_seconds": 0.0594,
       "goal_matched": true
     },
     {
@@ -186,7 +154,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0881,
+      "elapsed_seconds": 0.0569,
       "goal_matched": true
     },
     {
@@ -194,7 +162,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0881,
+      "elapsed_seconds": 0.058,
       "goal_matched": true
     },
     {
@@ -202,8 +170,40 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0027,
+      "elapsed_seconds": 0.0017,
       "goal_matched": false
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0572,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0568,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0589,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0589,
+      "goal_matched": true
     }
   ]
 }

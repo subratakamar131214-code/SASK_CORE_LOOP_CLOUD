@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "evaluations": 65380,
-  "searches": 4670,
-  "counterfactual_runs": 5894,
+  "evaluations": 73976,
+  "searches": 5284,
+  "counterfactual_runs": 7734,
   "promotions": [
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -21,7 +21,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:20:47.719083+00:00"
+      "timestamp": "2026-11-21T05:43:54.226373+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -40,7 +40,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:21:26.776636+00:00"
+      "timestamp": "2026-11-21T05:44:27.603916+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -59,7 +59,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:22:07.570546+00:00"
+      "timestamp": "2026-11-21T05:45:01.039809+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -78,7 +78,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:22:46.957684+00:00"
+      "timestamp": "2026-11-21T05:45:34.597669+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -97,7 +97,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:23:26.212283+00:00"
+      "timestamp": "2026-11-21T05:46:06.341726+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -116,7 +116,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:24:05.518237+00:00"
+      "timestamp": "2026-11-21T05:46:38.728063+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -135,7 +135,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:24:47.676363+00:00"
+      "timestamp": "2026-11-21T05:47:12.166333+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -154,7 +154,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:25:28.422671+00:00"
+      "timestamp": "2026-11-21T05:47:44.403909+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -173,7 +173,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:26:09.330920+00:00"
+      "timestamp": "2026-11-21T05:48:16.624248+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -192,7 +192,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:26:48.972979+00:00"
+      "timestamp": "2026-11-21T05:48:48.896076+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -211,7 +211,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:27:28.982396+00:00"
+      "timestamp": "2026-11-21T05:49:20.884584+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -230,7 +230,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:28:08.316780+00:00"
+      "timestamp": "2026-11-21T05:49:52.610778+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -249,7 +249,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:28:48.496209+00:00"
+      "timestamp": "2026-11-21T05:50:24.799299+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -268,7 +268,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:29:27.791040+00:00"
+      "timestamp": "2026-11-21T05:50:55.943562+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -287,7 +287,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:30:07.514552+00:00"
+      "timestamp": "2026-11-21T05:51:28.130058+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -306,7 +306,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:30:46.982083+00:00"
+      "timestamp": "2026-11-21T05:52:00.968658+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -325,7 +325,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:31:26.837796+00:00"
+      "timestamp": "2026-11-21T05:52:33.404522+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -344,7 +344,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:32:06.567688+00:00"
+      "timestamp": "2026-11-21T05:53:07.864840+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -363,7 +363,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:32:47.609555+00:00"
+      "timestamp": "2026-11-21T05:53:42.138841+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -382,7 +382,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:33:29.904109+00:00"
+      "timestamp": "2026-11-21T05:54:16.616969+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -401,7 +401,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:34:09.686064+00:00"
+      "timestamp": "2026-11-21T05:54:50.706243+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -420,7 +420,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:34:50.074585+00:00"
+      "timestamp": "2026-11-21T05:55:23.823751+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -439,7 +439,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:35:30.565265+00:00"
+      "timestamp": "2026-11-21T05:56:00.552576+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -458,7 +458,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:36:09.914804+00:00"
+      "timestamp": "2026-11-21T05:56:39.011211+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -477,7 +477,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:36:49.702992+00:00"
+      "timestamp": "2026-11-21T05:57:16.213947+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -496,7 +496,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:37:30.187312+00:00"
+      "timestamp": "2026-11-21T05:57:52.380961+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -515,7 +515,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:38:10.916177+00:00"
+      "timestamp": "2026-11-21T05:58:25.118640+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -534,7 +534,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:38:50.128388+00:00"
+      "timestamp": "2026-11-21T05:58:58.542123+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -553,7 +553,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:39:29.755462+00:00"
+      "timestamp": "2026-11-21T05:59:30.609558+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -572,7 +572,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:40:10.220803+00:00"
+      "timestamp": "2026-11-21T06:00:02.525361+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -591,7 +591,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:40:49.127142+00:00"
+      "timestamp": "2026-11-21T06:00:34.463628+00:00"
     },
     {
       "goal": "Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint",
@@ -610,7 +610,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:41:29.325254+00:00"
+      "timestamp": "2026-11-21T06:01:06.484779+00:00"
     }
   ],
   "promoted_by_goal": {
@@ -631,7 +631,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T18:41:29.325254+00:00"
+      "timestamp": "2026-11-21T06:01:06.484779+00:00"
     },
     "Challenge zero-error optimization: design a fault-injection experiment that surfaces latent invariants, then strengthen the verification gate from the observed failure mode.": {
       "goal": "Challenge zero-error optimization: design a fault-injection experiment that surfaces latent invariants, then strengthen the verification gate from the observed failure mode.",
@@ -650,7 +650,7 @@
         "reprojected_from_trusted_baseline": true
       },
       "verified": true,
-      "timestamp": "2026-11-20T13:04:15.734471+00:00"
+      "timestamp": "2026-11-21T00:23:36.151210+00:00"
     }
   },
   "best_by_goal": {
@@ -714,7 +714,7 @@
         }
       ],
       "lean_skeleton": "-- Formal Verification Specification generated by SASK Prover Pipeline\n-- Lean 4 Compiler Verification Module\n\nimport Mathlib\n\ntheorem meta_ebda20a1 : True -- Converge the SASK kernel with compact, verified proof paths across every science router and discipline constraint := by\n  sorry\n",
-      "timestamp": "2026-11-20T18:41:29.321719+00:00"
+      "timestamp": "2026-11-21T06:01:06.481847+00:00"
     }
   },
   "history": [
