@@ -1,15 +1,15 @@
 {
   "version": 1,
-  "superpositions": 5730,
-  "rewrites": 2763231,
-  "promotions": 63036,
+  "superpositions": 6862,
+  "rewrites": 3306029,
+  "promotions": 75490,
   "rejections": 0,
   "last": {
     "origin": "cycle_metrics",
     "expressions": 10,
     "merged_classes": 3,
     "rewrites": 572,
-    "elapsed_seconds": 0.0758,
+    "elapsed_seconds": 0.0774,
     "goal_matched": true
   },
   "history": [
@@ -18,7 +18,23 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0761,
+      "elapsed_seconds": 0.077,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0776,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.091,
       "goal_matched": true
     },
     {
@@ -26,7 +42,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0022,
+      "elapsed_seconds": 0.0026,
       "goal_matched": false
     },
     {
@@ -34,7 +50,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0756,
+      "elapsed_seconds": 0.0777,
       "goal_matched": true
     },
     {
@@ -42,7 +58,15 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0758,
+      "elapsed_seconds": 0.0769,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0779,
       "goal_matched": true
     },
     {
@@ -58,111 +82,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0764,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.076,
-      "goal_matched": true
-    },
-    {
-      "origin": "source_fragments",
-      "expressions": 16,
-      "merged_classes": 0,
-      "rewrites": 18,
-      "elapsed_seconds": 0.0023,
-      "goal_matched": false
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.076,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0783,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.076,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0762,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.076,
-      "goal_matched": true
-    },
-    {
-      "origin": "source_fragments",
-      "expressions": 16,
-      "merged_classes": 0,
-      "rewrites": 18,
-      "elapsed_seconds": 0.0023,
-      "goal_matched": false
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0755,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0766,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0766,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0754,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0758,
+      "elapsed_seconds": 0.0775,
       "goal_matched": true
     },
     {
@@ -178,7 +98,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0764,
+      "elapsed_seconds": 0.0911,
       "goal_matched": true
     },
     {
@@ -186,7 +106,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0763,
+      "elapsed_seconds": 0.0769,
       "goal_matched": true
     },
     {
@@ -194,7 +114,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.076,
+      "elapsed_seconds": 0.0776,
       "goal_matched": true
     },
     {
@@ -202,7 +122,87 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0758,
+      "elapsed_seconds": 0.0776,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0774,
+      "goal_matched": true
+    },
+    {
+      "origin": "source_fragments",
+      "expressions": 16,
+      "merged_classes": 0,
+      "rewrites": 18,
+      "elapsed_seconds": 0.0022,
+      "goal_matched": false
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0772,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0794,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0776,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0776,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0774,
+      "goal_matched": true
+    },
+    {
+      "origin": "source_fragments",
+      "expressions": 16,
+      "merged_classes": 0,
+      "rewrites": 18,
+      "elapsed_seconds": 0.0023,
+      "goal_matched": false
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0772,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0774,
       "goal_matched": true
     }
   ]
