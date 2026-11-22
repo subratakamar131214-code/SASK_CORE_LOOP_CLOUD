@@ -3,3 +3,6 @@
 # registry shim so the kernel still boots without network access.
 fastmcp>=2.12,<3
 # mcp[cli]>=1.9
+# AES-256-GCM for the optional SASK_VAULT_KEY encrypted cycle memory
+# (novelty_vault.py degrades to local-only quarantine when absent).
+cryptography>=42

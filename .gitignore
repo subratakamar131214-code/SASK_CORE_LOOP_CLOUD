@@ -60,3 +60,21 @@ sask_tuning.json
 scale_policy.json
 scale_policy.json.tmp
 scale_policy_backups/
+
+# Local Gemini transcript exports and fetch scratch (never pushed)
+chat_stem.md
+chat_simulators.md
+chat_*.md
+fetch_gemini_shares.py
+parse_gemini_share.py
+.sask_share*.html
+.sask_rpc_*
+.sask_page_*
+.sask_probe_*
+.sask_dom*
+.sask_sp*
+_audit_*
+
+# Private IP quarantine, provenance ledger, and encrypted cycle memory (never pushed)
+ip_quarantine/
+artifacts/private_candidates/

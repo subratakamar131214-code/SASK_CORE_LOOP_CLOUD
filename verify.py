@@ -269,6 +269,12 @@ class VerificationRunner:
         suite = loader.loadTestsFromTestCase(ScaleOrchestratorTests)
         return self.run_suite(suite)
 
+    def run_novelty_vault_verification(self) -> VerificationReport:
+        """Prove private quarantine, deterministic provenance, and A2UI redaction."""
+        loader = unittest.TestLoader()
+        suite = loader.loadTestsFromTestCase(NoveltyVaultTests)
+        return self.run_suite(suite)
+
     def run_diff_scoped(
         self,
         changed_files: Iterable[str],
@@ -398,6 +404,23 @@ class VerificationRunner:
             "passed": scale_report.passed_checks,
             "failed": scale_report.failed_checks,
             "duration_seconds": scale_report.duration_seconds,
+        }
+
+        vault_report = self.run_novelty_vault_verification()
+        consensus.total_checks += vault_report.total_checks
+        consensus.passed_checks += vault_report.passed_checks
+        consensus.failed_checks += vault_report.failed_checks
+        consensus.errors.extend(
+            f"[novelty-vault] {error}" for error in vault_report.errors
+        )
+        consensus.duration_seconds = round(
+            consensus.duration_seconds + vault_report.duration_seconds, 4
+        )
+        consensus.details["novelty_vault_self_test"] = {
+            "total": vault_report.total_checks,
+            "passed": vault_report.passed_checks,
+            "failed": vault_report.failed_checks,
+            "duration_seconds": vault_report.duration_seconds,
         }
 
         ratchet_info = self.gate.evaluate(consensus, depth=depth)
@@ -562,6 +585,9 @@ class CandidateSpec:
     use_cache: bool = True
     label: str = "candidate"
     policy: Optional[Dict[str, Any]] = None
+    # Opt-in marker: a passing candidate flagged novel is quarantined privately
+    # (ip_quarantine/) with a provenance record and an A2UI novelty alert.
+    novelty: bool = False
 
 
 def _utc_now() -> str:
@@ -2226,7 +2252,43 @@ class ZeroTrustPipeline:
         }
         return hashlib.sha256(json.dumps(material, sort_keys=True, default=str).encode("utf-8")).hexdigest()
 
+    @staticmethod
+    def _capture_novelty(verdict: VerificationVerdict, spec: Optional[CandidateSpec]) -> None:
+        """Route a passing novel/formal candidate to the private quarantine.
+
+        Side-channel only: any failure here is swallowed so verification
+        behaviour is never coupled to local storage.
+        """
+        if spec is None or not verdict.passed:
+            return
+        try:
+            import novelty_vault  # type: ignore[import]
+
+            if not novelty_vault.is_capture_eligible(
+                passed=verdict.passed,
+                formal=bool(spec.formal),
+                novelty=bool(spec.novelty),
+            ):
+                return
+            novelty_vault.observe_verified(
+                artifact=spec.module_source,
+                label=spec.label,
+                entrypoint=spec.entrypoint,
+                verification={
+                    "passed": True,
+                    "reason_code": verdict.reason_code,
+                    "tiers": dict(verdict.tier_timings),
+                    "duration_ms": verdict.duration_ms,
+                },
+                formal=bool(spec.formal),
+                changed_files=list(spec.changed_files),
+                allow_nonfinite=bool(spec.allow_nonfinite),
+            )
+        except Exception:
+            pass
+
     def _log(self, verdict: VerificationVerdict, spec: Optional[CandidateSpec], key: Optional[str]) -> None:
+        self._capture_novelty(verdict, spec)
         if not self.telemetry:
             return
         try:
@@ -3826,6 +3888,85 @@ class ZeroTrustPipelineTests(unittest.TestCase):
         self.assertFalse(verdict["passed"])
         self.assertTrue(verdict["integrity"]["reason_code"] == "integrity_ok")
         self.assertTrue(any(item.get("file") == "bad.py" for item in verdict["violations"]))
+
+
+class NoveltyVaultTests(unittest.TestCase):
+    """Prove private quarantine, deterministic provenance, and A2UI redaction."""
+
+    def setUp(self) -> None:
+        import novelty_vault
+
+        self.vault = novelty_vault
+        self.tmp = tempfile.TemporaryDirectory(prefix="sask-vault-")
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name) / "ip_quarantine"
+
+    def _observe(self, artifact: str, label: str = "discovery", **kwargs: Any) -> Dict[str, Any]:
+        return self.vault.observe_verified(
+            artifact=artifact,
+            label=label,
+            verification={
+                "passed": True,
+                "reason_code": "ok",
+                "tiers": {"tier1_ms": 1.0, "tier4_ms": 2.0},
+                "duration_ms": 3.5,
+            },
+            root=self.root,
+            **kwargs,
+        )
+
+    def test_capture_eligibility_is_deterministic(self) -> None:
+        self.assertTrue(self.vault.is_capture_eligible(passed=True, formal=True, novelty=False))
+        self.assertTrue(self.vault.is_capture_eligible(passed=True, formal=False, novelty=True))
+        self.assertFalse(self.vault.is_capture_eligible(passed=False, formal=True, novelty=True))
+        self.assertFalse(self.vault.is_capture_eligible(passed=True, formal=False, novelty=False))
+
+    def test_quarantine_dedupes_and_writes_placeholders(self) -> None:
+        source = "def solve(x):\n    return x + 1\n"
+        first = self._observe(source)
+        second = self._observe(source)
+        self.assertEqual(first["status"], "quarantined")
+        self.assertEqual(second["status"], "duplicate")
+        entries = self.vault.read_provenance(root=self.root)
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries[0]["artifact_sha256"], self.vault.sha256_text(source))
+        self.assertFalse(entries[0]["human_reviewed"])
+        self.assertEqual(entries[0]["human_inventor_note"], "")
+
+    def test_a2ui_messages_never_contain_raw_content(self) -> None:
+        secret_body = "SECRET_ALGORITHM = 42\n"
+        result = self._observe(secret_body, label="top-secret-goal")
+        blob = json.dumps(result["a2ui"])
+        self.assertNotIn("SECRET_ALGORITHM", blob)
+        self.assertNotIn("top-secret-goal", blob)
+        self.assertIn("createSurface", blob)
+        self.assertIn("updateComponents", blob)
+        self.assertIn("updateDataModel", blob)
+        self.assertIn(self.vault.sha256_text(secret_body), blob)
+        outbox = self.vault.read_outbox(root=self.root)
+        self.assertEqual(len(outbox), 3)
+
+    def test_encrypted_vault_roundtrip(self) -> None:
+        try:
+            import cryptography  # noqa: F401
+        except ImportError:
+            self.skipTest("cryptography not installed")
+        blob = self.vault.encrypt_bundle(b"payload", "unit-test-key-0123456789")
+        self.assertEqual(self.vault.decrypt_bundle(blob, "unit-test-key-0123456789"), b"payload")
+        with self.assertRaises(Exception):
+            self.vault.decrypt_bundle(blob, "wrong-key-0000000000000")
+
+    def test_key_present_writes_encrypted_bundle(self) -> None:
+        try:
+            import cryptography  # noqa: F401
+        except ImportError:
+            self.skipTest("cryptography not installed")
+        result = self._observe("def solve(x):\n    return x\n", key="unit-test-key-0123456789")
+        self.assertEqual(result["vault"]["status"], "encrypted")
+        blob = Path(result["vault"]["path"]).read_bytes()
+        self.assertTrue(blob.startswith(self.vault.VAULT_MAGIC))
+        plain = self.vault.decrypt_bundle(blob, "unit-test-key-0123456789")
+        self.assertIn(b"artifact", plain)
 
 
 class ScaleOrchestratorTests(unittest.TestCase):
