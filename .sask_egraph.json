@@ -1,16 +1,16 @@
 {
   "version": 1,
-  "superpositions": 6862,
-  "rewrites": 3306029,
-  "promotions": 75490,
+  "superpositions": 7728,
+  "rewrites": 3721051,
+  "promotions": 85020,
   "rejections": 0,
   "last": {
-    "origin": "cycle_metrics",
-    "expressions": 10,
-    "merged_classes": 3,
-    "rewrites": 572,
-    "elapsed_seconds": 0.0774,
-    "goal_matched": true
+    "origin": "source_fragments",
+    "expressions": 16,
+    "merged_classes": 0,
+    "rewrites": 18,
+    "elapsed_seconds": 0.0026,
+    "goal_matched": false
   },
   "history": [
     {
@@ -18,7 +18,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.077,
+      "elapsed_seconds": 0.0879,
       "goal_matched": true
     },
     {
@@ -26,7 +26,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0776,
+      "elapsed_seconds": 0.0871,
       "goal_matched": true
     },
     {
@@ -34,7 +34,71 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.091,
+      "elapsed_seconds": 0.0888,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0879,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0875,
+      "goal_matched": true
+    },
+    {
+      "origin": "source_fragments",
+      "expressions": 16,
+      "merged_classes": 0,
+      "rewrites": 18,
+      "elapsed_seconds": 0.0025,
+      "goal_matched": false
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0879,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.088,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0875,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0878,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0885,
       "goal_matched": true
     },
     {
@@ -50,7 +114,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0777,
+      "elapsed_seconds": 0.0878,
       "goal_matched": true
     },
     {
@@ -58,7 +122,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0769,
+      "elapsed_seconds": 0.0879,
       "goal_matched": true
     },
     {
@@ -66,7 +130,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0779,
+      "elapsed_seconds": 0.0877,
       "goal_matched": true
     },
     {
@@ -74,7 +138,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0768,
+      "elapsed_seconds": 0.0871,
       "goal_matched": true
     },
     {
@@ -82,7 +146,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0775,
+      "elapsed_seconds": 0.0872,
       "goal_matched": true
     },
     {
@@ -90,7 +154,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0022,
+      "elapsed_seconds": 0.0026,
       "goal_matched": false
     },
     {
@@ -98,7 +162,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0911,
+      "elapsed_seconds": 0.0877,
       "goal_matched": true
     },
     {
@@ -106,7 +170,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0769,
+      "elapsed_seconds": 0.088,
       "goal_matched": true
     },
     {
@@ -114,7 +178,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0776,
+      "elapsed_seconds": 0.0883,
       "goal_matched": true
     },
     {
@@ -122,7 +186,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0776,
+      "elapsed_seconds": 0.0874,
       "goal_matched": true
     },
     {
@@ -130,7 +194,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0774,
+      "elapsed_seconds": 0.0876,
       "goal_matched": true
     },
     {
@@ -138,72 +202,8 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0022,
+      "elapsed_seconds": 0.0026,
       "goal_matched": false
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0772,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0794,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0776,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0776,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0774,
-      "goal_matched": true
-    },
-    {
-      "origin": "source_fragments",
-      "expressions": 16,
-      "merged_classes": 0,
-      "rewrites": 18,
-      "elapsed_seconds": 0.0023,
-      "goal_matched": false
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0772,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0774,
-      "goal_matched": true
     }
   ]
 }
