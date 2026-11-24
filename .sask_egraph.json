@@ -1,16 +1,16 @@
 {
   "version": 1,
-  "superpositions": 9701,
-  "rewrites": 4667341,
-  "promotions": 106724,
+  "superpositions": 10411,
+  "rewrites": 5007535,
+  "promotions": 114538,
   "rejections": 0,
   "last": {
-    "origin": "cycle_metrics",
-    "expressions": 10,
-    "merged_classes": 3,
-    "rewrites": 572,
-    "elapsed_seconds": 0.0827,
-    "goal_matched": true
+    "origin": "source_fragments",
+    "expressions": 16,
+    "merged_classes": 0,
+    "rewrites": 18,
+    "elapsed_seconds": 0.0036,
+    "goal_matched": false
   },
   "history": [
     {
@@ -18,7 +18,39 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0837,
+      "elapsed_seconds": 0.1214,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.1215,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.1221,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.1207,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.1209,
       "goal_matched": true
     },
     {
@@ -26,7 +58,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0024,
+      "elapsed_seconds": 0.0035,
       "goal_matched": false
     },
     {
@@ -34,7 +66,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.083,
+      "elapsed_seconds": 0.1222,
       "goal_matched": true
     },
     {
@@ -42,7 +74,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0842,
+      "elapsed_seconds": 0.1258,
       "goal_matched": true
     },
     {
@@ -50,7 +82,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0832,
+      "elapsed_seconds": 0.1212,
       "goal_matched": true
     },
     {
@@ -58,7 +90,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0834,
+      "elapsed_seconds": 0.1198,
       "goal_matched": true
     },
     {
@@ -66,7 +98,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0987,
+      "elapsed_seconds": 0.1212,
       "goal_matched": true
     },
     {
@@ -74,7 +106,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0025,
+      "elapsed_seconds": 0.0035,
       "goal_matched": false
     },
     {
@@ -82,7 +114,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0827,
+      "elapsed_seconds": 0.1228,
       "goal_matched": true
     },
     {
@@ -90,7 +122,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0828,
+      "elapsed_seconds": 0.1208,
       "goal_matched": true
     },
     {
@@ -98,7 +130,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.1046,
+      "elapsed_seconds": 0.1214,
       "goal_matched": true
     },
     {
@@ -106,7 +138,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0832,
+      "elapsed_seconds": 0.1208,
       "goal_matched": true
     },
     {
@@ -114,7 +146,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0835,
+      "elapsed_seconds": 0.1213,
       "goal_matched": true
     },
     {
@@ -122,7 +154,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0025,
+      "elapsed_seconds": 0.0037,
       "goal_matched": false
     },
     {
@@ -130,7 +162,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0829,
+      "elapsed_seconds": 0.1222,
       "goal_matched": true
     },
     {
@@ -138,7 +170,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0829,
+      "elapsed_seconds": 0.1208,
       "goal_matched": true
     },
     {
@@ -146,7 +178,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0844,
+      "elapsed_seconds": 0.1224,
       "goal_matched": true
     },
     {
@@ -154,7 +186,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0825,
+      "elapsed_seconds": 0.1206,
       "goal_matched": true
     },
     {
@@ -162,7 +194,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0827,
+      "elapsed_seconds": 0.1284,
       "goal_matched": true
     },
     {
@@ -170,40 +202,8 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0025,
+      "elapsed_seconds": 0.0036,
       "goal_matched": false
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.083,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0832,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0854,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0827,
-      "goal_matched": true
     }
   ]
 }
