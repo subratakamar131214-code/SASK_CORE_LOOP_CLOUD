@@ -1,15 +1,15 @@
 {
   "version": 1,
-  "superpositions": 11416,
-  "rewrites": 5489323,
-  "promotions": 125596,
+  "superpositions": 12151,
+  "rewrites": 5841601,
+  "promotions": 133684,
   "rejections": 0,
   "last": {
     "origin": "cycle_metrics",
     "expressions": 10,
     "merged_classes": 3,
     "rewrites": 572,
-    "elapsed_seconds": 0.0762,
+    "elapsed_seconds": 0.1026,
     "goal_matched": true
   },
   "history": [
@@ -18,7 +18,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0764,
+      "elapsed_seconds": 0.103,
       "goal_matched": true
     },
     {
@@ -26,7 +26,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0765,
+      "elapsed_seconds": 0.1052,
       "goal_matched": true
     },
     {
@@ -34,7 +34,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0761,
+      "elapsed_seconds": 0.1033,
       "goal_matched": true
     },
     {
@@ -42,55 +42,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0762,
-      "goal_matched": true
-    },
-    {
-      "origin": "source_fragments",
-      "expressions": 16,
-      "merged_classes": 0,
-      "rewrites": 18,
-      "elapsed_seconds": 0.0023,
-      "goal_matched": false
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0757,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0764,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0778,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.076,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.0761,
+      "elapsed_seconds": 0.103,
       "goal_matched": true
     },
     {
@@ -98,7 +50,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0022,
+      "elapsed_seconds": 0.003,
       "goal_matched": false
     },
     {
@@ -106,7 +58,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0767,
+      "elapsed_seconds": 0.1037,
       "goal_matched": true
     },
     {
@@ -114,7 +66,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0784,
+      "elapsed_seconds": 0.1035,
       "goal_matched": true
     },
     {
@@ -122,7 +74,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0763,
+      "elapsed_seconds": 0.1029,
       "goal_matched": true
     },
     {
@@ -130,7 +82,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0761,
+      "elapsed_seconds": 0.1096,
       "goal_matched": true
     },
     {
@@ -138,7 +90,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0769,
+      "elapsed_seconds": 0.1037,
       "goal_matched": true
     },
     {
@@ -146,7 +98,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0023,
+      "elapsed_seconds": 0.003,
       "goal_matched": false
     },
     {
@@ -154,7 +106,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.077,
+      "elapsed_seconds": 0.1029,
       "goal_matched": true
     },
     {
@@ -162,7 +114,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0764,
+      "elapsed_seconds": 0.1046,
       "goal_matched": true
     },
     {
@@ -170,7 +122,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0775,
+      "elapsed_seconds": 0.1034,
       "goal_matched": true
     },
     {
@@ -178,7 +130,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0764,
+      "elapsed_seconds": 0.1033,
       "goal_matched": true
     },
     {
@@ -186,7 +138,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0764,
+      "elapsed_seconds": 0.1076,
       "goal_matched": true
     },
     {
@@ -194,7 +146,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0022,
+      "elapsed_seconds": 0.003,
       "goal_matched": false
     },
     {
@@ -202,7 +154,55 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.0762,
+      "elapsed_seconds": 0.1036,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.1037,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.1026,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.1039,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.1034,
+      "goal_matched": true
+    },
+    {
+      "origin": "source_fragments",
+      "expressions": 16,
+      "merged_classes": 0,
+      "rewrites": 18,
+      "elapsed_seconds": 0.004,
+      "goal_matched": false
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.1026,
       "goal_matched": true
     }
   ]
