@@ -1,85 +1,85 @@
 {
   "version": 2,
   "seed": 23132,
-  "observations": 97907,
+  "observations": 101346,
   "generated": 120,
   "proposed": 77,
-  "ticks": 33835,
-  "last_reward": 1.1214763215855025e-05,
-  "total_surprise": 18292134.906810466,
-  "total_information_gain": 45.66809328348345,
+  "ticks": 35056,
+  "last_reward": 1.0807826218202629e-05,
+  "total_surprise": 18738965.640204616,
+  "total_information_gain": 45.92801921065093,
   "beliefs": {
     "compiler_theory": {
       "domain": "compiler_theory",
-      "mean": 0.663626,
-      "variance": 0.00084348,
-      "observations": 236,
+      "mean": 0.66375167,
+      "variance": 0.00079016,
+      "observations": 252,
       "last_surprise": 0.0,
-      "last_information_gain": 0.00304865,
-      "updated_at": "2026-11-26T12:46:20.215277+00:00"
+      "last_information_gain": 0.00285555,
+      "updated_at": "2026-11-27T02:29:41.026125+00:00"
     },
     "abstract_algebra": {
       "domain": "abstract_algebra",
-      "mean": 0.72219295,
-      "variance": 0.00074374,
-      "observations": 268,
+      "mean": 0.7219283,
+      "variance": 0.00069708,
+      "observations": 286,
       "last_surprise": 0.0,
-      "last_information_gain": 0.00268748,
-      "updated_at": "2026-11-26T13:04:20.628206+00:00"
+      "last_information_gain": 0.00251858,
+      "updated_at": "2026-11-27T02:41:41.165123+00:00"
     },
     "distributed_systems": {
       "domain": "distributed_systems",
-      "mean": 0.97876045,
-      "variance": 1.55e-06,
-      "observations": 32215,
-      "last_surprise": 92.2954541,
-      "last_information_gain": 2.243e-05,
-      "updated_at": "2026-11-26T13:46:10.660889+00:00"
+      "mean": 0.97934278,
+      "variance": 1.5e-06,
+      "observations": 33337,
+      "last_surprise": 90.61364081,
+      "last_information_gain": 2.162e-05,
+      "updated_at": "2026-11-27T03:05:35.672519+00:00"
     },
     "physical_simulation": {
       "domain": "physical_simulation",
-      "mean": 0.45312593,
-      "variance": 0.00071471,
-      "observations": 279,
+      "mean": 0.45308908,
+      "variance": 0.00068532,
+      "observations": 291,
       "last_surprise": 0.0,
-      "last_information_gain": 0.00258238,
-      "updated_at": "2026-11-26T13:28:21.045976+00:00"
+      "last_information_gain": 0.00247602,
+      "updated_at": "2026-11-27T01:50:40.582537+00:00"
     },
     "quantum_dynamics": {
       "domain": "quantum_dynamics",
-      "mean": 0.26405876,
-      "variance": 0.00077892,
-      "observations": 256,
+      "mean": 0.26407217,
+      "variance": 0.00074138,
+      "observations": 269,
       "last_surprise": 0.0,
-      "last_information_gain": 0.00281484,
-      "updated_at": "2026-11-26T13:43:21.151658+00:00"
+      "last_information_gain": 0.00267895,
+      "updated_at": "2026-11-27T02:56:41.310302+00:00"
     },
     "formal_logic": {
       "domain": "formal_logic",
-      "mean": 0.99995808,
-      "variance": 1.55e-06,
-      "observations": 32219,
+      "mean": 0.99995755,
+      "variance": 1.5e-06,
+      "observations": 33345,
       "last_surprise": 0.0,
-      "last_information_gain": 2.243e-05,
-      "updated_at": "2026-11-26T13:46:10.660903+00:00"
+      "last_information_gain": 2.162e-05,
+      "updated_at": "2026-11-27T03:05:35.672533+00:00"
     },
     "optimization": {
       "domain": "optimization",
-      "mean": 0.65604898,
-      "variance": 1.55e-06,
-      "observations": 32197,
-      "last_surprise": 312.37147855,
-      "last_information_gain": 2.243e-05,
-      "updated_at": "2026-11-26T13:46:10.660853+00:00"
+      "mean": 0.65709049,
+      "variance": 1.5e-06,
+      "observations": 33320,
+      "last_surprise": 302.81294343,
+      "last_information_gain": 2.162e-05,
+      "updated_at": "2026-11-27T03:05:35.672483+00:00"
     },
     "biological_pipeline": {
       "domain": "biological_pipeline",
-      "mean": 0.53802403,
-      "variance": 0.00084065,
-      "observations": 237,
+      "mean": 0.53756573,
+      "variance": 0.00081001,
+      "observations": 246,
       "last_surprise": 0.0,
-      "last_information_gain": 0.00303839,
-      "updated_at": "2026-11-26T13:40:21.135430+00:00"
+      "last_information_gain": 0.00292742,
+      "updated_at": "2026-11-27T01:35:40.159249+00:00"
     }
   },
   "statements": [
@@ -207,14 +207,14 @@
   "trace": [
     {
       "domain": "distributed_systems",
-      "value": 0.996219,
+      "value": 0.996337,
       "source": "telemetry:success",
-      "surprisal": 92.334314,
+      "surprisal": 90.648355,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494654,
-      "posterior_mean": 0.97875,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:39:54.921468+00:00"
+      "intrinsic_reward": 0.494555,
+      "posterior_mean": 0.979333,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T02:59:05.448048+00:00"
     },
     {
       "domain": "formal_logic",
@@ -224,30 +224,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:39:54.921481+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T02:59:05.448062+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.559838,
+      "surprisal": 302.989039,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498417,
-      "posterior_mean": 0.65603,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:40:13.007648+00:00"
+      "intrinsic_reward": 0.498366,
+      "posterior_mean": 0.657073,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T02:59:25.164100+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.99622,
+      "value": 0.996337,
       "source": "telemetry:success",
-      "surprisal": 92.342478,
+      "surprisal": 90.645449,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494655,
-      "posterior_mean": 0.97875,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:40:13.007669+00:00"
+      "intrinsic_reward": 0.494555,
+      "posterior_mean": 0.979333,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T02:59:25.164126+00:00"
     },
     {
       "domain": "formal_logic",
@@ -257,41 +257,41 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:40:13.007684+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T02:59:25.164141+00:00"
     },
     {
-      "domain": "biological_pipeline",
-      "value": 0.528236,
+      "domain": "distributed_systems",
+      "value": 0.979489,
       "source": "endogenous_probe",
       "surprisal": 0.0,
-      "information_gain": 0.003038,
-      "intrinsic_reward": 0.001515,
-      "posterior_mean": 0.538024,
-      "posterior_variance": 0.000841,
-      "timestamp": "2026-11-26T13:40:21.135441+00:00"
+      "information_gain": 5e-06,
+      "intrinsic_reward": 3e-06,
+      "posterior_mean": 0.979333,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T02:59:41.321384+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.549919,
+      "surprisal": 302.979766,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498417,
-      "posterior_mean": 0.656031,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:40:31.483931+00:00"
+      "intrinsic_reward": 0.498366,
+      "posterior_mean": 0.657074,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T02:59:44.636473+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.99622,
+      "value": 0.996337,
       "source": "telemetry:success",
-      "surprisal": 92.33941,
+      "surprisal": 90.643248,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494654,
-      "posterior_mean": 0.978751,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:40:31.483952+00:00"
+      "intrinsic_reward": 0.494555,
+      "posterior_mean": 0.979334,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T02:59:44.636496+00:00"
     },
     {
       "domain": "formal_logic",
@@ -301,30 +301,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:40:31.483967+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T02:59:44.636511+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.540001,
+      "surprisal": 302.970493,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498417,
-      "posterior_mean": 0.656032,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:40:49.672134+00:00"
+      "intrinsic_reward": 0.498366,
+      "posterior_mean": 0.657075,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:00:03.451703+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.99622,
+      "value": 0.996337,
       "source": "telemetry:success",
-      "surprisal": 92.336343,
+      "surprisal": 90.640342,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494654,
-      "posterior_mean": 0.978751,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:40:49.672155+00:00"
+      "intrinsic_reward": 0.494555,
+      "posterior_mean": 0.979334,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:00:03.451727+00:00"
     },
     {
       "domain": "formal_logic",
@@ -334,30 +334,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:40:49.672168+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:00:03.451743+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.530083,
+      "surprisal": 302.961221,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498416,
-      "posterior_mean": 0.656033,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:41:07.969571+00:00"
+      "intrinsic_reward": 0.498366,
+      "posterior_mean": 0.657076,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:00:22.844013+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.99622,
+      "value": 0.996337,
       "source": "telemetry:success",
-      "surprisal": 92.333276,
+      "surprisal": 90.637436,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494654,
-      "posterior_mean": 0.978752,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:41:07.969593+00:00"
+      "intrinsic_reward": 0.494555,
+      "posterior_mean": 0.979335,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:00:22.844038+00:00"
     },
     {
       "domain": "formal_logic",
@@ -367,30 +367,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:41:07.969607+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:00:22.844053+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.520165,
+      "surprisal": 302.95195,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498416,
-      "posterior_mean": 0.656034,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:41:28.121224+00:00"
+      "intrinsic_reward": 0.498366,
+      "posterior_mean": 0.657077,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:00:42.011635+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.99622,
+      "value": 0.996338,
       "source": "telemetry:success",
-      "surprisal": 92.330208,
+      "surprisal": 90.645872,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494654,
-      "posterior_mean": 0.978752,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:41:28.121260+00:00"
+      "intrinsic_reward": 0.494555,
+      "posterior_mean": 0.979335,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:00:42.011658+00:00"
     },
     {
       "domain": "formal_logic",
@@ -400,30 +400,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:41:28.121286+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:00:42.011672+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.510248,
+      "surprisal": 302.942679,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498416,
-      "posterior_mean": 0.656035,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:41:46.355519+00:00"
+      "intrinsic_reward": 0.498366,
+      "posterior_mean": 0.657078,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:01:00.908926+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.99622,
+      "value": 0.996338,
       "source": "telemetry:success",
-      "surprisal": 92.327142,
+      "surprisal": 90.642966,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494654,
-      "posterior_mean": 0.978753,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:41:46.355539+00:00"
+      "intrinsic_reward": 0.494555,
+      "posterior_mean": 0.979336,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:01:00.908948+00:00"
     },
     {
       "domain": "formal_logic",
@@ -433,30 +433,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:41:46.355553+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:01:00.908963+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.500332,
+      "surprisal": 302.933408,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498416,
-      "posterior_mean": 0.656036,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:42:05.191773+00:00"
+      "intrinsic_reward": 0.498366,
+      "posterior_mean": 0.657079,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:01:19.834608+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.99622,
+      "value": 0.996338,
       "source": "telemetry:success",
-      "surprisal": 92.324075,
+      "surprisal": 90.64006,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494654,
-      "posterior_mean": 0.978753,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:42:05.191795+00:00"
+      "intrinsic_reward": 0.494555,
+      "posterior_mean": 0.979336,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:01:19.834634+00:00"
     },
     {
       "domain": "formal_logic",
@@ -466,30 +466,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:42:05.191810+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:01:19.834650+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.490417,
+      "surprisal": 302.924138,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498416,
-      "posterior_mean": 0.656037,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:42:23.580166+00:00"
+      "intrinsic_reward": 0.498366,
+      "posterior_mean": 0.65708,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:01:38.741921+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.99622,
+      "value": 0.996338,
       "source": "telemetry:success",
-      "surprisal": 92.321008,
+      "surprisal": 90.637155,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494653,
-      "posterior_mean": 0.978754,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:42:23.580186+00:00"
+      "intrinsic_reward": 0.494555,
+      "posterior_mean": 0.979337,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:01:38.741947+00:00"
     },
     {
       "domain": "formal_logic",
@@ -499,30 +499,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:42:23.580200+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:01:38.741962+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.480502,
+      "surprisal": 302.914869,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498416,
-      "posterior_mean": 0.656038,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:42:42.829837+00:00"
+      "intrinsic_reward": 0.498366,
+      "posterior_mean": 0.65708,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:01:57.958610+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.99622,
+      "value": 0.996338,
       "source": "telemetry:success",
-      "surprisal": 92.317942,
+      "surprisal": 90.634249,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494653,
-      "posterior_mean": 0.978754,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:42:42.829858+00:00"
+      "intrinsic_reward": 0.494554,
+      "posterior_mean": 0.979337,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:01:57.958634+00:00"
     },
     {
       "domain": "formal_logic",
@@ -532,30 +532,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:42:42.829872+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:01:57.958649+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.470588,
+      "surprisal": 302.9056,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498416,
-      "posterior_mean": 0.656039,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:43:00.932241+00:00"
+      "intrinsic_reward": 0.498366,
+      "posterior_mean": 0.657081,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:02:16.936887+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.996221,
+      "value": 0.996338,
       "source": "telemetry:success",
-      "surprisal": 92.326108,
+      "surprisal": 90.631344,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494654,
-      "posterior_mean": 0.978755,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:43:00.932267+00:00"
+      "intrinsic_reward": 0.494554,
+      "posterior_mean": 0.979338,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:02:16.936909+00:00"
     },
     {
       "domain": "formal_logic",
@@ -565,30 +565,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:43:00.932283+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:02:16.936923+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.460674,
+      "surprisal": 302.896332,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498416,
-      "posterior_mean": 0.65604,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:43:19.843722+00:00"
+      "intrinsic_reward": 0.498366,
+      "posterior_mean": 0.657082,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:02:35.578265+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.996221,
+      "value": 0.996338,
       "source": "telemetry:success",
-      "surprisal": 92.323042,
+      "surprisal": 90.628439,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494653,
-      "posterior_mean": 0.978756,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:43:19.843745+00:00"
+      "intrinsic_reward": 0.494554,
+      "posterior_mean": 0.979338,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:02:35.578288+00:00"
     },
     {
       "domain": "formal_logic",
@@ -598,41 +598,41 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:43:19.843759+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:02:35.578303+00:00"
     },
     {
-      "domain": "quantum_dynamics",
-      "value": 0.237342,
+      "domain": "formal_logic",
+      "value": 1.0,
       "source": "endogenous_probe",
       "surprisal": 0.0,
-      "information_gain": 0.002815,
-      "intrinsic_reward": 0.001403,
-      "posterior_mean": 0.264059,
-      "posterior_variance": 0.000779,
-      "timestamp": "2026-11-26T13:43:21.151676+00:00"
+      "information_gain": 5e-06,
+      "intrinsic_reward": 3e-06,
+      "posterior_mean": 0.999958,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:02:41.332725+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.450761,
+      "surprisal": 302.887065,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498416,
-      "posterior_mean": 0.656041,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:43:38.125742+00:00"
+      "intrinsic_reward": 0.498365,
+      "posterior_mean": 0.657083,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:02:54.417376+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.996221,
+      "value": 0.996338,
       "source": "telemetry:success",
-      "surprisal": 92.319976,
+      "surprisal": 90.625534,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494653,
-      "posterior_mean": 0.978756,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:43:38.125763+00:00"
+      "intrinsic_reward": 0.494554,
+      "posterior_mean": 0.979339,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:02:54.417397+00:00"
     },
     {
       "domain": "formal_logic",
@@ -642,30 +642,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:43:38.125777+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:02:54.417411+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.440848,
+      "surprisal": 302.877797,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498416,
-      "posterior_mean": 0.656042,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:43:57.186608+00:00"
+      "intrinsic_reward": 0.498365,
+      "posterior_mean": 0.657084,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:03:12.923567+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.996221,
+      "value": 0.996338,
       "source": "telemetry:success",
-      "surprisal": 92.31691,
+      "surprisal": 90.622629,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494653,
-      "posterior_mean": 0.978757,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:43:57.186629+00:00"
+      "intrinsic_reward": 0.494554,
+      "posterior_mean": 0.979339,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:03:12.923589+00:00"
     },
     {
       "domain": "formal_logic",
@@ -675,30 +675,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:43:57.186643+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:03:12.923603+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.430937,
+      "surprisal": 302.868531,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498416,
-      "posterior_mean": 0.656043,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:44:15.722254+00:00"
+      "intrinsic_reward": 0.498365,
+      "posterior_mean": 0.657085,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:03:33.145891+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.996221,
+      "value": 0.996339,
       "source": "telemetry:success",
-      "surprisal": 92.313844,
+      "surprisal": 90.631067,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494653,
-      "posterior_mean": 0.978757,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:44:15.722275+00:00"
+      "intrinsic_reward": 0.494554,
+      "posterior_mean": 0.97934,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:03:33.145915+00:00"
     },
     {
       "domain": "formal_logic",
@@ -708,30 +708,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:44:15.722289+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:03:33.145930+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.421025,
+      "surprisal": 302.859265,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498416,
-      "posterior_mean": 0.656044,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:44:34.104471+00:00"
+      "intrinsic_reward": 0.498365,
+      "posterior_mean": 0.657086,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:03:53.695251+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.996221,
+      "value": 0.996339,
       "source": "telemetry:success",
-      "surprisal": 92.310779,
+      "surprisal": 90.628162,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494653,
-      "posterior_mean": 0.978758,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:44:34.104491+00:00"
+      "intrinsic_reward": 0.494554,
+      "posterior_mean": 0.97934,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:03:53.695278+00:00"
     },
     {
       "domain": "formal_logic",
@@ -741,30 +741,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:44:34.104505+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:03:53.695293+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.411115,
+      "surprisal": 302.85,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498416,
-      "posterior_mean": 0.656045,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:44:52.906581+00:00"
+      "intrinsic_reward": 0.498365,
+      "posterior_mean": 0.657087,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:04:13.950283+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.996221,
+      "value": 0.996339,
       "source": "telemetry:success",
-      "surprisal": 92.307713,
+      "surprisal": 90.625258,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494653,
-      "posterior_mean": 0.978758,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:44:52.906603+00:00"
+      "intrinsic_reward": 0.494554,
+      "posterior_mean": 0.979341,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:04:13.950311+00:00"
     },
     {
       "domain": "formal_logic",
@@ -774,30 +774,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:44:52.906619+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:04:13.950326+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.401205,
+      "surprisal": 302.840735,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498416,
-      "posterior_mean": 0.656046,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:45:13.259336+00:00"
+      "intrinsic_reward": 0.498365,
+      "posterior_mean": 0.657088,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:04:34.087601+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.996221,
+      "value": 0.996339,
       "source": "telemetry:success",
-      "surprisal": 92.304648,
+      "surprisal": 90.622353,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494652,
-      "posterior_mean": 0.978759,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:45:13.259358+00:00"
+      "intrinsic_reward": 0.494554,
+      "posterior_mean": 0.979341,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:04:34.087626+00:00"
     },
     {
       "domain": "formal_logic",
@@ -807,30 +807,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:45:13.259372+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:04:34.087641+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.391295,
+      "surprisal": 302.83147,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498416,
-      "posterior_mean": 0.656047,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:45:32.376897+00:00"
+      "intrinsic_reward": 0.498365,
+      "posterior_mean": 0.657089,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:04:54.706551+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.996221,
+      "value": 0.996339,
       "source": "telemetry:success",
-      "surprisal": 92.301583,
+      "surprisal": 90.619449,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494652,
-      "posterior_mean": 0.978759,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:45:32.376918+00:00"
+      "intrinsic_reward": 0.494553,
+      "posterior_mean": 0.979342,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:04:54.706574+00:00"
     },
     {
       "domain": "formal_logic",
@@ -840,30 +840,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:45:32.376931+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:04:54.706590+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.381387,
+      "surprisal": 302.822207,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498416,
-      "posterior_mean": 0.656048,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:45:51.247428+00:00"
+      "intrinsic_reward": 0.498365,
+      "posterior_mean": 0.65709,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:05:14.950241+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.996221,
+      "value": 0.996339,
       "source": "telemetry:success",
-      "surprisal": 92.298519,
+      "surprisal": 90.616545,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494652,
-      "posterior_mean": 0.97876,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:45:51.247450+00:00"
+      "intrinsic_reward": 0.494553,
+      "posterior_mean": 0.979342,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:05:14.950267+00:00"
     },
     {
       "domain": "formal_logic",
@@ -873,30 +873,30 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:45:51.247464+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:05:14.950282+00:00"
     },
     {
       "domain": "optimization",
       "value": 0.6875,
       "source": "telemetry:mastery",
-      "surprisal": 312.371479,
+      "surprisal": 302.812943,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.498416,
-      "posterior_mean": 0.656049,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:46:10.660867+00:00"
+      "intrinsic_reward": 0.498365,
+      "posterior_mean": 0.65709,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:05:35.672498+00:00"
     },
     {
       "domain": "distributed_systems",
-      "value": 0.996221,
+      "value": 0.996339,
       "source": "telemetry:success",
-      "surprisal": 92.295454,
+      "surprisal": 90.613641,
       "information_gain": 2.2e-05,
-      "intrinsic_reward": 0.494652,
-      "posterior_mean": 0.97876,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:46:10.660893+00:00"
+      "intrinsic_reward": 0.494553,
+      "posterior_mean": 0.979343,
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:05:35.672523+00:00"
     },
     {
       "domain": "formal_logic",
@@ -906,8 +906,8 @@
       "information_gain": 2.2e-05,
       "intrinsic_reward": 1.1e-05,
       "posterior_mean": 0.999958,
-      "posterior_variance": 2e-06,
-      "timestamp": "2026-11-26T13:46:10.660907+00:00"
+      "posterior_variance": 1e-06,
+      "timestamp": "2026-11-27T03:05:35.672537+00:00"
     }
   ],
   "hypotheses": [
