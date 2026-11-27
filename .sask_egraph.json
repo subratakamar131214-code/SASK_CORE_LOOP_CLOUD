@@ -1,15 +1,15 @@
 {
   "version": 1,
-  "superpositions": 15093,
-  "rewrites": 7251857,
-  "promotions": 166056,
+  "superpositions": 15978,
+  "rewrites": 7676085,
+  "promotions": 175794,
   "rejections": 0,
   "last": {
     "origin": "cycle_metrics",
     "expressions": 10,
     "merged_classes": 3,
     "rewrites": 572,
-    "elapsed_seconds": 0.1227,
+    "elapsed_seconds": 0.0625,
     "goal_matched": true
   },
   "history": [
@@ -18,7 +18,31 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.1201,
+      "elapsed_seconds": 0.0601,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0622,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0613,
+      "goal_matched": true
+    },
+    {
+      "origin": "cycle_metrics",
+      "expressions": 10,
+      "merged_classes": 3,
+      "rewrites": 572,
+      "elapsed_seconds": 0.0613,
       "goal_matched": true
     },
     {
@@ -26,7 +50,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0035,
+      "elapsed_seconds": 0.0019,
       "goal_matched": false
     },
     {
@@ -34,7 +58,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.1235,
+      "elapsed_seconds": 0.0599,
       "goal_matched": true
     },
     {
@@ -42,7 +66,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.1287,
+      "elapsed_seconds": 0.0615,
       "goal_matched": true
     },
     {
@@ -50,7 +74,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.1206,
+      "elapsed_seconds": 0.059,
       "goal_matched": true
     },
     {
@@ -58,7 +82,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.1212,
+      "elapsed_seconds": 0.0592,
       "goal_matched": true
     },
     {
@@ -66,7 +90,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.1213,
+      "elapsed_seconds": 0.0605,
       "goal_matched": true
     },
     {
@@ -74,7 +98,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0036,
+      "elapsed_seconds": 0.0017,
       "goal_matched": false
     },
     {
@@ -82,7 +106,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.123,
+      "elapsed_seconds": 0.0578,
       "goal_matched": true
     },
     {
@@ -90,7 +114,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.1229,
+      "elapsed_seconds": 0.0861,
       "goal_matched": true
     },
     {
@@ -98,7 +122,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.1255,
+      "elapsed_seconds": 0.0583,
       "goal_matched": true
     },
     {
@@ -106,7 +130,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.1211,
+      "elapsed_seconds": 0.0578,
       "goal_matched": true
     },
     {
@@ -114,7 +138,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.123,
+      "elapsed_seconds": 0.0586,
       "goal_matched": true
     },
     {
@@ -122,7 +146,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0036,
+      "elapsed_seconds": 0.0019,
       "goal_matched": false
     },
     {
@@ -130,7 +154,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.1251,
+      "elapsed_seconds": 0.0585,
       "goal_matched": true
     },
     {
@@ -138,7 +162,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.122,
+      "elapsed_seconds": 0.0625,
       "goal_matched": true
     },
     {
@@ -146,7 +170,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.1278,
+      "elapsed_seconds": 0.0614,
       "goal_matched": true
     },
     {
@@ -154,7 +178,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.1204,
+      "elapsed_seconds": 0.0616,
       "goal_matched": true
     },
     {
@@ -162,7 +186,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.1215,
+      "elapsed_seconds": 0.0608,
       "goal_matched": true
     },
     {
@@ -170,7 +194,7 @@
       "expressions": 16,
       "merged_classes": 0,
       "rewrites": 18,
-      "elapsed_seconds": 0.0036,
+      "elapsed_seconds": 0.0018,
       "goal_matched": false
     },
     {
@@ -178,31 +202,7 @@
       "expressions": 10,
       "merged_classes": 3,
       "rewrites": 572,
-      "elapsed_seconds": 0.1212,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.1233,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.1256,
-      "goal_matched": true
-    },
-    {
-      "origin": "cycle_metrics",
-      "expressions": 10,
-      "merged_classes": 3,
-      "rewrites": 572,
-      "elapsed_seconds": 0.1227,
+      "elapsed_seconds": 0.0625,
       "goal_matched": true
     }
   ]
