@@ -78,3 +78,8 @@ _audit_*
 # Private IP quarantine, provenance ledger, and encrypted cycle memory (never pushed)
 ip_quarantine/
 artifacts/private_candidates/
+
+# SASK v2.0 runtime state and caches (never pushed)
+sask_v2/state/
+sask_v2/ring/__pycache__/
+__pycache__/

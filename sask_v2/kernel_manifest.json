@@ -1,0 +1,14 @@
+{
+  "files": {
+    "novelty_vault.py": "add1da38eb9bc8d3eaa6dbadc334d3167a8da1b1fc776dfd6149fd7a81be12e6",
+    "sask_v2/boundary.py": "5a845a541cd2809ee468fa7e1caa229c39167af2d5f3413c7aea5bb97027b251",
+    "sask_v2/supervisor.py": "c6a4d9e3547ef45c270fe2fc9e14b9fae232d00642470383341d4565a960a87d",
+    "scale_orchestrator.py": "a088bd2a5a19a8f76407f36e8c6cc84f80a7137070d0764e67230823dfcde2c9",
+    "verify.py": "1d0e80332efbc6c77082e75c9cec8a001da7cde0475abe211ceba1b4309124ac",
+    "verify_golden_suite.json": "bba1c089b938caf91cf7ea82d4e71ed5a67068563da7c9b2e7816cc3f10c3b56",
+    "verify_holdout_suite.json": "d36f40048286cbd6e870fcb29bf9725f94075c2f9ca5e257e243cbcdd1c429cb",
+    "verify_integrity.json": "8db72e6dc5ca100834d4eaaeee378d11a741c98d091b88de95d3be7ed4296b6b"
+  },
+  "frozen_at": "2026-11-28T03:38:57.757459+00:00",
+  "schema": 1
+}
