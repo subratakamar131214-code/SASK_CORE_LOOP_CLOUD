@@ -167,6 +167,18 @@ Operational notes:
 - **Manifest discipline.** `sask_v2/kernel_manifest.json` is written only by a
   maintainer freeze. Re-freeze after any intentional kernel or supervisor
   change, otherwise `check_pin` and `assert_intact` will report drift.
+- **Process sessions.** Spawn workers with `start_new_session=True` on POSIX.
+  `_kill_tree` signals a process group only when the worker pid leads it, so a
+  worker that shares the runner's group can never cause the supervisor to kill
+  the CI job itself.
+
+## 5.1 Continuous integration
+
+`.github/workflows/v2_autonomy.yml` runs on pushes and pull requests targeting
+`v2.0-autonomy` (plus manual dispatch). It installs only `cryptography`, then
+byte-compiles `sask_v2`/`tests_v2` and runs `python -m sask_v2.selftest`
+followed by a direct `tests_v2` discovery run on `ubuntu-latest`. It does not
+trigger on `main`, so the v1.0 baseline workflows are unchanged.
 
 ## 6. Public-safety invariants
 

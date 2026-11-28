@@ -13,9 +13,11 @@ agent, and:
   on drift unless the operator overrides.
 
 Killing uses the OS process tree (``taskkill /T /F`` on Windows, process group
-SIGKILL on POSIX). Memory observation uses ``psutil`` when installed and falls
-back to ``tasklist`` / ``/proc``; absence of a metric is reported, never
-guessed.
+SIGKILL on POSIX). On POSIX the group is signalled only when the worker pid
+leads it -- spawn workers with ``start_new_session=True`` so the supervisor can
+reap the whole tree without touching the parent's (e.g. CI runner's) group.
+Memory observation uses ``psutil`` when installed and falls back to
+``tasklist`` / ``/proc``; absence of a metric is reported, never guessed.
 """
 
 from __future__ import annotations
@@ -178,14 +180,23 @@ def _kill_tree(pid: int) -> bool:
         except (OSError, subprocess.SubprocessError):
             return False
     try:
-        os.killpg(os.getpgid(pid), signal.SIGKILL)
-        return True
-    except (OSError, ProcessLookupError):
+        pgid = os.getpgid(pid)
+    except OSError:
+        pgid = None
+    # Only signal a process group this pid leads. Workers are expected to be
+    # spawned with ``start_new_session=True``; if a caller shares the parent's
+    # group, killing that group would take down the whole CI job.
+    if pgid is not None and pgid == pid:
         try:
-            os.kill(pid, signal.SIGKILL)
+            os.killpg(pgid, signal.SIGKILL)
             return True
         except OSError:
-            return False
+            pass
+    try:
+        os.kill(pid, signal.SIGKILL)
+        return True
+    except OSError:
+        return False
 
 
 def check_pin(root: Path | str) -> Dict[str, Any]:

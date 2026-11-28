@@ -6,6 +6,7 @@ import contextlib
 import hashlib
 import io
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -15,6 +16,14 @@ from pathlib import Path
 from unittest import mock
 
 from sask_v2 import supervisor
+
+
+def spawn_sleeper():
+    """Worker-like child; own session on POSIX so a group kill stays scoped."""
+    kwargs = {"start_new_session": True} if os.name != "nt" else {}
+    return subprocess.Popen(
+        [sys.executable, "-c", "import time; time.sleep(120)"], **kwargs
+    )
 
 
 def write_heartbeat(root: Path, pid: int, epoch: float) -> Path:
@@ -32,9 +41,7 @@ class HangKillTest(unittest.TestCase):
     def test_stale_heartbeat_kills_hung_child(self):
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)
-            child = subprocess.Popen(
-                [sys.executable, "-c", "import time; time.sleep(120)"]
-            )
+            child = spawn_sleeper()
             try:
                 write_heartbeat(root, child.pid, time.time() - 1000.0)
                 config = supervisor.SupervisorConfig(
@@ -75,6 +82,23 @@ class HangKillTest(unittest.TestCase):
             actions = [item["action"] for item in result["actions"]]
             self.assertIn("kill_rss", actions)
             self.assertFalse(result["healthy"])
+
+
+@unittest.skipIf(os.name == "nt", "POSIX process-group semantics")
+class ProcessGroupSafetyTest(unittest.TestCase):
+    def test_shared_group_is_not_signalled(self):
+        child = subprocess.Popen(
+            [sys.executable, "-c", "import time; time.sleep(120)"]
+        )
+        try:
+            self.assertNotEqual(os.getpgid(child.pid), child.pid)
+            self.assertTrue(supervisor._kill_tree(child.pid))
+            child.wait(timeout=30)
+            self.assertIsNotNone(child.poll())
+        finally:
+            if child.poll() is None:
+                child.kill()
+                child.wait(timeout=30)
 
 
 class TelemetryRotationTest(unittest.TestCase):

@@ -1,0 +1,40 @@
+name: SASK v2.0 Autonomy Suite
+
+on:
+  push:
+    branches: [ v2.0-autonomy ]
+  pull_request:
+    branches: [ v2.0-autonomy ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  v2-autonomy:
+    name: Boundary, oracle, repair, and failover tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository source
+        uses: actions/checkout@v4
+
+      - name: Set up Python runtime
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install minimal runtime dependency
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "cryptography>=42"
+
+      - name: Byte-compile the v2 package and tests
+        run: python -m compileall -q sask_v2 tests_v2
+
+      - name: Run v2 selftest (discovers tests_v2)
+        run: python -m sask_v2.selftest
+
+      - name: Run tests_v2 directly
+        run: python -m unittest discover -s tests_v2 -t . -v
