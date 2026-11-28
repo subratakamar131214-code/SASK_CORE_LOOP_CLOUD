@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "comparisons": 269760,
-  "isomorphisms": 35968,
-  "boundary_probes": 28100,
+  "comparisons": 281700,
+  "isomorphisms": 37560,
+  "boundary_probes": 29700,
   "structures": [
     {
       "id": "alg-cayley-z6",
@@ -511,7 +511,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:34:21.157753+00:00"
+      "timestamp": "2026-11-28T11:26:14.908987+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -533,7 +533,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:35:23.078764+00:00"
+      "timestamp": "2026-11-28T11:27:05.103229+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -555,7 +555,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:36:25.096976+00:00"
+      "timestamp": "2026-11-28T11:27:55.279161+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -577,7 +577,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:37:27.160742+00:00"
+      "timestamp": "2026-11-28T11:28:45.938331+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -599,7 +599,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:38:29.427573+00:00"
+      "timestamp": "2026-11-28T11:29:36.435480+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -621,7 +621,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:39:31.521152+00:00"
+      "timestamp": "2026-11-28T11:30:27.283891+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -643,7 +643,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:40:36.145202+00:00"
+      "timestamp": "2026-11-28T11:31:18.597181+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -665,7 +665,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:41:39.144287+00:00"
+      "timestamp": "2026-11-28T11:32:09.568537+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -687,7 +687,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:42:40.676855+00:00"
+      "timestamp": "2026-11-28T11:33:00.492131+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -709,7 +709,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:43:42.542554+00:00"
+      "timestamp": "2026-11-28T11:33:52.749783+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -731,7 +731,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:44:45.253906+00:00"
+      "timestamp": "2026-11-28T11:34:44.576844+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -753,7 +753,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:45:47.583152+00:00"
+      "timestamp": "2026-11-28T11:35:35.500292+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -775,7 +775,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:46:49.911869+00:00"
+      "timestamp": "2026-11-28T11:36:26.053430+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -797,7 +797,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:47:54.247281+00:00"
+      "timestamp": "2026-11-28T11:37:16.755413+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -819,7 +819,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:48:55.836486+00:00"
+      "timestamp": "2026-11-28T11:38:07.258280+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -841,7 +841,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:50:00.531788+00:00"
+      "timestamp": "2026-11-28T11:38:57.682366+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -863,7 +863,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:51:03.189003+00:00"
+      "timestamp": "2026-11-28T11:39:48.605471+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -885,7 +885,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:52:05.903142+00:00"
+      "timestamp": "2026-11-28T11:40:39.207975+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -907,7 +907,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:53:07.910791+00:00"
+      "timestamp": "2026-11-28T11:41:29.665545+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -929,7 +929,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:54:12.103141+00:00"
+      "timestamp": "2026-11-28T11:42:20.277271+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -951,7 +951,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:55:14.697351+00:00"
+      "timestamp": "2026-11-28T11:43:11.023103+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -973,7 +973,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:56:19.386138+00:00"
+      "timestamp": "2026-11-28T11:44:02.195538+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -995,7 +995,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:57:22.270203+00:00"
+      "timestamp": "2026-11-28T11:44:53.551128+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1017,7 +1017,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:58:24.500914+00:00"
+      "timestamp": "2026-11-28T11:45:44.853327+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1039,7 +1039,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T00:59:27.560194+00:00"
+      "timestamp": "2026-11-28T11:46:36.338692+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1061,7 +1061,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:00:32.160059+00:00"
+      "timestamp": "2026-11-28T11:47:27.858496+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1083,7 +1083,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:01:35.127484+00:00"
+      "timestamp": "2026-11-28T11:48:19.458190+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1105,7 +1105,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:02:38.017384+00:00"
+      "timestamp": "2026-11-28T11:49:11.265474+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1127,7 +1127,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:03:41.698933+00:00"
+      "timestamp": "2026-11-28T11:50:04.016899+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1149,7 +1149,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:04:44.439419+00:00"
+      "timestamp": "2026-11-28T11:50:56.243567+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1171,7 +1171,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:05:46.941244+00:00"
+      "timestamp": "2026-11-28T11:51:47.439796+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1193,7 +1193,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:06:50.109834+00:00"
+      "timestamp": "2026-11-28T11:52:38.457859+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1215,7 +1215,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:07:53.652977+00:00"
+      "timestamp": "2026-11-28T11:53:29.631425+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1237,7 +1237,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:08:56.894758+00:00"
+      "timestamp": "2026-11-28T11:54:20.878505+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1259,7 +1259,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:09:59.489082+00:00"
+      "timestamp": "2026-11-28T11:55:11.539199+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1281,7 +1281,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:11:01.890528+00:00"
+      "timestamp": "2026-11-28T11:56:01.957309+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1303,7 +1303,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:12:06.452854+00:00"
+      "timestamp": "2026-11-28T11:56:52.822083+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1325,7 +1325,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:13:11.209389+00:00"
+      "timestamp": "2026-11-28T11:57:43.658247+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1347,7 +1347,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:14:17.381752+00:00"
+      "timestamp": "2026-11-28T11:58:34.353447+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1369,7 +1369,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:15:22.113377+00:00"
+      "timestamp": "2026-11-28T11:59:25.502631+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1391,7 +1391,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:16:26.838548+00:00"
+      "timestamp": "2026-11-28T12:00:16.238385+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1413,7 +1413,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:17:33.224782+00:00"
+      "timestamp": "2026-11-28T12:01:07.352066+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1435,7 +1435,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:18:39.504197+00:00"
+      "timestamp": "2026-11-28T12:01:58.852641+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1457,7 +1457,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:19:44.684857+00:00"
+      "timestamp": "2026-11-28T12:02:50.403349+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1479,7 +1479,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:20:51.406367+00:00"
+      "timestamp": "2026-11-28T12:03:41.454059+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1501,7 +1501,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:21:55.497219+00:00"
+      "timestamp": "2026-11-28T12:04:32.756449+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1523,7 +1523,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:22:58.109951+00:00"
+      "timestamp": "2026-11-28T12:05:24.217391+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1545,7 +1545,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:24:01.215006+00:00"
+      "timestamp": "2026-11-28T12:06:15.165149+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1567,7 +1567,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:25:04.341486+00:00"
+      "timestamp": "2026-11-28T12:07:05.685220+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1589,7 +1589,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:26:07.222636+00:00"
+      "timestamp": "2026-11-28T12:07:56.518928+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1611,7 +1611,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:27:10.813074+00:00"
+      "timestamp": "2026-11-28T12:08:47.002694+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1633,7 +1633,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:28:15.336495+00:00"
+      "timestamp": "2026-11-28T12:09:38.082499+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1655,7 +1655,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:29:18.943948+00:00"
+      "timestamp": "2026-11-28T12:10:29.699327+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1677,7 +1677,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:30:21.190344+00:00"
+      "timestamp": "2026-11-28T12:11:20.386225+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1699,7 +1699,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:31:24.730884+00:00"
+      "timestamp": "2026-11-28T12:12:10.831188+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1721,7 +1721,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:32:29.432117+00:00"
+      "timestamp": "2026-11-28T12:13:01.837011+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1743,7 +1743,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:33:32.503421+00:00"
+      "timestamp": "2026-11-28T12:13:52.460205+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1765,7 +1765,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:34:35.366292+00:00"
+      "timestamp": "2026-11-28T12:14:43.172342+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1787,7 +1787,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:35:38.934290+00:00"
+      "timestamp": "2026-11-28T12:15:34.982448+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1809,7 +1809,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:36:42.432670+00:00"
+      "timestamp": "2026-11-28T12:16:26.378121+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1831,7 +1831,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:37:45.535399+00:00"
+      "timestamp": "2026-11-28T12:17:17.785686+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1853,7 +1853,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:38:48.426907+00:00"
+      "timestamp": "2026-11-28T12:18:09.061083+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1875,7 +1875,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:39:51.893222+00:00"
+      "timestamp": "2026-11-28T12:19:00.371797+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1897,7 +1897,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:40:56.893379+00:00"
+      "timestamp": "2026-11-28T12:19:51.612305+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1919,7 +1919,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:42:00.381693+00:00"
+      "timestamp": "2026-11-28T12:20:42.393587+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1941,7 +1941,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:43:02.954978+00:00"
+      "timestamp": "2026-11-28T12:21:32.966581+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1963,7 +1963,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:44:05.014539+00:00"
+      "timestamp": "2026-11-28T12:22:24.758849+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -1985,7 +1985,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:45:08.843109+00:00"
+      "timestamp": "2026-11-28T12:23:16.290148+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2007,7 +2007,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:46:12.869378+00:00"
+      "timestamp": "2026-11-28T12:24:08.081994+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2029,7 +2029,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:47:15.508446+00:00"
+      "timestamp": "2026-11-28T12:24:59.803221+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2051,7 +2051,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:48:17.923089+00:00"
+      "timestamp": "2026-11-28T12:25:51.571138+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2073,7 +2073,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:49:20.790620+00:00"
+      "timestamp": "2026-11-28T12:26:44.017053+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2095,7 +2095,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:50:25.171144+00:00"
+      "timestamp": "2026-11-28T12:27:36.301037+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2117,7 +2117,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:51:28.910556+00:00"
+      "timestamp": "2026-11-28T12:28:28.722773+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2139,7 +2139,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:52:31.706649+00:00"
+      "timestamp": "2026-11-28T12:29:20.436109+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2161,7 +2161,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:53:34.092035+00:00"
+      "timestamp": "2026-11-28T12:30:11.474968+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2183,7 +2183,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:54:37.532713+00:00"
+      "timestamp": "2026-11-28T12:31:02.208599+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2205,7 +2205,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:55:40.120951+00:00"
+      "timestamp": "2026-11-28T12:31:52.473215+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2227,7 +2227,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:56:45.376720+00:00"
+      "timestamp": "2026-11-28T12:32:42.896462+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2249,7 +2249,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:57:49.296761+00:00"
+      "timestamp": "2026-11-28T12:33:33.846012+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2271,7 +2271,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:58:52.318889+00:00"
+      "timestamp": "2026-11-28T12:34:24.878901+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2293,7 +2293,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T01:59:54.872651+00:00"
+      "timestamp": "2026-11-28T12:35:15.639773+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2315,7 +2315,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:00:57.689068+00:00"
+      "timestamp": "2026-11-28T12:36:06.918515+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2337,7 +2337,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:02:00.934295+00:00"
+      "timestamp": "2026-11-28T12:36:58.006609+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2359,7 +2359,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:03:03.924073+00:00"
+      "timestamp": "2026-11-28T12:37:49.614025+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2381,7 +2381,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:04:08.105535+00:00"
+      "timestamp": "2026-11-28T12:38:41.391810+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2403,7 +2403,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:05:11.384050+00:00"
+      "timestamp": "2026-11-28T12:39:32.777599+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2425,7 +2425,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:06:14.808581+00:00"
+      "timestamp": "2026-11-28T12:40:24.268389+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2447,7 +2447,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:07:17.233799+00:00"
+      "timestamp": "2026-11-28T12:41:16.649158+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2469,7 +2469,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:08:21.567627+00:00"
+      "timestamp": "2026-11-28T12:42:09.552140+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2491,7 +2491,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:09:24.536370+00:00"
+      "timestamp": "2026-11-28T12:43:02.856487+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2513,7 +2513,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:10:28.204196+00:00"
+      "timestamp": "2026-11-28T12:43:56.031253+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2535,7 +2535,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:11:31.126010+00:00"
+      "timestamp": "2026-11-28T12:44:49.628746+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2557,7 +2557,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:12:34.408970+00:00"
+      "timestamp": "2026-11-28T12:45:43.700712+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2579,7 +2579,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:13:36.727753+00:00"
+      "timestamp": "2026-11-28T12:46:38.855152+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2601,7 +2601,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:14:39.347439+00:00"
+      "timestamp": "2026-11-28T12:47:34.913983+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2623,7 +2623,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:15:42.334161+00:00"
+      "timestamp": "2026-11-28T12:48:31.720693+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2645,7 +2645,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:16:45.389626+00:00"
+      "timestamp": "2026-11-28T12:49:28.280838+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2667,7 +2667,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:17:48.854267+00:00"
+      "timestamp": "2026-11-28T12:50:24.982110+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2689,7 +2689,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:18:53.201767+00:00"
+      "timestamp": "2026-11-28T12:51:21.229218+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2711,7 +2711,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:19:55.849287+00:00"
+      "timestamp": "2026-11-28T12:52:17.210543+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2733,7 +2733,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:20:59.616860+00:00"
+      "timestamp": "2026-11-28T12:53:13.015240+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2755,7 +2755,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:22:02.082857+00:00"
+      "timestamp": "2026-11-28T12:54:09.029392+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2777,7 +2777,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:23:05.912861+00:00"
+      "timestamp": "2026-11-28T12:55:05.324580+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2799,7 +2799,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:24:08.918850+00:00"
+      "timestamp": "2026-11-28T12:56:01.384828+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2821,7 +2821,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:25:11.699835+00:00"
+      "timestamp": "2026-11-28T12:56:57.448144+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2843,7 +2843,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:26:14.787012+00:00"
+      "timestamp": "2026-11-28T12:57:52.890574+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2865,7 +2865,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:27:17.988003+00:00"
+      "timestamp": "2026-11-28T12:58:48.305000+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2887,7 +2887,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:28:20.804232+00:00"
+      "timestamp": "2026-11-28T12:59:43.798273+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2909,7 +2909,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:29:23.090062+00:00"
+      "timestamp": "2026-11-28T13:00:39.292804+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2931,7 +2931,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:30:25.986643+00:00"
+      "timestamp": "2026-11-28T13:01:34.297862+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2953,7 +2953,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:31:29.668911+00:00"
+      "timestamp": "2026-11-28T13:02:29.920768+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2975,7 +2975,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:32:36.640276+00:00"
+      "timestamp": "2026-11-28T13:03:25.642231+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -2997,7 +2997,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:33:44.452366+00:00"
+      "timestamp": "2026-11-28T13:04:20.775290+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -3019,7 +3019,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:34:48.106890+00:00"
+      "timestamp": "2026-11-28T13:05:15.866704+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -3041,7 +3041,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:35:53.264699+00:00"
+      "timestamp": "2026-11-28T13:06:11.877485+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -3063,7 +3063,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:36:57.651468+00:00"
+      "timestamp": "2026-11-28T13:07:08.544550+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -3085,7 +3085,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:38:02.947023+00:00"
+      "timestamp": "2026-11-28T13:08:05.419563+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -3107,7 +3107,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:39:05.737177+00:00"
+      "timestamp": "2026-11-28T13:09:01.866914+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -3129,7 +3129,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:40:09.182888+00:00"
+      "timestamp": "2026-11-28T13:09:58.772539+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -3151,7 +3151,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:41:16.330087+00:00"
+      "timestamp": "2026-11-28T13:10:55.058542+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -3173,7 +3173,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:42:19.884635+00:00"
+      "timestamp": "2026-11-28T13:11:51.243649+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -3195,7 +3195,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:43:22.213582+00:00"
+      "timestamp": "2026-11-28T13:12:47.435980+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -3217,7 +3217,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:44:25.113338+00:00"
+      "timestamp": "2026-11-28T13:13:43.769436+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -3239,7 +3239,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:45:27.840615+00:00"
+      "timestamp": "2026-11-28T13:14:39.537881+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -3261,7 +3261,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:46:30.640073+00:00"
+      "timestamp": "2026-11-28T13:15:35.668777+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -3283,7 +3283,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:47:33.734412+00:00"
+      "timestamp": "2026-11-28T13:16:31.596485+00:00"
     },
     {
       "source": "alg-cayley-z6",
@@ -3305,7 +3305,7 @@
       },
       "transferred": true,
       "directive": "Transfer 'cycle_decomposition' from abstract_algebra (Cayley graph of Z6) to distributed_networks (Six-node ring topology) via mapping z0->n0, z1->n1, z5->n5, z2->n2, z4->n4, z3->n3.",
-      "timestamp": "2026-11-28T02:48:37.079696+00:00"
+      "timestamp": "2026-11-28T13:17:27.832721+00:00"
     }
   ]
 }
