@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SASK — Open-World Command &amp; Execution Space</title>
+<meta name="description" content="Local read-only open-world command space for the SASK autopoietic kernel. Every order and mini-game runs in an isolated browser sandbox.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+<link rel="stylesheet" href="/ui/styles.css">
+<link rel="stylesheet" href="/ui/evolved.css" id="evolved-styles">
+</head>
+<body>
+<div id="app-shell">
+  <header id="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">◈</span>
+      <div>
+        <h1>SASK <span>WORLD DECK</span></h1>
+        <p class="brand-sub">autopoietic kernel · open-world command space · locally hosted</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <div id="status-pill" class="status-pill" data-state="connecting">
+        <span id="connection-dot" class="dot"></span>
+        <span id="status-text">CONNECTING</span>
+      </div>
+      <div id="clock" class="clock" aria-label="local time">--:--:--</div>
+      <span id="fps-meter" class="fps-meter">-- FPS</span>
+      <button id="explain-toggle" class="btn btn-ghost" title="Explain what I'm seeing">Explain mode</button>
+      <button id="reliability-toggle" class="btn btn-ghost" title="Real cycle telemetry, cloud runs, bottlenecks and active fixes">Reliability</button>
+      <button id="telemetry-toggle" class="btn btn-ghost" title="Open read-only kernel telemetry">Telemetry</button>
+      <button id="help-toggle" class="btn btn-ghost" title="Controls and world guide">?</button>
+      <button id="evolve-btn" class="btn btn-accent" title="Run one UI/UX self-evolution cycle">Evolve UI</button>
+      <button id="revert-btn" class="btn btn-ghost" title="Revert to the previous UI version">Revert UI</button>
+    </div>
+  </header>
+
+  <main id="world-shell">
+    <canvas id="world-canvas" aria-label="SASK open-world 3D station map"></canvas>
+
+    <div class="world-hud">
+      <section id="mission-strip" class="glass hud-block mission-strip">
+        <span class="eyebrow">1-LINE MISSION</span>
+        <p id="mission-line">Booting the world map…</p>
+        <div class="mission-actions">
+          <span id="copilot-state" class="copilot-state" data-mode="autonomous"><i class="cp-dot"></i>CO-PILOT ONLINE</span>
+          <button id="demo-btn" class="btn btn-mini" title="Run a guided 30-second tour">Show Me (30s)</button>
+          <button id="copilot-toggle" class="btn btn-mini" title="Pause or resume the autonomous co-pilot">Pause co-pilot</button>
+        </div>
+      </section>
+
+      <section id="minimap-wrap" class="glass hud-block minimap-wrap">
+        <div class="hud-head"><h2>World Radar</h2><span class="pill pill-soft" id="world-layout-pill">ring-hub</span></div>
+        <canvas id="minimap-canvas" width="190" height="190" aria-label="Station radar minimap"></canvas>
+        <p id="minimap-caption" class="mini-caption">WASD move · drag orbit · scroll zoom</p>
+      </section>
+
+      <section id="copilot-panel" class="glass hud-block copilot-panel">
+        <div class="hud-head">
+          <h2>Co-Pilot Log</h2>
+          <span class="pill pill-soft" id="copilot-mode">autonomous</span>
+        </div>
+        <ul id="copilot-log" class="copilot-log"></ul>
+      </section>
+
+      <section id="waypoint-dock" class="glass hud-block waypoint-dock">
+        <div class="hud-head"><h2>Warp Waypoints</h2><span class="pill pill-soft">keys 1–0</span></div>
+        <div id="waypoint-grid" class="waypoint-grid"></div>
+      </section>
+
+      <div id="station-hint" class="station-hint" hidden>
+        <span class="hint-keys"><kbd>E</kbd> or click to enter</span>
+        <strong id="station-hint-name">—</strong>
+      </div>
+
+      <div id="world-badges" class="world-badges">
+        <div id="sandbox-badge" class="sandbox-badge">ISOLATED SANDBOX — ZERO EFFECT ON LIVE KERNEL OR REPO</div>
+        <button id="sandbox-reset" class="btn btn-danger btn-mini" title="Reset every sandbox order, mini-game and co-pilot state">Reset World/Sandbox</button>
+      </div>
+
+      <div id="world-controls" class="world-controls">
+        <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move</span>
+        <span><kbd>Shift</kbd> sprint</span>
+        <span>drag orbit · scroll zoom</span>
+        <span><kbd>1</kbd>–<kbd>0</kbd> warp</span>
+        <span><kbd>E</kbd> enter</span>
+      </div>
+
+      <div id="demo-banner" class="demo-banner" hidden>
+        <span id="demo-step">Demo starting…</span>
+        <button id="demo-cancel" class="btn btn-mini">Stop demo</button>
+      </div>
+
+      <section id="telemetry-dock" class="glass hud-block telemetry-dock" hidden>
+        <div class="hud-head">
+          <h2>Kernel Telemetry</h2>
+          <span class="pill pill-soft" id="isolation-pill">isolation ?</span>
+          <button id="telemetry-close" class="btn btn-mini" aria-label="Close telemetry">Close</button>
+        </div>
+        <p class="panel-lead">Read-only snapshot of the live kernel, ledgers and the UI evolution ledger. Nothing here can write to the kernel.</p>
+        <div id="telemetry-stats" class="stat-list"></div>
+        <h3 class="subhead">UI evolution versions</h3>
+        <div id="versions-list" class="versions-list"><span class="muted">loading…</span></div>
+      </section>
+    </div>
+
+    <aside id="station-console" class="station-console" aria-hidden="true">
+      <div class="console-head">
+        <div class="console-title">
+          <span id="station-script" class="console-script">script.py</span>
+          <h2 id="station-name">Station</h2>
+        </div>
+        <button id="station-close" class="btn btn-mini" aria-label="Close station console">Close</button>
+      </div>
+      <p id="station-desc" class="console-desc"></p>
+
+      <div class="console-live">
+        <span class="live-label">LIVE KERNEL SIGNAL</span>
+        <span id="station-live" class="live-value">awaiting telemetry…</span>
+      </div>
+      <div id="station-metrics" class="console-metrics"></div>
+
+      <div class="console-controls">
+        <button id="station-takeover" class="btn btn-accent">Take over station</button>
+        <button id="station-pause" class="btn">Pause order</button>
+        <label class="intensity" for="station-intensity">
+          <span>Co-steer intensity <output id="station-intensity-value">50%</output></span>
+          <input id="station-intensity" type="range" min="0" max="100" value="50" step="1">
+        </label>
+        <button id="station-explain" class="btn btn-ghost">Explain what I'm seeing</button>
+      </div>
+
+      <h3 class="subhead">1-Click Orders</h3>
+      <div id="order-list" class="order-list"></div>
+
+      <form id="order-form" class="order-form" autocomplete="off">
+        <input id="order-input" type="text" placeholder="Custom directive, e.g. 'probe 3 new axioms'" maxlength="120" aria-label="Custom directive">
+        <button id="order-send" class="btn btn-accent" type="submit">Send order</button>
+      </form>
+
+      <div class="console-progress">
+        <span id="station-progress-label">Idle — no active order</span>
+        <div class="meter"><div id="station-progress" class="meter-fill" style="width:0%"></div></div>
+      </div>
+
+      <h3 class="subhead">Order Queue</h3>
+      <ul id="order-queue" class="order-queue"></ul>
+
+      <button id="station-game-btn" class="btn btn-ghost btn-block" title="Open the isolated sandbox mini-games">Play station mini-game (sandbox)</button>
+    </aside>
+  </main>
+</div>
+
+<div id="game-shell" hidden>
+  <div id="game-backdrop"></div>
+  <section id="panel-sandbox" class="glass game-modal" aria-label="Isolated sandbox mini-games">
+    <div class="panel-head">
+      <h2>Improvement Sandbox <span class="muted">(isolated)</span></h2>
+      <div class="game-head-actions">
+        <div id="sandbox-badge-games" class="sandbox-badge">ISOLATED SANDBOX — ZERO EFFECT ON LIVE SASK KERNEL OR REPO</div>
+        <button id="sandbox-reset-games" class="btn btn-danger btn-mini" title="Reset every sandbox game">Reset Sandbox</button>
+        <button id="game-close" class="btn btn-mini" aria-label="Close sandbox games">Close</button>
+      </div>
+    </div>
+    <div id="sandbox" class="sandbox">
+      <p class="panel-lead">Every value lives in <code>gameSandboxState</code> in this browser tab; nothing is posted to the kernel, written to files, or sent to GitHub.</p>
+      <div class="sandbox-topline">
+        <div id="game-tabs" class="game-tabs" role="tablist" aria-label="Sandbox games">
+          <button class="game-tab active" data-game="mutator" role="tab" aria-selected="true">DIY Mutator Lab</button>
+          <button class="game-tab" data-game="egraph" role="tab" aria-selected="false">E-Graph Builder</button>
+          <button class="game-tab" data-game="axioms" role="tab" aria-selected="false">Axiom Flipper</button>
+          <button class="game-tab" data-game="science" role="tab" aria-selected="false">Surrogate Lab</button>
+        </div>
+      </div>
+
+      <div class="game-pane active" id="game-mutator" role="tabpanel">
+        <h3>1 · DIY Mutator &amp; Regression Lab</h3>
+        <p class="game-lead">Evolve a toy codebase. Aggressive mutations gain score but raise regression risk; reckless edits can trigger reward hacking.</p>
+        <div class="game-metrics">
+          <div class="metric"><span>Code score</span><strong id="mut-score">100</strong></div>
+          <div class="metric"><span>Regression risk</span><strong id="mut-risk">0%</strong></div>
+          <div class="metric"><span>Mutation budget</span><strong id="mut-budget">100</strong></div>
+          <div class="metric"><span>Regressions</span><strong id="mut-regressions">0</strong></div>
+        </div>
+        <div class="meter"><div id="mut-risk-bar" class="meter-fill warn" style="width:0%"></div></div>
+        <div class="btn-row">
+          <button class="btn" data-mut="safe">Safe refactor</button>
+          <button class="btn" data-mut="aggressive">Aggressive rewrite</button>
+          <button class="btn" data-mut="reckless">Reckless hack</button>
+          <button class="btn btn-accent" data-mut="verify">Run verify</button>
+        </div>
+        <p id="mut-verdict" class="verdict"></p>
+        <ul id="mut-log" class="game-log"></ul>
+      </div>
+
+      <div class="game-pane" id="game-egraph" role="tabpanel" hidden>
+        <h3>2 · E-Graph Rewrite &amp; Equivalence Builder</h3>
+        <p class="game-lead">Select two expressions you believe are equivalent, then merge them. Only provable rewrites are accepted. Beat the saturation bot.</p>
+        <div class="expr-grid" id="expr-grid"></div>
+        <div class="btn-row">
+          <button class="btn btn-accent" data-eg="merge">Merge selected</button>
+          <button class="btn" data-eg="saturate">Simulate saturation</button>
+        </div>
+        <div class="game-metrics">
+          <div class="metric"><span>Classes</span><strong id="eg-classes">6</strong></div>
+          <div class="metric"><span>Merges</span><strong id="eg-merges">0</strong></div>
+          <div class="metric"><span>Goals met</span><strong id="eg-goals">0 / 3</strong></div>
+        </div>
+        <p id="eg-verdict" class="verdict"></p>
+        <ul id="eg-log" class="game-log"></ul>
+      </div>
+
+      <div class="game-pane" id="game-axioms" role="tabpanel" hidden>
+        <h3>3 · Axiom Flipper &amp; Devil's Advocate</h3>
+        <p class="game-lead">Toggle axioms in a toy proof graph. The devil's advocate shows what breaks — and why <code>allow_sorry</code> is rejected.</p>
+        <div class="axiom-grid" id="axiom-grid"></div>
+        <div class="btn-row">
+          <button class="btn" data-ax="devil">Run devil attack</button>
+          <button class="btn" data-ax="restore">Restore axioms</button>
+        </div>
+        <div id="axiom-graph" class="axiom-graph"></div>
+        <p id="ax-verdict" class="verdict"></p>
+        <ul id="ax-log" class="game-log"></ul>
+      </div>
+
+      <div class="game-pane" id="game-science" role="tabpanel" hidden>
+        <h3>4 · Virtual Lab — Surrogate vs. Exact</h3>
+        <p class="game-lead">Spend a fixed compute budget. Surrogates are fast but may fail verification; exact solvers are slow but accurate. Hit the accuracy target.</p>
+        <div class="game-metrics">
+          <div class="metric"><span>Budget left</span><strong id="sci-budget">10</strong></div>
+          <div class="metric"><span>Accuracy</span><strong id="sci-accuracy">0%</strong></div>
+          <div class="metric"><span>Wall time</span><strong id="sci-time">0.0s</strong></div>
+          <div class="metric"><span>Target</span><strong id="sci-target">98%</strong></div>
+        </div>
+        <label class="slider-label" for="sci-target-slider">Accuracy target <output id="sci-target-value">98%</output></label>
+        <input id="sci-target-slider" type="range" min="80" max="100" value="98" step="1">
+        <div class="btn-row">
+          <button class="btn" data-sci="train">Train surrogate</button>
+          <button class="btn" data-sci="exact">Run exact solver</button>
+          <button class="btn btn-accent" data-sci="hybrid">Hybrid run</button>
+          <button class="btn" data-sci="verify">Verify</button>
+        </div>
+        <p id="sci-verdict" class="verdict"></p>
+        <ul id="sci-log" class="game-log"></ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<aside id="explainer-drawer" aria-hidden="true">
+  <div class="drawer-head">
+    <h2 id="explainer-title">Explain what I'm seeing</h2>
+    <button id="explainer-close" class="btn btn-mini" aria-label="Close explainer">Close</button>
+  </div>
+  <div id="explainer-body" class="drawer-body"></div>
+</aside>
+
+<aside id="reliability-drawer" aria-hidden="true">
+  <div class="drawer-head">
+    <h2>Reliability &amp; Active Fixes</h2>
+    <div class="drawer-head-actions">
+      <span id="reliability-provenance" class="prov-pill" data-state="none">NO DATA YET (WAITING FOR CYCLE)</span>
+      <button id="reliability-close" class="btn btn-mini" aria-label="Close reliability panel">Close</button>
+    </div>
+  </div>
+  <div class="drawer-body reliability-body">
+    <div class="rel-actions">
+      <button id="rel-refresh" class="btn btn-mini" title="Refresh real telemetry now">Refresh</button>
+      <button id="rel-fix-all" class="btn btn-accent btn-mini" title="Apply every safe local remediation and queue agent directives for the rest">Fix Top Bottlenecks Now</button>
+      <button id="rel-queue-all" class="btn btn-mini" title="Write every detected bottleneck to sask_agent_fix_queue.json">Generate Fix Directives</button>
+    </div>
+
+    <section class="rel-grid">
+      <div class="rel-card">
+        <span class="eyebrow">GITHUB ACTIONS · LIVE</span>
+        <strong id="rel-cloud-status">NO DATA YET</strong>
+        <p id="rel-cloud-meta" class="muted">checking remote…</p>
+        <div class="meter"><div id="rel-cloud-bar" class="meter-fill" style="width:0%"></div></div>
+        <span id="rel-cloud-window" class="mini-caption">—</span>
+      </div>
+      <div class="rel-card">
+        <span class="eyebrow">LAST REAL CYCLE</span>
+        <strong id="rel-cycle-status">NO DATA YET</strong>
+        <p id="rel-cycle-meta" class="muted">waiting for a real run</p>
+        <div class="rel-kpis">
+          <span>pass <b id="rel-pass">—</b></span>
+          <span>cpu <b id="rel-cpu">—</b></span>
+          <span>ram <b id="rel-rss">—</b></span>
+          <span>D <b id="rel-discipline">—</b></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="rel-section" id="scale-section">
+      <div class="hud-head">
+        <h3>Elastic Scale &amp; Meta-Scheduler</h3>
+        <span id="rel-scale-status" class="pill pill-soft">—</span>
+      </div>
+      <div class="rel-grid">
+        <div class="rel-card">
+          <span class="eyebrow">ACTIVE WORKERS</span>
+          <strong id="rel-scale-workers">—</strong>
+          <p id="rel-scale-limits" class="muted">hardware ceiling…</p>
+          <div class="meter"><div id="rel-scale-worker-bar" class="meter-fill" style="width:0%"></div></div>
+          <span id="rel-scale-headroom" class="mini-caption">—</span>
+        </div>
+        <div class="rel-card">
+          <span class="eyebrow">EARLY-CANCEL SAVINGS</span>
+          <strong id="rel-scale-saved">—</strong>
+          <p id="rel-scale-cancelled" class="muted">no races cancelled yet</p>
+          <span id="rel-scale-policy" class="mini-caption">policy v—</span>
+        </div>
+      </div>
+      <h3 class="subhead">Strategy slot allocation</h3>
+      <div id="rel-scale-slots" class="scale-slots"><span class="muted">loading…</span></div>
+      <div class="hud-head"><h3>Recent self-tuning</h3><span id="rel-scale-upgrade-count" class="pill pill-soft">—</span></div>
+      <ul id="rel-scale-upgrades" class="rel-list compact"><li class="muted">no policy events yet</li></ul>
+    </section>
+
+    <section class="rel-section">
+      <div class="hud-head"><h3>Bottlenecks, Limits &amp; Active Fixes</h3><span id="rel-limiters" class="pill pill-soft">—</span></div>
+      <ul id="rel-bottleneck-list" class="rel-list"><li class="muted">no cycle data yet</li></ul>
+    </section>
+
+    <section class="rel-section">
+      <h3 class="subhead">Step durations — latest cycle</h3>
+      <canvas id="rel-steps-chart" class="rel-chart" height="150"></canvas>
+    </section>
+
+    <section class="rel-section">
+      <h3 class="subhead">Cycle trends — CPU · RAM · pass rate</h3>
+      <canvas id="rel-trend-chart" class="rel-chart" height="150"></canvas>
+      <div id="rel-trend-legend" class="rel-legend"></div>
+    </section>
+
+    <section class="rel-section">
+      <h3 class="subhead">Bottleneck ranking</h3>
+      <canvas id="rel-rank-chart" class="rel-chart" height="150"></canvas>
+    </section>
+
+    <section class="rel-section">
+      <div class="hud-head"><h3>Cloud Runs</h3><span id="rel-cloud-count" class="pill pill-soft">—</span></div>
+      <ul id="rel-cloud-runs" class="rel-list compact"><li class="muted">checking cloud…</li></ul>
+    </section>
+
+    <section class="rel-section">
+      <div class="hud-head"><h3>Agent Fix Queue</h3><span id="rel-fix-counts" class="pill pill-soft">—</span></div>
+      <ul id="rel-fix-queue" class="rel-list"><li class="muted">queue empty</li></ul>
+    </section>
+
+    <section class="rel-section" id="rel-directive-wrap" hidden>
+      <div class="hud-head">
+        <h3>Agent Fix Directive</h3>
+        <button id="rel-copy-directive" class="btn btn-mini">Copy directive</button>
+      </div>
+      <p class="mini-caption">Paste this into Qoder or whichever agent is operating in the workspace, then run the verification commands it lists.</p>
+      <textarea id="rel-directive" class="rel-directive" readonly rows="12" spellcheck="false"></textarea>
+    </section>
+  </div>
+</aside>
+
+<div id="toast-host" aria-live="polite"></div>
+
+<script src="/ui/app.js"></script>
+</body>
+</html>

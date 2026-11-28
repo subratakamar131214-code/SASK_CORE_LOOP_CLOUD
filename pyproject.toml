@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sask-command-center"
+version = "0.1.0"
+description = "Local-only interactive command center and self-evolving UI for the SASK kernel"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn>=0.27",
+    "websockets>=12",
+    "textual>=0.50",
+    "rich>=13.7",
+]
+
+[project.scripts]
+SASK = "sask_cli:main"
+sask = "sask_cli:main"
+
+[tool.setuptools]
+py-modules = [
+    "core",
+    "drives",
+    "bio_gen",
+    "telos",
+    "telos_v2",
+    "mutate",
+    "prover",
+    "verify",
+    "science_mcp",
+    "meta_prover",
+    "manifold_bridge",
+    "devil_advocate",
+    "egraph_engine",
+    "sask_cli",
+    "sask_ui_server",
+    "ui_evolver",
+]
